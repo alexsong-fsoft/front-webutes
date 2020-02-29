@@ -1,0 +1,156 @@
+<h2 class="header header-efx">{{titulo}}</h2>
+
+
+<div id="tabs_docentetema" class="tabbable">
+    <ul class="nav nav-tabs">
+        <li><a href="javascript:void(0)" (click)="showTab('tab-mistemas')"><i class="fa fa-certificate"></i>&nbsp; Mis Temas</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-desarrollo')"><i class="fa fa-certificate"></i>&nbsp; En Desarrollo</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-revision')"><i class="fa fa-certificate"></i>&nbsp; Revisión de Temas</a></li>        
+    </ul>
+    
+    <div class="tab-content">
+
+        <div id="tab-mistemas" class="tab-pane">
+            <div id="cont-tab-mistemas">
+                <div class="widget-header">
+                    <button type="button" name="nuevo" (click)='openDialog3()' class="btn btn-primary btn-xs" title="Crear Tema">
+                        <i class="fa fa-pencil-square-o"></i> Crear Tema
+                    </button>
+                    <button type="button" name="updateTemaAddConvocatoria" (click)='updateTemaAddConvocatoria()' class="btn btn-primary btn-xs" title="Enviar Temas Seleccionados">
+                        <i class="fa fa-pencil-square-o"></i> Enviar Temas
+                    </button>
+                </div>
+                <div style="clear: both;"></div>
+                <table class="table table-striped table-bordered tbl_chk font-small" style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th class="center" style="width: 100px;">Acciones</th>
+                            <th class="center hide" style="width: 30px;">ID</th>
+                            <th scope="col" class="fixed-side center">
+                                <input id="chk_all_row" class="chk_all_row" type="checkbox" value="">                                                                   
+                            </th>
+                            <th>Título</th>
+                            <th>N° Est</th>
+                            <th>Convocatoria</th>
+                            <th>Estado</th>
+                            <th>Tipo</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listDocente; index as i">
+                            <td class="center" style="width: 30px;">{{i + 1}}</td>
+                            <td class="actions center" style="width: 100px">
+                                <button type="button" name="detalle" (click)='openDialog(item)'  class="btn btn-primary btn-xs" title="Ver Detalle">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                                <button type="button" name="editar" (click)='openDialog2(item)' [className]="habilitaBotonActualiza(item.temIdEstado) ? 'btn btn-primary btn-xs disabled' : 'btn btn-primary btn-xs'" title="Editar">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                </button>
+                            </td>
+                            <td class="hide">{{item.idTem}}</td>
+                            <td class="actions fixed-side center">
+                                <input id="row_{{item.idTem}}" name="chk_row" type="checkbox" value="{{item.idTem}}" (change)="onChange(item.idTem, $event.target.checked)">
+                            </td>
+                            <td>{{item.temNombre}}</td>
+                            <td>{{item.temNumEst}}</td>
+                            <td></td>
+                            <!-- <td>{{item.convocatoria.conNombre}}</td> -->
+                            <td>{{item.nombreEstado}}</td>
+                            <td>{{item.nombreTipo}}</td>
+                            <td>{{item.temFechaCreado}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="space-4" style="clear:both"></div>
+        </div>
+
+        <div id="tab-desarrollo" class="tab-pane">
+            <div id="cont-tab-desarrollo">
+                <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th class="center" style="width: 100px;">Acciones</th>
+                            <th class="center hide" style="width: 30px;">ID</th>
+                            <th>Título</th>
+                            <th>N° Est</th>
+                            <th>Convocatoria</th>
+                            <th>Estado</th>
+                            <th>Tipo</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listTemaPost; index as i">
+                            <td class="center" style="width: 30px;">{{i + 1}}</td>
+                            <td class="actions center" style="width: 100px">
+                                <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </td>
+                            <td class="hide">{{item.idTem}}</td>
+                            <td>{{item.temNombre}}</td>
+                            <td>{{item.temNumEst}}</td>
+                            <td>{{item.convocatoria.conNombre}}</td>
+                            <td>{{item.nombreEstado}}</td>
+                            <td>{{item.nombreTipo}}</td>
+                            <td>{{item.temFechaCreado}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="space-4" style="clear:both"></div>
+        </div>
+
+        <div id="tab-revision" class="tab-pane">
+            <div id="cont-tab-revision">
+                <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th class="center" style="width: 100px;">Acciones</th>
+                            <th class="center hide" style="width: 30px;">ID</th>
+                            <th>Título</th>
+                            <th>Fecha Enviado</th>
+                            <th>N° Est</th>
+                            <th>Convocatoria</th>
+                            <th>Estado</th>
+                            <th>Tipo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listTemaAsignaRevisar; index as i">
+                            <td class="center" style="width: 30px;">{{i + 1}}</td>
+                            <td class="actions center" style="width: 100px">
+                                <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </td>
+                            <td class="hide">{{item.idTem}}</td>
+                            <td>{{item.temNombre}}</td>
+                            <td>{{item.temFechaEnviado}}</td>
+                            <td>{{item.temNumEst}}</td>
+                            <td>{{item.convocatoria.conNombre}}</td>
+                            <td>{{item.nombreEstado}}</td>
+                            <td>{{item.nombreTipo}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="space-4" style="clear:both"></div>
+        </div>
+
+    </div>
+    <br>
+</div>
+
+<div id="dialog">
+    <div>
+        <div class="ad-banner-example">
+            <ng-template ad-host></ng-template>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+<h2 class="header header-efx">{{titulo}}</h2>
+<form>
+    <div class="form-group row">
+        <label for="idTema" class="col-sm-2 col-form-label">idTema</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="idTema" [(ngModel)]="hito.idTema">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="hitIdEstado" class="col-sm-2 col-form-label">hitIdEstado</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="hitIdEstado" [(ngModel)]="hito.hitIdEstado">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="hitCodigo" class="col-sm-2 col-form-label">hitCodigo</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="hitCodigo" [(ngModel)]="hito.hitCodigo">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="hitDescripcion" class="col-sm-2 col-form-label">hitDescripcion</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="hitDescripcion" [(ngModel)]="hito.hitDescripcion">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="hitFechaEntrega" class="col-sm-2 col-form-label">hitFechaEntrega</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="hitFechaEntrega" [(ngModel)]="hito.hitFechaEntrega">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="hitComentario" class="col-sm-2 col-form-label">hitComentario</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="hitComentario" [(ngModel)]="hito.hitComentario">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="hitFechavalida" class="col-sm-2 col-form-label">hitFechavalida</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="hitFechavalida" [(ngModel)]="hito.hitFechavalida">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="hitSecuencia" class="col-sm-2 col-form-label">hitSecuencia</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="hitSecuencia" [(ngModel)]="hito.hitSecuencia">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="hitValida" class="col-sm-2 col-form-label">hitValida</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="hitValida" [(ngModel)]="hito.hitValida">
+        </div>
+    </div>
+    <input type="hidden" value="" name="id" [(ngModel)]="hito.idHit">
+    <div class="form-group row">
+        <div class="col-sm-8 center">
+            <button class="btn btn-primary" role="button" (click)='create()' *ngIf="!hito.idHit else elseBlock">
+                <i class="fa fa-save"></i> CREAR
+            </button>
+            <ng-template #elseBlock>
+                <button class="btn btn-primary" role="button" (click)='update()'>
+                    <i class="fa fa-save"></i> EDITAR
+                </button>
+            </ng-template>
+            <a routerLink="/hito" class="btn btn-danger">
+                <i class="fa fa-reply"></i> VOLVER
+            </a>
+        </div>
+    </div>
+</form>

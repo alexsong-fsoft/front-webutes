@@ -1,0 +1,97 @@
+<h2 class="header header-efx">{{titulo}}</h2>
+<form>
+    <div class="form-group row">
+        <label for="idPersona" class="col-sm-2 col-form-label">idPersona</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="idPersona" [(ngModel)]="presolicitud.idPersona">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="idInscripcion" class="col-sm-2 col-form-label">idInscripcion</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="idInscripcion" [(ngModel)]="presolicitud.idInscripcion">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="pslIdEstado" class="col-sm-2 col-form-label">pslIdEstado</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="pslIdEstado" [(ngModel)]="presolicitud.pslIdEstado">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="pslIdOpcion" class="col-sm-2 col-form-label">pslIdOpcion</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="pslIdOpcion" [(ngModel)]="presolicitud.pslIdOpcion">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="pslFecha" class="col-sm-2 col-form-label">pslFecha</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="pslFecha" [(ngModel)]="presolicitud.pslFecha">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="pslMensaje" class="col-sm-2 col-form-label">pslMensaje</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="pslMensaje" [(ngModel)]="presolicitud.pslMensaje">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="pslFechaRevision" class="col-sm-2 col-form-label">pslFechaRevision</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="pslFechaRevision" [(ngModel)]="presolicitud.pslFechaRevision">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="pslObservacion" class="col-sm-2 col-form-label">pslObservacion</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="pslObservacion" [(ngModel)]="presolicitud.pslObservacion">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="pslPrerevision" class="col-sm-2 col-form-label">pslPrerevision</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="pslPrerevision" [(ngModel)]="presolicitud.pslPrerevision">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="pslFechaPrerevision" class="col-sm-2 col-form-label">pslFechaPrerevision</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="pslFechaPrerevision" [(ngModel)]="presolicitud.pslFechaPrerevision">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="pslIdEstadoAnterior" class="col-sm-2 col-form-label">pslIdEstadoAnterior</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="pslIdEstadoAnterior" [(ngModel)]="presolicitud.pslIdEstadoAnterior">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="pslActivo" class="col-sm-2 col-form-label">pslActivo</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="pslActivo" [(ngModel)]="presolicitud.pslActivo">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="pslFiles" class="col-sm-2 col-form-label">pslFiles</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="pslFiles" [(ngModel)]="presolicitud.pslFiles">
+        </div>
+    </div>
+    <input type="hidden" value="" name="id" [(ngModel)]="presolicitud.idPsl">
+    <div class="form-group row">
+        <div class="col-sm-8 center">
+            <button class="btn btn-primary" role="button" (click)='create()' *ngIf="!presolicitud.idPsl else elseBlock">
+                <i class="fa fa-save"></i> CREAR
+            </button>
+            <ng-template #elseBlock>
+                <button class="btn btn-primary" role="button" (click)='update()'>
+                    <i class="fa fa-save"></i> EDITAR
+                </button>
+            </ng-template>
+            <a routerLink="/presolicitud" class="btn btn-danger">
+                <i class="fa fa-reply"></i> VOLVER
+            </a>
+        </div>
+    </div>
+</form>

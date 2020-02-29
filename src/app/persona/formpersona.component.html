@@ -1,0 +1,73 @@
+<h2 class="header header-efx">{{titulo}}</h2>
+<form>
+    <div class="form-group row">
+        <label for="perCedula" class="col-sm-2 col-form-label">perCedula</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="perCedula" [(ngModel)]="persona.perCedula">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="perNombre" class="col-sm-2 col-form-label">perNombre</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="perNombre" [(ngModel)]="persona.perNombre">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="perApellido" class="col-sm-2 col-form-label">perApellido</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="perApellido" [(ngModel)]="persona.perApellido">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="perDireccion" class="col-sm-2 col-form-label">perDireccion</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="perDireccion" [(ngModel)]="persona.perDireccion">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="perTelefono" class="col-sm-2 col-form-label">perTelefono</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="perTelefono" [(ngModel)]="persona.perTelefono">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="perCelular" class="col-sm-2 col-form-label">perCelular</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="perCelular" [(ngModel)]="persona.perCelular">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="perSexo" class="col-sm-2 col-form-label">perSexo</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="perSexo" [(ngModel)]="persona.perSexo">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="perFechaCreado" class="col-sm-2 col-form-label">perFechaCreado</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="perFechaCreado" [(ngModel)]="persona.perFechaCreado">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="perFechaEditado" class="col-sm-2 col-form-label">perFechaEditado</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="perFechaEditado" [(ngModel)]="persona.perFechaEditado">
+        </div>
+    </div>
+    <input type="hidden" value="" name="id" [(ngModel)]="persona.idPer">
+    <div class="form-group row">
+        <div class="col-sm-8 center">
+            <button class="btn btn-primary" role="button" (click)='create()' *ngIf="!persona.idPer else elseBlock">
+                <i class="fa fa-save"></i> CREAR
+            </button>
+            <ng-template #elseBlock>
+                <button class="btn btn-primary" role="button" (click)='update()'>
+                    <i class="fa fa-save"></i> EDITAR
+                </button>
+            </ng-template>
+            <a routerLink="/persona" class="btn btn-danger">
+                <i class="fa fa-reply"></i> VOLVER
+            </a>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,37 @@
+<h2 class="header header-efx">{{titulo}}</h2>
+<form>
+    <div class="form-group row">
+        <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="nombre" [(ngModel)]="area.areNombre">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="tipo" class="col-sm-2 col-form-label">Tipo</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="tipo" [(ngModel)]="area.idAreaTipo">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="estado" class="col-sm-2 col-form-label">Estado</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="estado" [(ngModel)]="area.areActivo">
+        </div>
+    </div>
+    <input type="hidden" value="" name="id" [(ngModel)]="area.idAre">
+    <div class="form-group row">
+        <div class="col-sm-8 center">
+            <button class="btn btn-primary" role="button" (click)='create()' *ngIf="!area.idAre else elseBlock">
+                <i class="fa fa-save"></i> CREAR
+            </button>
+            <ng-template #elseBlock>
+                <button class="btn btn-primary" role="button" (click)='update()'>
+                    <i class="fa fa-save"></i> EDITAR
+                </button>
+            </ng-template>
+            <a routerLink="/dashboard/area" class="btn btn-danger">
+                <i class="fa fa-reply"></i> VOLVER
+            </a>
+        </div>
+    </div>
+</form>

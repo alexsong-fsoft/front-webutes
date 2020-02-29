@@ -1,0 +1,52 @@
+<h2 class="header header-efx">{{titulo}}</h2>
+
+
+<div id="tabs_docentetema" class="tabbable">
+    <ul class="nav nav-tabs">
+        <li><a href="javascript:void(0)" (click)="showTab('tab-mistemas')"><i class="fa fa-certificate"></i>&nbsp; Inscripción</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-desarrollo')"><i class="fa fa-certificate"></i>&nbsp; General</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-revision')"><i class="fa fa-certificate"></i>&nbsp; Trabajo Docentes</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-requisitos')"><i class="fa fa-certificate"></i>&nbsp; Estado de Proyectos</a></li>
+    </ul>
+    
+    <div class="tab-content">
+
+        <div id="tab-mistemas" class="tab-pane">
+            <div id="cont-tab-mistemas">
+                
+            </div>
+            <div class="space-4" style="clear:both"></div>
+        </div>
+
+        <div id="tab-desarrollo" class="tab-pane">
+            <div id="cont-tab-desarrollo">
+                
+            </div>
+            <div class="space-4" style="clear:both"></div>
+        </div>
+
+        <div id="tab-revision" class="tab-pane">
+            <div id="cont-tab-revision">
+                
+            </div>
+            <div class="space-4" style="clear:both"></div>
+        </div>
+
+        <div id="tab-requisitos" class="tab-pane">
+            <div id="cont-tab-requisitos">
+                
+            </div>
+            <div class="space-4" style="clear:both"></div>
+        </div>
+
+    </div>
+    <br>
+</div>
+
+<div id="dialog">
+    <div>
+        <div class="ad-banner-example">
+            <ng-template ad-host></ng-template>
+        </div>
+    </div>
+</div>

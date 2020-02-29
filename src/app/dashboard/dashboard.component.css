@@ -1,0 +1,7 @@
+.sidebar {
+    background-color: #2e353d;  
+}
+.sidebar.menu-min .nav-list>li.active.open>a:after, .sidebar.menu-min .nav-list>li.hover-show>a>.menu-text, .sidebar.menu-min .nav-list>li:hover>a>.menu-text, .sidebar.menu-min .nav-list>li:hover>ul.submenu {
+    background-color: #2e353d;
+    color: #e1ffff;
+}

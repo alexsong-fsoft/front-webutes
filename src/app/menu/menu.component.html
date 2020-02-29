@@ -1,0 +1,300 @@
+<ul class="nav nav-list">
+    <li class="" *ngIf="usserLogged.sysPerfil.prfNombre === 'ESTUDIANTE'">
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-certificate"></i><span class="menu-text"> Estudiante</span>
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu">
+            <li class="">
+                <a routerLink="/dashboard/estudiantetema"> <i class="menu-icon fa fa-caret-right"></i> Inicio </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/estudianteinscripcion"> <i class="menu-icon fa fa-caret-right"></i> Inscripción </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/estudianteevolucion"> <i class="menu-icon fa fa-caret-right"></i> Evolución de Trabajo </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/estudiantehito"> <i class="menu-icon fa fa-caret-right"></i> Hito </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+    <li class="" *ngIf="usserLogged.sysPerfil.prfNombre === 'DOCENTE'">
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-certificate"></i><span class="menu-text"> Docente</span>
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu">
+            <li class="">
+                <a routerLink="/dashboard/"> <i class="menu-icon fa fa-caret-right"></i> Inicio </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/docentetema"> <i class="menu-icon fa fa-caret-right"></i> Gestión de Temas </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/docenteasignacion"> <i class="menu-icon fa fa-caret-right"></i> Asignación Estudiante a Tema </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/docenteevolucion"> <i class="menu-icon fa fa-caret-right"></i> Evolución de Trabajo </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/docentehito"> <i class="menu-icon fa fa-caret-right"></i> Hitos </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+    <li class="" *ngIf="usserLogged.sysPerfil.prfNombre === 'UTES'">
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-university"></i><span class="menu-text"> UTES </span>
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu">
+            <li class="">
+                <a routerLink="/dashboard/"> <i class="menu-icon fa fa-caret-right"></i> Inicio </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/utespresolicitud"> <i class="menu-icon fa fa-caret-right"></i> Validación de Inscripciones </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+    <li class="" *ngIf="usserLogged.sysPerfil.prfNombre === 'UTES'">
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-certificate"></i><span class="menu-text"> Gestión Temas </span>
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu">
+            <li class="">
+                <a routerLink="/dashboard/utesasignacion"> <i class="menu-icon fa fa-caret-right"></i> Asignación </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/utesprerevision"> <i class="menu-icon fa fa-caret-right"></i> Revisión Previa </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/utesaprobar"> <i class="menu-icon fa fa-caret-right"></i> Aprobación </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/utesresolucion"> <i class="menu-icon fa fa-caret-right"></i> Resolución </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+    <li class="" *ngIf="usserLogged.sysPerfil.prfNombre === 'UTES'">
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-certificate"></i><span class="menu-text"> Gestión Examen </span>
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu">
+            <li class="">
+                <a routerLink="/dashboard/utesprerevisionexamen"> <i class="menu-icon fa fa-caret-right"></i> Revisión Previa </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+    <li class="" *ngIf="usserLogged.sysPerfil.prfNombre == 'UTES'">
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-certificate"></i><span class="menu-text"> Administración </span>
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu">
+            <li class="">
+                <a routerLink="/dashboard/utesconfiguracion"> <i class="menu-icon fa fa-caret-right"></i> Configuración </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/utesconsulta"> <i class="menu-icon fa fa-caret-right"></i> Consultas </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/uteshistorico"> <i class="menu-icon fa fa-caret-right"></i> Histórico </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+    <li class="" *ngIf="usserLogged.sysPerfil.prfNombre == 'ADMINISTRADOR'">
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-certificate"></i><span class="menu-text"> Administración </span>
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu">
+            <li class="">
+                <a routerLink="/dashboard/administradorcorreo"> <i class="menu-icon fa fa-caret-right"></i> Inicio </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/administradorpermiso"> <i class="menu-icon fa fa-caret-right"></i> Permiso </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/administradorconfiguracion"> <i class="menu-icon fa fa-caret-right"></i> Configuracion </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+    <li class="" *ngIf="usserLogged.sysPerfil.prfNombre === ''">
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-certificate"></i><span class="menu-text"> Administración </span>
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu">
+            <li class="">
+                <a routerLink="/dashboard/correo"> <i class="menu-icon fa fa-caret-right"></i> Inicio </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/syspermiso"> <i class="menu-icon fa fa-caret-right"></i> Permiso </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/sysusuario"> <i class="menu-icon fa fa-caret-right"></i> Configuracion </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+    <li class="">
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-cogs"></i><span class="menu-text"> Configuraciones</span>
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu">
+            <li class="">
+                <a routerLink="/dashboard/areatipo"> <i class="menu-icon fa fa-caret-right"></i> Tipo de Areas </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/area"> <i class="menu-icon fa fa-caret-right"></i> Areas </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/areapersona"> <i class="menu-icon fa fa-caret-right"></i> Areas - Personas </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/asignado"> <i class="menu-icon fa fa-caret-right"></i> Asignado </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/convocatoria"> <i class="menu-icon fa fa-caret-right"></i> Convocatoria </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/correo"> <i class="menu-icon fa fa-caret-right"></i> Correo </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/cuestionario"> <i class="menu-icon fa fa-caret-right"></i> Cuestionario </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/evolucion"> <i class="menu-icon fa fa-caret-right"></i> Evolucion </a>
+                <b class="arrow"></b>
+            </li>			
+			<li class="">
+                <a routerLink="/dashboard/historico"> <i class="menu-icon fa fa-caret-right"></i> Historico </a>
+                <b class="arrow"></b>
+            </li>			
+			<li class="">
+                <a routerLink="/dashboard/hito"> <i class="menu-icon fa fa-caret-right"></i> Hito </a>
+                <b class="arrow"></b>
+            </li>			
+			<li class="">
+                <a routerLink="/dashboard/informe"> <i class="menu-icon fa fa-caret-right"></i> Informe </a>
+                <b class="arrow"></b>
+            </li>			
+			<li class="">
+                <a routerLink="/dashboard/inscripcion"> <i class="menu-icon fa fa-caret-right"></i> Inscripción </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/periodo"> <i class="menu-icon fa fa-caret-right"></i> Periodo </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/persona"> <i class="menu-icon fa fa-caret-right"></i> Persona </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/presolicitud"> <i class="menu-icon fa fa-caret-right"></i> Presolicitud </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/resolucion"> <i class="menu-icon fa fa-caret-right"></i> Resolución</a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/respuesta"> <i class="menu-icon fa fa-caret-right"></i> Respuesta </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/seleccion"> <i class="menu-icon fa fa-caret-right"></i> Selección </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/sysconfiguracion"> <i class="menu-icon fa fa-caret-right"></i> Configuracion </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/syspaginaperfil"> <i class="menu-icon fa fa-caret-right"></i> Pagina Perfil </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/syspagina"> <i class="menu-icon fa fa-caret-right"></i> Pagina </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/sysperfil"> <i class="menu-icon fa fa-caret-right"></i> Perfil </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/syspermiso"> <i class="menu-icon fa fa-caret-right"></i> Permiso </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/syspropiedad"> <i class="menu-icon fa fa-caret-right"></i> Propiedades </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/sysusuario"> <i class="menu-icon fa fa-caret-right"></i> Usuario </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/tema"> <i class="menu-icon fa fa-caret-right"></i> Tema </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/tipoopcion"> <i class="menu-icon fa fa-caret-right"></i> tipo opcion </a>
+                <b class="arrow"></b>
+            </li>
+			<li class="">
+                <a routerLink="/dashboard/tiporesolucion"> <i class="menu-icon fa fa-caret-right"></i> tipo resolucion </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+</ul>
+<!-- /.nav-list -->
+<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+    <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state"
+        data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+</div>

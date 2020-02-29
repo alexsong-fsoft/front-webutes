@@ -1,0 +1,61 @@
+<h2 class="header header-efx">{{titulo}}</h2>
+<form>
+    <div class="form-group row">
+        <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="nombre" [(ngModel)]="inscripcion.insNombre">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="insPeriodo" class="col-sm-2 col-form-label">insPeriodo</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="insPeriodo" [(ngModel)]="inscripcion.insPeriodo">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="insFechaInicio" class="col-sm-2 col-form-label">insFechaInicio</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="insFechaInicio" [(ngModel)]="inscripcion.insFechaInicio">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="insFechaFin" class="col-sm-2 col-form-label">insFechaFin</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="insFechaFin" [(ngModel)]="inscripcion.insFechaFin">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="insActivo" class="col-sm-2 col-form-label">insActivo</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="insActivo" [(ngModel)]="inscripcion.insActivo">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="insSecuencia" class="col-sm-2 col-form-label">insSecuencia</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="insSecuencia" [(ngModel)]="inscripcion.insSecuencia">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="file" class="col-sm-2 col-form-label">file</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="file" [(ngModel)]="inscripcion.file">
+        </div>
+    </div>
+    <input type="hidden" value="" name="id" [(ngModel)]="inscripcion.idIns">
+    <div class="form-group row">
+        <div class="col-sm-8 center">
+            <button class="btn btn-primary" role="button" (click)='create()' *ngIf="!inscripcion.idIns else elseBlock">
+                <i class="fa fa-save"></i> CREAR
+            </button>
+            <ng-template #elseBlock>
+                <button class="btn btn-primary" role="button" (click)='update()'>
+                    <i class="fa fa-save"></i> EDITAR
+                </button>
+            </ng-template>
+            <a routerLink="/inscripcion" class="btn btn-danger">
+                <i class="fa fa-reply"></i> VOLVER
+            </a>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,171 @@
+<h2 class="header header-efx">{{titulo}}</h2>
+
+
+<div id="tabs_docentetema" class="tabbable">
+    <ul class="nav nav-tabs">
+        <li><a href="javascript:void(0)" (click)="showTab('tab-mistemas')"><i class="fa fa-certificate"></i>&nbsp; Periodo</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-desarrollo')"><i class="fa fa-certificate"></i>&nbsp; Convocatoria</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-revision')"><i class="fa fa-certificate"></i>&nbsp; Inscripción</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-requisitos')"><i class="fa fa-certificate"></i>&nbsp; Requisitos</a></li>
+    </ul>
+    
+    <div class="tab-content">
+
+        <div id="tab-mistemas" class="tab-pane">
+            <div id="cont-tab-mistemas">
+                <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th class="center" style="width: 100px;">Acciones</th>
+                            <th>Periodo</th>
+                            <th>Fecha inicio</th>
+                            <th>Fecha fin</th>
+                            <th>Año inicio</th>
+                            <th>Año fin</th>
+                            <th>Activo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listPeriodo; index as i">
+                            <td class="center" style="width: 30px;">{{i + 1}}</td>
+                            <td class="actions center" style="width: 100px">
+                                <button type="button" name="detalle" (click)='openDialog(item)'  class="btn btn-primary btn-xs" title="Ver Detalle">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                                <button type="button" name="editar" [routerLink]="['/dashboard/estudianteevoluciondesarrollo', item.idTem]"  class="btn btn-primary btn-xs" title="Ver Evolución">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                </button>
+                            </td>
+                            <td>{{item.prdNumero}}</td>
+                            <td>{{item.prdFechaInicio}}</td>
+                            <td>{{item.prdFechaFin}}</td>
+                            <td>{{item.prdAnioInicio}}</td>
+                            <td>{{item.prdAnioFin}}</td>
+                            <td>{{item.prdActivo}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="space-4" style="clear:both"></div>
+        </div>
+
+        <div id="tab-desarrollo" class="tab-pane">
+            <div id="cont-tab-desarrollo">
+                <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th class="center" style="width: 100px;">Acciones</th>
+                            <th class="center" style="width: 30px;">ID</th>
+                            <th>Convocatoria</th>
+                            <th>N° tema</th>
+                            <th>Periodo</th>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha fin</th>
+                            <th>Activo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listConvocatoria; index as i">
+                            <td class="center" style="width: 30px;">{{i + 1}}</td>
+                            <td class="actions center" style="width: 100px">
+                                <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </td>
+                            <td>{{item.idCon}}</td>
+                            <td>{{item.conNombre}}</td>
+                            <td>{{item.conNumeroTema}}</td>
+                            <td>{{item.conPeriodo}}</td>
+                            <td>{{item.conFechaInicio}}</td>
+                            <td>{{item.conFechaFin}}</td>
+                            <td>{{item.conActivo}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="space-4" style="clear:both"></div>
+        </div>
+
+        <div id="tab-revision" class="tab-pane">
+            <div id="cont-tab-revision">
+                <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th class="center" style="width: 100px;">Acciones</th>
+                            <th class="center" style="width: 30px;">ID</th>
+                            <th>Código</th>
+                            <th>Periodo</th>
+                            <th>Fecha inicio</th>
+                            <th>Fecha fin</th>
+                            <th>Activo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listInscripcion; index as i">
+                            <td class="center" style="width: 30px;">{{i + 1}}</td>
+                            <td class="actions center" style="width: 100px">
+                                <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </td>
+                            <td>{{item.idIns}}</td>
+                            <td>{{item.insNombre}}</td>
+                            <td>{{item.insPeriodo}}</td>
+                            <td>{{item.insFechaInicio}}</td>
+                            <td>{{item.insFechaFin}}</td>
+                            <td>{{item.insActivo}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="space-4" style="clear:both"></div>
+        </div>
+
+        <div id="tab-requisitos" class="tab-pane">
+            <div id="cont-tab-requisitos">
+                <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th class="center" style="width: 100px;">Acciones</th>
+                            <th class="center" style="width: 30px;">ID</th>
+                            <th>tab-requisitos</th>
+                            <th>Tipo</th>
+                            <th>Inscripción</th>
+                            <th>Activo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listCuestionario; index as i">
+                            <td class="center" style="width: 30px;">{{i + 1}}</td>
+                            <td class="actions center" style="width: 100px">
+                                <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </td>
+                            <td>{{item.idCue}}</td>
+                            <td>{{item.cuePregunta}}</td>
+                            <td>{{item.cueIdTipo}}</td>
+                            <td>{{item.cueIdInscripcion}}</td>
+                            <td>{{item.cueActivo}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="space-4" style="clear:both"></div>
+        </div>
+
+    </div>
+    <br>
+</div>
+
+<div id="dialog">
+    <div>
+        <div class="ad-banner-example">
+            <ng-template ad-host></ng-template>
+        </div>
+    </div>
+</div>

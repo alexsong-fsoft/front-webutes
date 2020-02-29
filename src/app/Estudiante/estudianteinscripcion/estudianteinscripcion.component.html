@@ -1,0 +1,36 @@
+<h2 class="header header-efx">{{titulo}}</h2>
+<div class="widget-header">
+    <button type="button" name="nuevo" (click)='openDialog()' class="btn btn-primary btn-xs" title="Nuevo" *ngIf="habilitaBotonInscripcion">
+        <i class="fa fa-pencil-square-o"></i> NUEVO
+    </button>
+</div>
+<div style="clear: both;"></div>
+<table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+    <thead class="thead-inverse">
+        <tr>
+            <th class="center" style="width: 30px;"></th>
+            <th>Mensaje</th>
+            <th>Inscripción</th>
+            <th>Estado</th>
+            <th>Opción</th> 
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of listPresolicitud; index as i">
+            <td class="center" style="width: 30px;">{{i + 1}}</td>
+            <td>{{item.pslMensaje}}</td>
+            <td>{{item.inscripcion.insNombre}}</td>
+            <td>{{item.nombreEstado}}</td>
+            <td>{{item.nombreTipo}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<div id="dialog">
+    <div>
+        <!-- <app-ad-banner [ads]="ads"></app-ad-banner> -->
+        <div class="ad-banner-example">
+            <ng-template ad-host></ng-template>
+        </div>
+    </div>
+</div>

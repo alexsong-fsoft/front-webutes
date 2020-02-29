@@ -1,0 +1,64 @@
+<h2 class="header header-efx">{{titulo}}</h2>
+<div class="widget-box widget-color-dark ui-sortable-handle hide" id="widget-box-11">
+    <div class="widget-header">
+        
+    </div>
+    <div class="widget-body hide" style="display: block; padding: 5px 10px;">
+        <div class="content font-small">
+            <fieldset>
+                <legend>Filtros :</legend>
+                <form id="formFilter" class="formFilter" action="/dashboard/empleado/listar" method="POST">
+                    <div class="form-group row">
+                        <div class="col col-xs-3 col-sm-3 col-lg-3">
+                            <label for="nombres" class="col-form-label"> Nombre : </label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                </form>
+            </fieldset>
+        </div>
+    </div>
+</div>
+<div style="clear: both;"></div>
+<table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+    <thead class="thead-inverse">
+        <tr>
+            <th class="center" style="width: 30px;"></th>
+            <th class="center" style="width: 100px;">Acciones</th>
+            <th class="center" style="width: 30px;">ID</th>
+            <th>Autor</th>
+            <th>Título</th>
+            <th>Fec Enviado</th>
+            <th>Convocatoria</th>
+            <th>Estado</th>
+            <th>Tipo</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of listComisionPublicadoEstudiante; index as i">
+            <td class="center" style="width: 30px;">{{(pageRender.paginaActual - 1) * pageRender.numElementosPorPagina + i + 1}}</td>
+            <td class="actions center" style="width: 100px">
+                <button type="button" name="eliminar" (click)='openDialog(item)' class="btn btn-primary btn-xs" title="Eliminar">
+                    <i class="fa fa-search"></i>
+                </button>
+            </td>
+            <td>{{item.idTem}}</td>
+            <td>{{item.persona.perApellido}} {{item.persona.perNombre}}</td>
+            <td>{{item.temNombre}}</td>
+            <td>{{item.temFechaEnviado}}</td>
+            <td>{{item.convocatoria.conNombre}}</td>
+            <td>{{item.nombreEstado}}</td>
+            <td>{{item.nombreTipo}}</td>
+        </tr>
+    </tbody>
+</table>
+<ng-template ad-host-paginator></ng-template>
+
+<div id="dialog">
+    <div>
+        <!-- <app-ad-banner [ads]="ads"></app-ad-banner> -->
+        <div class="ad-banner-example">
+            <ng-template ad-host></ng-template>
+        </div>
+    </div>
+</div>

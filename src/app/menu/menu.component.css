@@ -1,0 +1,10 @@
+#sidebar-toggle-icon {
+    color: #e1ffff;    
+}
+ul.submenu li:hover a{
+    color: #e1ffff;
+}
+.menu-min .nav-list>li.active.open>a:after, .menu-min .nav-list>li.hover-show>a>.menu-text, .menu-min .nav-list>li:hover>a>.menu-text, .menu-min .nav-list>li:hover>ul.submenu {
+    background-color: #2e353d;
+    color: #e1ffff;
+}

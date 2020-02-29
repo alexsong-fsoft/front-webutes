@@ -1,0 +1,97 @@
+<h2 class="header header-efx">{{titulo}}</h2>
+<form>
+    <div class="form-group row">
+        <label for="correoHost" class="col-sm-2 col-form-label">Host</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="correoHost" [(ngModel)]="correo.correoHost">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="correoProtocolo" class="col-sm-2 col-form-label">Protocolo</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="correoProtocolo" [(ngModel)]="correo.correoProtocolo">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="correoUsuario" class="col-sm-2 col-form-label">Usuario</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="correoUsuario" [(ngModel)]="correo.correoUsuario">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="correoClave" class="col-sm-2 col-form-label">Clave</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="correoClave" [(ngModel)]="correo.correoClave">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="correoPuerto" class="col-sm-2 col-form-label">Puerto</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="correoPuerto" [(ngModel)]="correo.correoPuerto">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="correoAuth" class="col-sm-2 col-form-label">Auth</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="correoAuth" [(ngModel)]="correo.correoAuth">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="correoHtml" class="col-sm-2 col-form-label">Html</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="correoHtml" [(ngModel)]="correo.correoHtml">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="correoNotificacion" class="col-sm-2 col-form-label">Notificacion</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="correoNotificacion" [(ngModel)]="correo.correoNotificacion">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="correoRecordatorio" class="col-sm-2 col-form-label">Recordatorio</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="correoRecordatorio" [(ngModel)]="correo.correoRecordatorio">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="correoPeticion" class="col-sm-2 col-form-label">Peticion</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="correoPeticion" [(ngModel)]="correo.correoPeticion">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="correoActivo" class="col-sm-2 col-form-label">Estado</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="correoActivo" [(ngModel)]="correo.correoActivo">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="correoFechaCreado" class="col-sm-2 col-form-label">FechaCreado</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="correoFechaCreado" [(ngModel)]="correo.correoFechaCreado">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="correoFechaEditado" class="col-sm-2 col-form-label">FechaEditado</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="correoFechaEditado" [(ngModel)]="correo.correoFechaEditado">
+        </div>
+    </div>
+    <input type="hidden" value="" name="id" [(ngModel)]="correo.idCorreo">
+    <div class="form-group row">
+        <div class="col-sm-8 center">
+            <button class="btn btn-primary" role="button" (click)='create()' *ngIf="!correo.idCorreo else elseBlock">
+                <i class="fa fa-save"></i> CREAR
+            </button>
+            <ng-template #elseBlock>
+                <button class="btn btn-primary" role="button" (click)='update()'>
+                    <i class="fa fa-save"></i> EDITAR
+                </button>
+            </ng-template>
+            <a routerLink="/correo" class="btn btn-danger">
+                <i class="fa fa-reply"></i> VOLVER
+            </a>
+        </div>
+    </div>
+</form>

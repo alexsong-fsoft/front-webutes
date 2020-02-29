@@ -1,0 +1,58 @@
+<div id="tabs_docentetema" class="tabbable">
+    <ul class="nav nav-tabs">
+        <li><a href="javascript:void(0)" (click)="showTab('tab-mistemas')"><i class="fa fa-certificate"></i>&nbsp; Revisión previa - Temas</a></li>
+    </ul>
+    
+    <div class="tab-content">
+
+        <div id="tab-mistemas" class="tab-pane">
+            <div id="cont-tab-mistemas">
+                <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th class="center" style="width: 100px;">Acciones</th>
+                            <th class="center" style="width: 30px;">ID</th>
+                            <th>Título</th>
+                            <th>N° Est</th>
+                            <th>Convocatoria</th>
+                            <th>Estado</th>
+                            <th>Tipo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listLectorAsigna; index as i">
+                            <td class="center" style="width: 30px;"></td>
+                            <td class="actions center" style="width: 100px">
+                                <button type="button" name="detalle" (click)='openDialog(item)'  class="btn btn-primary btn-xs" title="Ver Detalle">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                                <button type="button" name="editar" [routerLink]="['/dashboard/estudianteevoluciondesarrollo', item.idTem]"  class="btn btn-primary btn-xs" title="Ver Evolución">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                </button>
+                            </td>
+                            <td>{{item.idTem}}</td>
+                            <td>{{item.temNombre}}</td>
+                            <td>{{item.temNumEst}}</td>
+                            <td></td>
+                            <!-- <td>{{item.convocatoria.conNombre}}</td> -->
+                            <td>{{item.nombreEstado}}</td>
+                            <td>{{item.nombreTipo}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="space-4" style="clear:both"></div>
+        </div>
+
+    </div>
+    <br>
+</div>
+
+<div id="dialog">
+    <div>
+        <div class="ad-banner-example">
+            <ng-template ad-host></ng-template>
+        </div>
+    </div>
+</div>

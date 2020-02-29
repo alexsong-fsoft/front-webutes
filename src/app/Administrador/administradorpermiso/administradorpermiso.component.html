@@ -1,0 +1,86 @@
+<h2 class="header header-efx">{{titulo}}</h2>
+
+
+<div id="tabs_docentetema" class="tabbable">
+    <ul class="nav nav-tabs">
+        <li><a href="javascript:void(0)" (click)="showTab('tab-perfil')"><i class="fa fa-certificate"></i>&nbsp; Perfil</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-pagina')"><i class="fa fa-certificate"></i>&nbsp; Página</a></li>
+    </ul>
+    
+    <div class="tab-content">
+
+        <div id="tab-perfil" class="tab-pane">
+            <div id="cont-tab-mistemas">
+                <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th class="center" style="width: 100px;">Acciones</th>
+                            <th class="center" style="width: 30px;">ID</th>
+                            <th>Nombre</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of sysperfiles">
+                            <td class="center" style="width: 30px;"></td>
+                            <td class="actions center" style="width: 100px">
+                                <button type="button" name="detalle" (click)='openDialog(item)'  class="btn btn-primary btn-xs" title="Ver Detalle">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </td>
+                            <td>{{item.idPrf}}</td>
+                            <td>{{item.prfNombre}}</td>
+                            <td>{{item.prfActivo}}</td>            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="space-4" style="clear:both"></div>
+        </div>
+
+        <div id="tab-pagina" class="tab-pane">
+            <div id="cont-tab-desarrollo">
+                <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th class="center" style="width: 100px;">Acciones</th>
+                            <th class="center" style="width: 30px;">ID</th>
+                            <th>Etiqueta</th>
+                            <th>Titulo</th>
+                            <th>Orden</th>
+                            <th>Tipo</th>
+                            <th>Ruta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of syspaginas">
+                            <td class="center" style="width: 30px;"></td>
+                            <td class="actions center" style="width: 100px">
+                                
+                            </td>
+                            <td>{{item.idPag}}</td>
+                            <td>{{item.pagEtiqueta}}</td>
+                            <td>{{item.pagTitulo}}</td>            
+                            <td>{{item.pagOrden}}</td>
+                            <td>{{item.pagTipo}}</td>
+                            <td>{{item.pagUrl}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="space-4" style="clear:both"></div>
+        </div>
+
+    </div>
+    <br>
+</div>
+
+<div id="dialog">
+    <div>
+        <div class="ad-banner-example">
+            <ng-template ad-host></ng-template>
+        </div>
+    </div>
+</div>

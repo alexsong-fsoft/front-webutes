@@ -1,0 +1,109 @@
+<h2 class="header header-efx">{{titulo}}</h2>
+<form>
+    <div class="form-group row">
+        <label for="idTema" class="col-sm-2 col-form-label">Tema</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="idTema" [(ngModel)]="evolucion.idTema">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="evlIdEstado" class="col-sm-2 col-form-label">evlIdEstado</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="evlIdEstado" [(ngModel)]="evolucion.evlIdEstado">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="evlCodigo" class="col-sm-2 col-form-label">evlCodigo</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="evlCodigo" [(ngModel)]="evolucion.evlCodigo">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="evlFechaCita" class="col-sm-2 col-form-label">evlFechaCita</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="evlFechaCita" [(ngModel)]="evolucion.evlFechaCita">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="evlFechaRegistro" class="col-sm-2 col-form-label">evlFechaRegistro</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="evlFechaRegistro" [(ngModel)]="evolucion.evlFechaRegistro">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="evlTiempoDuracion" class="col-sm-2 col-form-label">evlTiempoDuracion</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="evlTiempoDuracion" [(ngModel)]="evolucion.evlTiempoDuracion">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="evlDescripcion" class="col-sm-2 col-form-label">evlDescripcion</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="evlDescripcion" [(ngModel)]="evolucion.evlDescripcion">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="evlTareas" class="col-sm-2 col-form-label">evlTareas</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="evlTareas" [(ngModel)]="evolucion.evlTareas">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="evlValida" class="col-sm-2 col-form-label">evlValida</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="evlValida" [(ngModel)]="evolucion.evlValida">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="evlFechaValida" class="col-sm-2 col-form-label">evlFechaValida</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="evlFechaValida" [(ngModel)]="evolucion.evlFechaValida">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="evlComentario" class="col-sm-2 col-form-label">evlComentario</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="evlComentario" [(ngModel)]="evolucion.evlComentario">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="evlActivo" class="col-sm-2 col-form-label">evlActivo</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="evlActivo" [(ngModel)]="evolucion.evlActivo">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="evlSecuencia" class="col-sm-2 col-form-label">evlSecuencia</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="evlSecuencia" [(ngModel)]="evolucion.evlSecuencia">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="evlPorcentaje" class="col-sm-2 col-form-label">evlPorcentaje</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="evlPorcentaje" [(ngModel)]="evolucion.evlPorcentaje">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="evlHoracita" class="col-sm-2 col-form-label">evlHoracita</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="evlHoracita" [(ngModel)]="evolucion.evlHoracita">
+        </div>
+    </div>
+    <input type="hidden" value="" name="id" [(ngModel)]="evolucion.idEvl">
+    <div class="form-group row">
+        <div class="col-sm-8 center">
+            <button class="btn btn-primary" role="button" (click)='create()' *ngIf="!evolucion.idEvl else elseBlock">
+                <i class="fa fa-save"></i> CREAR
+            </button>
+            <ng-template #elseBlock>
+                <button class="btn btn-primary" role="button" (click)='update()'>
+                    <i class="fa fa-save"></i> EDITAR
+                </button>
+            </ng-template>
+            <a routerLink="/evolucion" class="btn btn-danger">
+                <i class="fa fa-reply"></i> VOLVER
+            </a>
+        </div>
+    </div>
+</form>

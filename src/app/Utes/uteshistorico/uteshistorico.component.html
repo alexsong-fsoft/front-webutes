@@ -1,0 +1,44 @@
+<h2 class="header header-efx">{{titulo}}</h2>
+
+
+<div id="tabs_docentetema" class="tabbable">
+    <ul class="nav nav-tabs">
+        <li><a href="javascript:void(0)" (click)="showTab('tab-mistemas')"><i class="fa fa-certificate"></i>&nbsp; Histórico</a></li>
+    </ul>
+    
+    <div class="tab-content">
+
+        <div id="tab-mistemas" class="tab-pane">
+            <div id="cont-tab-mistemas">
+                <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th class="center" style="width: 30px;">Id Tema</th>
+                            <th>Valor</th>
+                            <th>Id Persona</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listHistorico; index as i">
+                            <td class="center" style="width: 30px;">{{i + 1}}</td>
+                            <td>{{item.hisValor}}</td>
+                            <td>{{item.hisPersona}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="space-4" style="clear:both"></div>
+        </div>
+
+    </div>
+    <br>
+</div>
+
+<div id="dialog">
+    <div>
+        <div class="ad-banner-example">
+            <ng-template ad-host></ng-template>
+        </div>
+    </div>
+</div>

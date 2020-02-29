@@ -1,0 +1,25 @@
+<nav>
+	<ul class="pagination">
+        <li [className]="pageRender.first ? 'page-item disabled' : 'page-item'">
+            <span [className]="pageRender.first ? 'page-link show' : 'page-link hide'"> Primera</span>
+			<a [className]="pageRender.first ? 'page-link hide' : 'page-link show'" [routerLink]="[pageRender.url, 0]" page='0'> Primera</a>
+		</li>
+		<li [className]="!pageRender.hasPrevious ? 'page-item disabled' : 'page-item'">
+			<span [className]="!pageRender.hasPrevious ? 'page-link show' : 'page-link hide'">&laquo;</span>
+			<a [className]="!pageRender.hasPrevious ? 'page-link hide' : 'page-link show'" [routerLink]="[pageRender.url, pageRender.paginaActual-2]" page='pageRender.paginaActual-2'>&laquo;</a>
+        </li>
+        <li [className]="itemPage.actual ? 'page-item active' : 'page-item'" *ngFor="let itemPage of pageRender.paginas">
+            <span [className]="itemPage.actual ? 'page-link show' : 'page-link hide'">{{itemPage.numero}}</span>
+            <a [className]="itemPage.actual ? 'page-link hide' : 'page-link show'" [routerLink]="[pageRender.url, itemPage.numero-1]" page='itemPage.numero-1'>{{itemPage.numero}}</a>
+        </li>	
+		<li [className]="!pageRender.hasNext ? 'page-item disabled' : 'page-item'">
+			<span [className]="!pageRender.hasNext ? 'page-link show' : 'page-link hide'">&raquo;</span>
+			<a [className]="!pageRender.hasNext ? 'page-link hide' : 'page-link show'" [routerLink]="[pageRender.url, pageRender.paginaActual]" page='pageRender.paginaActual'>&raquo;</a>
+		</li>
+		<li [className]="pageRender.last ? 'page-item disabled' : 'page-item'">
+			<span [className]="pageRender.last ? 'page-link show' : 'page-link hide'">&Uacute;ltima</span>
+			<a [className]="pageRender.last ? 'page-link hide' : 'page-link show'" [routerLink]="[pageRender.url, pageRender.totalPaginas-1]" page='pageRender.totalPaginas-1'>&Uacute;ltima</a>
+		</li>
+	</ul>
+ 
+</nav>

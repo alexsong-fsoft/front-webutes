@@ -1,0 +1,49 @@
+<h2 class="header header-efx">{{titulo}}</h2>
+<form>
+    <div class="form-group row">
+        <label for="idPersona" class="col-sm-2 col-form-label">idPersona</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="idPersona" [(ngModel)]="seleccion.idPersona">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="IdPeriodo" class="col-sm-2 col-form-label">IdPeriodo</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="IdPeriodo" [(ngModel)]="seleccion.IdPeriodo">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="selHoraAsignada" class="col-sm-2 col-form-label">selHoraAsignada</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="selHoraAsignada" [(ngModel)]="seleccion.selHoraAsignada">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="selHoraVigente" class="col-sm-2 col-form-label">selHoraVigente</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="selHoraVigente" [(ngModel)]="seleccion.selHoraVigente">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="selHoraLectura" class="col-sm-2 col-form-label">selHoraLectura</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="selHoraLectura" [(ngModel)]="seleccion.selHoraLectura">
+        </div>
+    </div>
+    <input type="hidden" value="" name="id" [(ngModel)]="seleccion.idSel">
+    <div class="form-group row">
+        <div class="col-sm-8 center">
+            <button class="btn btn-primary" role="button" (click)='create()' *ngIf="!seleccion.idSel else elseBlock">
+                <i class="fa fa-save"></i> CREAR
+            </button>
+            <ng-template #elseBlock>
+                <button class="btn btn-primary" role="button" (click)='update()'>
+                    <i class="fa fa-save"></i> EDITAR
+                </button>
+            </ng-template>
+            <a routerLink="/seleccion" class="btn btn-danger">
+                <i class="fa fa-reply"></i> VOLVER
+            </a>
+        </div>
+    </div>
+</form>
