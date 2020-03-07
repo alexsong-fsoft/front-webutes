@@ -17,13 +17,11 @@ declare var Gestor: any;
 })
 export class DocentehitoComponent implements OnInit {
   titulo: string = "Docente - Hito";
-  asig: Asignado = null;
   listDocenteHito: Tema[];
   public usserLogged: Sysusuario = null;
   
   constructor(private userService: UserService,
-    private temaService: TemaService, 
-    private asignadoService: AsignadoService) { }
+    private temaService: TemaService) { }
 
   ngOnInit() {
     this.usserLogged = this.userService.getUserLoggedIn();
