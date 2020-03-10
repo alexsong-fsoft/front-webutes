@@ -72,7 +72,7 @@
     </li>
     <li class="" *ngIf="usserLogged.sysPerfil.prfNombre === 'UTES'">
         <a href="javascript:void(0);" class="dropdown-toggle">
-            <i class="menu-icon fa <i class="fa fa-folder-open" aria-hidden="true"></i>"></i><span class="menu-text"> Gestión Temas </span>
+            <i class="menu-icon fa fa-certificate"></i><span class="menu-text"> Gestión Temas </span>
             <b class="arrow fa fa-angle-down"></b>
         </a>
         <b class="arrow"></b>
@@ -97,7 +97,7 @@
     </li>
     <li class="" *ngIf="usserLogged.sysPerfil.prfNombre === 'UTES'">
         <a href="javascript:void(0);" class="dropdown-toggle">
-            <i class="menu-icon fa <i class="fa fa-list-ol" aria-hidden="true"></i>"></i><span class="menu-text"> Gestión Examen </span>
+            <i class="menu-icon fa fa-certificate"></i><span class="menu-text"> Gestión Examen </span>
             <b class="arrow fa fa-angle-down"></b>
         </a>
         <b class="arrow"></b>
@@ -146,6 +146,27 @@
             </li>
             <li class="">
                 <a routerLink="/dashboard/administradorconfiguracion"> <i class="menu-icon fa fa-caret-right"></i> Configuracion </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+    <li class="" *ngIf="usserLogged.sysPerfil.prfNombre === ''">
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-certificate"></i><span class="menu-text"> Administración </span>
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu">
+            <li class="">
+                <a routerLink="/dashboard/correo"> <i class="menu-icon fa fa-caret-right"></i> Inicio </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/syspermiso"> <i class="menu-icon fa fa-caret-right"></i> Permiso </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a routerLink="/dashboard/sysusuario"> <i class="menu-icon fa fa-caret-right"></i> Configuracion </a>
                 <b class="arrow"></b>
             </li>
         </ul>
