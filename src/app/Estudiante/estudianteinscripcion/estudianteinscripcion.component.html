@@ -1,6 +1,6 @@
 <h2 class="header header-efx">{{titulo}}</h2>
 <div class="widget-header">
-    <button type="button" name="nuevo" (click)='openDialog()' class="btn btn-primary btn-xs" title="Nuevo" *ngIf="habilitaBotonInscripcion">
+    <button type="button" name="nuevo" (click)='openDialog()' title="Nuevo" [className]="habilitaBotonInscripcion ? 'btn btn-primary btn-xs' : 'btn btn-primary btn-xs disabled'">
         <i class="fa fa-pencil-square-o"></i> NUEVO
     </button>
 </div>

@@ -352,7 +352,9 @@ const routes: Routes = [
     DocentehitodesarrolloComponent, 
     DocentehitodetalleComponent, 
     DocentehitoresoluciondialogComponent, 
-    DocentehitodialogComponent, UtespresolicituddetalledialogComponent, UtespresolicitudvalidarespuestadialogComponent, UtesasignacionrevisordialogComponent, UtesresoluciondetalleComponent, PrerevisionexamendetalleComponent
+    DocentehitodialogComponent, UtespresolicituddetalledialogComponent, 
+    UtespresolicitudvalidarespuestadialogComponent, UtesasignacionrevisordialogComponent, 
+    UtesresoluciondetalleComponent, PrerevisionexamendetalleComponent
   ],
   imports: [
     BrowserModule,
@@ -420,7 +422,8 @@ const routes: Routes = [
     UtespresolicituddetalledialogComponent,
     AsignaciondetalleComponent,
     UtesresoluciondetalleComponent,
-    PrerevisionexamendetalleComponent
+    PrerevisionexamendetalleComponent,
+    UtesasignacionrevisordialogComponent
   ]
 })
 export class AppModule { }

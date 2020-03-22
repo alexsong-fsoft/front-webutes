@@ -1,14 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Router } from '@angular/router';
 import { AdComponent } from 'src/app/Estudiante/estudiantetema/ad.component';
 import { Sysusuario } from 'src/app/sysusuario/sysusuario';
 import { UserService } from 'src/app/login/user.service';
+import { PeriodoService } from 'src/app/periodo/periodo.service';
+import { Estaticos } from 'src/app/app.constants';
+import { SysusuarioService } from 'src/app/sysusuario/sysusuario.service';
+import { Tipo } from 'src/app/tipo/Tipo';
 import { Tema } from 'src/app/tema/tema';
 import { TemaService } from 'src/app/tema/tema.service';
-import { PeriodoService } from 'src/app/periodo/periodo.service';
-import { Periodo } from 'src/app/periodo/periodo';
-import { SysusuarioService } from 'src/app/sysusuario/sysusuario.service';
-import { Estaticos } from 'src/app/app.constants';
 
 @Component({
   // selector: 'app-utesasignacionrevisordialog',
@@ -19,11 +18,12 @@ export class UtesasignacionrevisordialogComponent implements AdComponent {
   public usserLogged: Sysusuario = null;
   private tema: Tema = new Tema();
   private listUsuarioRevisor: Sysusuario[];
-
+  private listTipoDocumento: Tipo[];
+  
   constructor(private userService: UserService,
-    private temaService: TemaService, 
     private periodoService: PeriodoService,
-    private router: Router) { }
+    private temaService: TemaService,
+    private sysusuarioService: SysusuarioService) { }
 
   ngOnInit() {
     this.usserLogged = this.userService.getUserLoggedIn();
@@ -31,8 +31,10 @@ export class UtesasignacionrevisordialogComponent implements AdComponent {
   }
 
   public load(): void {
+    this.listTipoDocumento = Tipo.loadDocumento();
     let id = this.data.idTema;
-    if (id) {
+    if (id) {      
+      this.getListUsuarioRevisor(id);
       this.temaService.getById(id).subscribe(
         (tema) => {
           if (tema != null) {
@@ -50,7 +52,11 @@ export class UtesasignacionrevisordialogComponent implements AdComponent {
           if (idlastperiodo != null) {
             this.periodoService.getByIdActivo(idlastperiodo).subscribe(
               (enperiodoActual) => {
-                //this.listUsuarioRevisor = SysusuarioService.getAllByNombrePerfilIdTemaIdPeriodo(Estaticos.TIPO_LABEL_PERFIL_DOCENTE, idtem, enperiodoActual.idPrd);
+                this.sysusuarioService.getAllByNombrePerfilIdTemaIdPeriodo(Estaticos.TIPO_LABEL_PERFIL_DOCENTE, idtem, enperiodoActual.idPrd).subscribe(
+                  (sysusuarios) => {
+                    this.listUsuarioRevisor = sysusuarios;
+                  }
+                );
               }
             );
           } 
@@ -58,4 +64,6 @@ export class UtesasignacionrevisordialogComponent implements AdComponent {
       );
     }
   }
+  
+
 }

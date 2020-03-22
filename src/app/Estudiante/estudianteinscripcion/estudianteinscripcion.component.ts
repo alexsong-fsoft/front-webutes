@@ -13,6 +13,8 @@ import { Sysusuario } from 'src/app/sysusuario/sysusuario';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { filter, takeUntil, pairwise, startWith } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { InscripcionService } from 'src/app/inscripcion/inscripcion.service';
+import { Estado } from 'src/app/estado/Estado';
 
 declare var JQuery: any;
 declare var $: any;
@@ -22,21 +24,24 @@ declare var Gestor: any;
   selector: 'app-estudianteinscripcion',
   templateUrl: './estudianteinscripcion.component.html'
 })
-export class EstudianteinscripcionComponent implements OnInit, OnDestroy{
+export class EstudianteinscripcionComponent implements OnInit, OnDestroy {
   titulo: string = "Estudiante - Inscripción";
   persona: Persona = null;
   listPresolicitud: Presolicitud[];
+  listDataEstadoInscripcion: Estado[];
+  maxsecuencial: number = null;
   habilitaBotonInscripcion: boolean = false;
   public usserLogged: Sysusuario = null;
   public destroyed = new Subject<any>();
-  
-  @ViewChild(AdDirective, {static: true}) adHost: AdDirective;
-  
-  constructor(private presolicitudService: PresolicitudService, 
+
+  @ViewChild(AdDirective, { static: true }) adHost: AdDirective;
+
+  constructor(private presolicitudService: PresolicitudService,
     private personaService: PersonaService,
     private userService: UserService,
+    private inscripcionService: InscripcionService,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private router: Router) {}
+    private router: Router) { }
 
   ngOnInit() {
     this.router.events.pipe(
@@ -47,10 +52,9 @@ export class EstudianteinscripcionComponent implements OnInit, OnDestroy{
       takeUntil(this.destroyed)
     ).subscribe(() => {
       this.usserLogged = this.userService.getUserLoggedIn();
+      this.habilitaBotonEvolucionEstado();
       this.loadListaPresolicitud();
     })
-    // this.usserLogged = this.userService.getUserLoggedIn();
-    //   this.loadListaPresolicitud();
   }
 
   ngOnDestroy() {
@@ -58,23 +62,59 @@ export class EstudianteinscripcionComponent implements OnInit, OnDestroy{
     this.destroyed.complete();
   }
 
-  loadListaPresolicitud(): Presolicitud[] {
+  loadListaPresolicitud() {
     this.personaService.getByCedula(this.usserLogged.persona.perCedula).subscribe(
       (persona) => {
         this.persona = persona;
         if (persona != null) {
-            this.presolicitudService.getAllByCedula(persona).subscribe(
+          this.presolicitudService.getAllByCedula(persona).subscribe(
             (presolicituds: Presolicitud[]) => {
               this.listPresolicitud = presolicituds;
-              if(presolicituds.length == 0){
-                this.habilitaBotonInscripcion = true;
+            }
+          );
+        }
+      }
+    );
+  }
+  
+  public habilitaBotonEvolucionEstado(): void {
+    this.inscripcionService.getInscripcionActivaMaxSecuencial().subscribe(
+      (maxsecuencial) => {
+        this.maxsecuencial = maxsecuencial;
+        if (maxsecuencial != null) {
+          this.inscripcionService.getById(maxsecuencial).subscribe(
+            (auxinscripcion) => {
+              if (auxinscripcion != null) {
+                this.listDataEstadoInscripcion = Estado.loadInscripcionAccion();
+                let errores: String[] = [];
+                let valor: number = 0;
+                this.presolicitudService.getAllByCedulaId(this.usserLogged.persona, auxinscripcion).subscribe(
+                (listpresol: Presolicitud[]) => {
+                    if (listpresol != undefined && listpresol.length > 0) {
+                      listpresol.forEach(objpre => {
+                        if (objpre != null) {
+                          valor = objpre.pslIdEstado;
+                          this.listDataEstadoInscripcion.forEach(objest => {
+                            if (objest.id == valor) {
+                              errores.push(valor.toString());
+                            }
+                          });
+                        }
+                      });
+                      if (errores.length > 0) {
+                        this.habilitaBotonInscripcion = false;
+                      } else {
+                        this.habilitaBotonInscripcion = true;
+                      }
+                    }
+                  }
+                );                  
               }
             }
           );
         }
       }
     );
-    return this.listPresolicitud;
   }
 
   loadComponent() {
@@ -85,11 +125,11 @@ export class EstudianteinscripcionComponent implements OnInit, OnDestroy{
     const componentRef = viewContainerRef.createComponent(componentFactory);
     (<AdComponent>componentRef.instance).data = adItem.data;
   }
-  
+
   openDialog(): void {
     this.loadComponent();
     $('#dialog').dialog({
-      title: 'Formulario Presolicitud', 
+      title: 'Formulario Presolicitud',
       modal: true,
       minWidth: 800,
       resizable: false

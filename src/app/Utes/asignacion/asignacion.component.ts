@@ -10,6 +10,7 @@ import { AdComponent } from 'src/app/Estudiante/estudiantetema/ad.component';
 import { Estaticos } from 'src/app/app.constants';
 import { AsignaciondetalleComponent } from './asignaciondetalle.component';
 import { PageRender } from 'src/app/Page/pagerender';
+import { UtesasignacionrevisordialogComponent } from './utesasignacionrevisordialog.component';
 
 declare var JQuery: any;
 declare var $: any;
@@ -107,11 +108,31 @@ export class AsignacionComponent implements OnInit {
     (<AdComponent>componentRef.instance).data = adItem.data;
   }
 
+  loadComponent2(idTema: number) {
+    const adItem = new AdItem(UtesasignacionrevisordialogComponent, { idTema: idTema });
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
+    const viewContainerRef = this.adHost.viewContainerRef;
+    viewContainerRef.clear();
+    const componentRef = viewContainerRef.createComponent(componentFactory);
+    (<AdComponent>componentRef.instance).data = adItem.data;
+  }
+
   openDialog(tema: Tema): void {
     this.loadComponent(tema.idTem);
     $('#dialog').dialog({
       modal: true,
-      minWidth: 1000,
+      minWidth: 800,
+      resizable: false
+    });
+    Gestor.fn.positionDialog();
+  }
+
+  openDialog2(tema: Tema): void {
+    this.loadComponent2(tema.idTem);
+    $('#dialog').dialog({
+      tittle: 'Asignación de revisor de tema',
+      modal: true,
+      minWidth: 800,
       resizable: false
     });
     Gestor.fn.positionDialog();

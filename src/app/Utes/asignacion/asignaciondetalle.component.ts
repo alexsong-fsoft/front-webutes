@@ -29,7 +29,7 @@ export class AsignaciondetalleComponent implements AdComponent {
   ngOnInit() {
     this.load();
     this.listEstadoAsignadoLectorRevisorUtes = Estado.loadAsignaLectorRevisor();
-    this.listTipoAsignacion = Tipo.getListDataTipoAsignacion();
+    this.listTipoAsignacion = Tipo.loadAsignacion();
     $("#tabs_docentetema_detalle").tabs();
     this.showTab2('tab-tema');
   }

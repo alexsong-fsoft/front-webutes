@@ -154,6 +154,8 @@ export class Estaticos {
     static readonly ESTADO_LABEL_HITO_CREADO = 'Creado';
     static readonly ESTADO_LABEL_HITO_CUMPLIDO = 'Cumplido';
     static readonly ESTADO_LABEL_HITO_NOCUMPLIDO = 'Retraso';
+    static readonly TIPO_LABEL_CUESTIONARIO_INSCRIPCION = 'INSCRIPCIÓN';
+    static readonly TIPO_LABEL_CUESTIONARIO_PREREVISION = 'REVISIÓN PREVIA';
 
     static readonly PERSONAID_ESTUDIANTE = 161;  //42 tiene tema - 161 no tiene
     static readonly PERSONACEDULA_ESTUDIANTE = '1714075916'; //1802727485 tiene - 1714075916 no tiene

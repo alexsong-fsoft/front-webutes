@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import Lang from '../../assets/app.lang.json';
 import { Persona } from '../persona/persona';
 import { Page } from '../Page/page';
+import { Inscripcion } from '../inscripcion/inscripcion';
 
 @Injectable({
   providedIn: 'root'
@@ -74,8 +75,8 @@ export class PresolicitudService {
     );
   }
 
-  getAllByCedulaId(presolicitudtipo: Presolicitud): Observable<Presolicitud[]> {
-    return this.http.post<Presolicitud[]>(`${this.urlEndPoint}/obtenerListadoPresolicitudPorCedulaId`, presolicitudtipo, {headers: this.httpHeaders}).pipe(
+  getAllByCedulaId(persona: Persona, inscripcion: Inscripcion): Observable<Presolicitud[]> {
+    return this.http.post<Presolicitud[]>(`${this.urlEndPoint}/obtenerListadoPresolicitudPorCedulaId`, { persona: persona, inscripcion: inscripcion } , {headers: this.httpHeaders}).pipe(
       map( response => response as Presolicitud[] )
     );
   }

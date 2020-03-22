@@ -9,11 +9,18 @@ export class Tipo {
         this.nombre = nombreTipo;
     }
 
-    static getListTipoDocumentoAll(): Tipo[] {
+    static loadDocumentoAll(): Tipo[] {
         return [
             new Tipo(Estaticos.TIPO_ID_OPCIONTITULACION_PROYECTO, Estaticos.TIPO_LABEL_TITULACION_PROYECTO),
             new Tipo(Estaticos.TIPO_ID_OPCIONTITULACION_ARTICULO, Estaticos.TIPO_LABEL_TITULACION_ARTICULO),
             new Tipo(Estaticos.TIPO_ID_OPCIONTITULACION_EXAMEN, Estaticos.TIPO_LABEL_TITULACION_EXAMEN)
+        ];
+    }
+
+    static loadDocumento(): Tipo[] {
+        return [
+            new Tipo(Estaticos.TIPO_ID_OPCIONTITULACION_PROYECTO, Estaticos.TIPO_LABEL_TITULACION_PROYECTO),
+            new Tipo(Estaticos.TIPO_ID_OPCIONTITULACION_ARTICULO, Estaticos.TIPO_LABEL_TITULACION_ARTICULO)
         ];
     }
 
@@ -24,7 +31,16 @@ export class Tipo {
         ];
     }
 
-    static getListDataTipoAsignacion(): Tipo[] {
+    static loadCuestionario(): Tipo[] {
+        return [
+            new Tipo(Estaticos.TIPO_ID_CUESTIONARIO_INSCRIPCION, Estaticos.TIPO_LABEL_CUESTIONARIO_INSCRIPCION),
+            new Tipo(Estaticos.TIPO_ID_CUESTIONARIO_PREREVISION, Estaticos.TIPO_LABEL_CUESTIONARIO_PREREVISION)
+        ];
+    }
+    
+    
+
+    static loadAsignacion(): Tipo[] {
         return [
             new Tipo(Estaticos.TIPO_ID_ASIGNACION_REVISOR, Estaticos.TIPO_LABEL_ASIGNACION_REVISOR),
             new Tipo(Estaticos.TIPO_ID_ASIGNACION_ESTUDIANTE, Estaticos.TIPO_LABEL_ASIGNACION_ESTUDIANTE),

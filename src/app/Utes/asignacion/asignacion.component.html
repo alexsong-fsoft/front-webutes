@@ -1,6 +1,3 @@
-<h2 class="header header-efx">{{titulo}}</h2>
-
-
 <div id="tabs_docentetema" class="tabbable">
     <ul class="nav nav-tabs">
         <li><a href="javascript:void(0)" (click)="showTab('tab-mistemas')"><i class="fa fa-certificate"></i>&nbsp; Asignación - Revisor</a></li>
@@ -23,7 +20,7 @@
                         <tr>
                             <th class="center" style="width: 30px;"></th>
                             <th class="center" style="width: 100px;">Acciones</th>
-                            <th class="center" style="width: 30px;">ID</th>
+                            <th class="center hide" style="width: 30px;">ID</th>
                             <th scope="col" class="fixed-side center">
                                 <input id="chk_all_row" class="chk_all_row" type="checkbox" value="">                                                                   
                             </th>
@@ -33,20 +30,21 @@
                             <th>Convocatoria</th>
                             <th>Estado</th>
                             <th>Tipo</th>
+                            <th>Fecha</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of listUtesEnviados; index as i">
                             <td class="center" style="width: 30px;">{{i +1}}</td>
                             <td class="actions center" style="width: 100px">
-                                <button type="button" name="editar" [routerLink]="['/dashboard/estudianteevoluciondesarrollo', item.idTem]" title="Asignar Revisor" [className]="habilitaBotonAsignarRevisor(item.temIdEstado) ? 'btn btn-primary btn-xs disabled' : 'btn btn-primary btn-xs'">
+                                <button type="button" name="editar" (click)='openDialog2(item)' title="Asignar Revisor" [className]="habilitaBotonAsignarRevisor(item.temIdEstado) ? 'btn btn-primary btn-xs disabled' : 'btn btn-primary btn-xs'">
                                     <i class="fa fa-plus"></i>
                                 </button>
                                 <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </td>
-                            <td class="">{{item.idTem}}</td>
+                            <td class="hide">{{item.idTem}}</td>
                             <td class="actions fixed-side center">
                                 <input id="row_{{item.idTem}}" name="chk_row" type="checkbox" value="{{item.idTem}}" (change)="onChange(item.idTem, $event.target.checked)">
                             </td>
@@ -56,6 +54,7 @@
                             <td>{{item.convocatoria ? item.convocatoria.conNombre : ''}}</td>
                             <td>{{item.nombreEstado}}</td>
                             <td>{{item.nombreTipo}}</td>
+                            <td>{{item.temFechaCreado}}</td>
                         </tr>
                     </tbody>
                 </table>

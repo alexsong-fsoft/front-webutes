@@ -35,17 +35,17 @@ export class EstudianteinscripcionDialogComponent implements AdComponent {
   private listTipoOpcionTitulacion: Tipo[];
   private listCuestionario: Cuestionario[];
   private listCuestionarioSeleccion: number[] = [];
-  public usserLogged: Sysusuario = null;
+  public usserLogged2: Sysusuario = null;
 
-  constructor(private userService: UserService,
-    private inscripcionService: InscripcionService,
+  constructor(private userService2: UserService,
+    private inscripcionService2: InscripcionService,
     private cuestionarioService: CuestionarioService,
-    private presolicitudService: PresolicitudService,
+    private presolicitudService2: PresolicitudService,
     private respuestaService: RespuestaService,
-    private router: Router) { }
+    private router2: Router) { }
 
   ngOnInit() {
-    this.usserLogged = this.userService.getUserLoggedIn();
+    this.usserLogged2 = this.userService2.getUserLoggedIn();
     this.load();
   }
 
@@ -61,8 +61,8 @@ export class EstudianteinscripcionDialogComponent implements AdComponent {
   }
 
   public load(): void {
-    this.listTipoOpcionTitulacion = Tipo.getListTipoDocumentoAll();
-    this.inscripcionService.getUltimoRegistroInscripcion().subscribe(
+    this.listTipoOpcionTitulacion = Tipo.loadDocumentoAll();
+    this.inscripcionService2.getUltimoRegistroInscripcion().subscribe(
       (idinscripcion) => {
         if (idinscripcion != null) {
           this.cuestionarioService.getByIdsTipoIdInscripcion(Estaticos.TIPO_ID_CUESTIONARIO_INSCRIPCION.toString(), idinscripcion).subscribe(
@@ -111,26 +111,26 @@ export class EstudianteinscripcionDialogComponent implements AdComponent {
             if (this.verificaSeleccionRequisitos() == true) {
               let utilfecha = new Date();
               if (this.listCuestionarioSeleccion != null) {
-                this.inscripcionService.getUltimoRegistroInscripcion().subscribe(
+                this.inscripcionService2.getUltimoRegistroInscripcion().subscribe(
                   (idultimo) => {
                     if (idultimo != null) {
-                      this.inscripcionService.getInscripcionActivaMaxSecuencial().subscribe(
+                      this.inscripcionService2.getInscripcionActivaMaxSecuencial().subscribe(
                         (maxsecuencial) => {
                           if (maxsecuencial != null) {
-                            this.inscripcionService.getById(maxsecuencial).subscribe(
+                            this.inscripcionService2.getById(maxsecuencial).subscribe(
                               (auxinscripcion) => {
                                 if (auxinscripcion != null) {
                                   this.enpresolicitud = new Presolicitud();
                                   //this.enpresolicitud.inscripcion = auxinscripcion;
-                                  //this.enpresolicitud.persona = this.usserLogged.persona;
+                                  //this.enpresolicitud.persona = this.usserLogged2.persona;
                                   this.enpresolicitud.idInscripcion = auxinscripcion.idIns;
-                                  this.enpresolicitud.idPersona = this.usserLogged.persona.idPer;
+                                  this.enpresolicitud.idPersona = this.usserLogged2.persona.idPer;
                                   this.enpresolicitud.pslIdEstado = Estaticos.ESTADO_PRESOLICITUD_ENVIADO;
                                   this.enpresolicitud.pslMensaje = (this.presolicitud.pslMensaje != null ? this.presolicitud.pslMensaje.toUpperCase().trim() : this.presolicitud.pslMensaje);
                                   this.enpresolicitud.pslIdOpcion = this.presolicitud.pslIdOpcion;
                                   this.enpresolicitud.pslFecha = utilfecha;
                                   this.enpresolicitud.pslActivo = true;
-                                  this.presolicitudService.create(this.enpresolicitud).subscribe(
+                                  this.presolicitudService2.create(this.enpresolicitud).subscribe(
                                     (response) => {
                                       if (response) {
                                         this.listCuestionario.forEach(objcue => {
@@ -147,7 +147,7 @@ export class EstudianteinscripcionDialogComponent implements AdComponent {
                                                   if (response2) {
                                                     // $('#dialog').dialog('close');
                                                     // swal.fire(Lang.messages.register_new, "Se registro un nueva inscripción", 'success');
-                                                    // this.router.navigate(['/dashboard/estudianteinscripcion'])
+                                                    // this.router2.navigate(['/dashboard/estudianteinscripcion'])
                                                     //notificacionGlobal("Notificaciones", "Se registro un nueva inscripción", "/convocatoriatema");
                                                   } else {
                                                     errores.push("" + enrespuesta);
@@ -163,7 +163,7 @@ export class EstudianteinscripcionDialogComponent implements AdComponent {
                                           //Mensajes.mensajeInfo(null, MENSAJE_OK_REGISTRA, null);
                                           $('#dialog').dialog('close');
                                           swal.fire(Lang.messages.register_new, "Se registro un nueva inscripción", 'success');
-                                          this.router.navigate(['/dashboard/estudianteinscripcion'])
+                                          this.router2.navigate(['/dashboard/estudianteinscripcion'])
                                           
                                         } else {
                                           swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_REGISTRA, 'error');

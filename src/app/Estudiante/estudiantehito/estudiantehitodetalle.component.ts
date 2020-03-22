@@ -35,7 +35,7 @@ export class EstudiantehitoDetalleComponent implements OnInit {
   ngOnInit() {
     this.load();
     this.listEstadoAsignadoLector = Estado.loadAsignaLector();
-    this.listTipoAsignacion = Tipo.getListDataTipoAsignacion();
+    this.listTipoAsignacion = Tipo.loadAsignacion();
     $("#tabs_evolucion_detalle").tabs();
     this.showTab('tab-tema');    
   }
