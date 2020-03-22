@@ -11,6 +11,8 @@ import { Estaticos } from 'src/app/app.constants';
 import { AsignaciondetalleComponent } from './asignaciondetalle.component';
 import { PageRender } from 'src/app/Page/pagerender';
 import { UtesasignacionrevisordialogComponent } from './utesasignacionrevisordialog.component';
+import swal from 'sweetalert2';
+import Lang from '../../../assets/app.lang.json';
 
 declare var JQuery: any;
 declare var $: any;
@@ -26,6 +28,7 @@ export class AsignacionComponent implements OnInit {
   listUtesEnviados: Tema[];
   listComisionPublicado: Tema[];
   listUtesAprobados: Tema[];
+  listUtesEnviadosSeleccion: number[] = [];
   pageRender: PageRender<Tema>;
   pageRender2: PageRender<Tema>;
   pageRender3: PageRender<Tema>;
@@ -136,5 +139,70 @@ export class AsignacionComponent implements OnInit {
       resizable: false
     });
     Gestor.fn.positionDialog();
+  }
+
+  onChange(idTema: number, isChecked: boolean) {
+    let selectedTema = this.listUtesEnviadosSeleccion;
+    if (isChecked) {
+      selectedTema.push(idTema);
+    } else {
+      selectedTema = this.listUtesEnviadosSeleccion.filter(item => item !== idTema);
+    }
+    this.listUtesEnviadosSeleccion = selectedTema;
+  }
+
+
+  updateTemaEstado() {
+    let errores: String[] = [];
+    let tematexto: String[] = [];     ;
+    try {
+      if(this.listUtesEnviadosSeleccion != null && this.listUtesEnviadosSeleccion.length > 0){
+        this.listUtesEnviadosSeleccion.forEach(idTem => {
+          this.temaService.getById(idTem).subscribe(
+            (objtem) => {
+              if (objtem != null) {
+                if (objtem.temIdEstado == Estaticos.ESTADO_TEMA_PRE_REVISADO) {
+                  let utilfecha = new Date();
+                  objtem.temIdEstado = Estaticos.ESTADO_TEMA_PRE_PUBLICADO;
+                  objtem.temFechaEnviado = utilfecha;
+                  this.temaService.update(objtem).subscribe(
+                    (response2) => {
+                      if (response2) {
+                        //notificacionGlobal("Notificaciones", "Tema publicado", "/temapublicado");
+                        // if (daoconfigura.activaProcesoByCampo(CONFIG_TEMA_PUBLICACIONAUTOR)) {
+                        //   SysUsuario auxus = daousuario.obtenerUsuarioPorPersonaId(objtema.getPersona().getIdPer());
+                        //   utilcorreo.setDataUsuario(auxus, "Publicación tema", "Se ha publicado el tema:", objtema.getTemNombre());
+                        //   utilcorreo.sendNotificaNuevo();
+                        // }
+                        tematexto.push("   " + objtem.temNombre + "\n");                                      
+                      } else {
+                        errores.push("" + objtem.idTem);
+                      }
+                    }
+                  );
+                  
+                }
+              } 
+            }                
+          )
+        });
+        
+        if (errores.length == 0) {
+          swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_ACTUALIZA, 'success');
+          //this.router.navigate(['/dashboard/docentetema'])
+          // if (daoconfigura.activaProcesoByCampo(CONFIG_TEMA_ENVIADO)) {
+          //   utilcorreo.setDataUsuario(enusuariosesion, "Envio de temas", "Se ha enviado los siguiente(s) tema(s) para su revisión:", tematexto.toString().replace('[', ' ').replace(']', ' '));
+          //   utilcorreo.sendNotificaNuevo();
+          // }
+        } else {
+          swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_REGISTRA, 'error');
+        }
+
+      } else {
+        swal.fire("", Estaticos.MENSAJE_ERROR_SELECCION, 'error');
+      }
+    } catch (error) {
+      console.error('Here is the error message', error);
+    }
   }
 }

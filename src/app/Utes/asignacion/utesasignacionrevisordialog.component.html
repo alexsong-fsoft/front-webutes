@@ -16,12 +16,37 @@
     <div class="form-group row">
         <label for="temIdTipo" class="col-sm-2 col-form-label">Revisor</label>
         <div class="col-sm-8">
-            <select class="form-control" name="miselect2">
+            <select class="form-control" name="miselect2" [(ngModel)]="usserSelected.idUsr">
                 <option [value]="item.idUsr" *ngFor="let item of listUsuarioRevisor">{{item.persona.perNombre}}</option>
             </select>
         </div>
+        <div class="col-sm-2">
+            <button type="button" name="addrevisor" (click)='createUtesAsignaRevisor()' title="Asignar Revisor">
+                <i class="fa fa-plus"></i>
+            </button>
+        </div>
     </div>
-    
+    <div style="clear: both;"></div>
+    <div class="col-sm-12">
+    <table class="table table-striped table-bordered tbl_chk font-small" style="width:100%; margin-bottom:0px;">
+        <thead class="thead-inverse">
+            <tr>
+                <th class="center" style="width: 30px;"></th>
+                <th>Cédula</th>
+                <th>Docente</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of listPerAsignaRevisorSelected">
+                <td class="center" style="width: 30px;"></td>
+                <td>{{item.persona.perCedula}}</td>
+                <td>{{item.persona.perNombre}}</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
     
     <input type="hidden" value="" name="id" [(ngModel)]="tema.idTem">
     <div class="form-group row">

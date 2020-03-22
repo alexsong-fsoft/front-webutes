@@ -218,10 +218,6 @@ export class DocentetemaComponent implements OnInit, OnDestroy {
           } 
         }
       )
-
-      
-        
-          
     } catch (error) {
       console.error('Here is the error message', error);
     }
