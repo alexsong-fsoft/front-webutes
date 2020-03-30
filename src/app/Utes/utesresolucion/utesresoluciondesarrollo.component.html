@@ -1,0 +1,103 @@
+<h2 class="header header-efx">{{titulo}}</h2>
+<div class="col-xs-12">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="profile-info-name">Tipo :</div>
+            <div class="profile-info-value" style="background-color: #b5d4fb;"><span><b>{{tema.nombreTipo}}</b></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="profile-info-name">Tema :</div>
+            <div class="profile-info-value"><span>{{tema.temNombre}}</span></div>
+        </div>
+    </div>
+</div>
+<div style="clear: both;"></div>
+<div class="widget-header">
+    <button type="button" name="datosTema" (click)='openDialog3()' class="btn btn-primary btn-xs" title="Datos de Tema">
+        <i class="fa fa-pencil-square-o"></i> Datos de Tema
+    </button>
+    <button type="button" name="crearResolucion" (click)='openDialog2()' class="btn btn-primary btn-xs" title="Crear Nueva Resolución">
+        <i class="fa fa-pencil-square-o"></i> Nueva Resolución
+    </button>
+</div>
+<div style="clear: both;"></div>
+<table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+    <thead class="thead-inverse">
+        <tr>
+            <th class="center" style="width: 30px;"></th>
+            <th class="center" style="width: 100px;">Acciones</th>
+            <th class="center hide" style="width: 30px;">ID</th>
+            <th>No. resolución</th>
+            <th>Fecha resolución</th>
+            <th>Tipo</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of tema.resoluciones; index as i">
+            <td class="center" style="width: 30px;">{{i + 1}}</td>
+            <td class="actions center" style="width: 100px">
+                <button type="button" name="editar" (click)='openDialog2(item)' title="Registro de desarrollo de cita"
+                    [className]="!habilitaProceso(item.rslIdEstado) ? 'btn btn-primary btn-xs' : 'btn btn-primary btn-xs disabled'">
+                    <i class="fa fa-pencil-square-o"></i>
+                </button>
+                <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs"
+                    title="Ver Detalle">
+                    <i class="fa fa-search"></i>
+                </button>
+            </td>
+            <td class="hide">{{item.idRsl}}</td>
+            <td>{{item.rslNumero}}</td>
+            <td>{{item.rslFechaResolucion}}</td>
+            <td>{{(item.tipoResolucion.trslTitulo)}}</td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<div class="form-group row">
+    <div class="col-sm-12 center">
+        <a routerLink="/dashboard/utesresolucion" class="btn btn-danger">
+            <i class="fa fa-reply"></i> VOLVER
+        </a>
+    </div>
+</div>
+
+
+<div id="dialog2">
+    <div>
+        <div class="ad-banner-example">
+            <ng-template ad-host></ng-template>
+        </div>
+    </div>
+</div>
+
+<div id="dialog3">
+    <div>
+        <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+            <thead class="thead-inverse">
+                <tr>
+                    <th class="center" style="width: 30px;"></th>
+                    <th class="center hide" style="width: 30px;">ID</th>
+                    <th>Cédula</th>
+                    <th>Apellido</th>
+                    <th>Nombre</th>
+                    <th>Fecha</th>
+                    <th>Tipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of tema.asignados; index as i">
+                    <td class="center" style="width: 30px;">{{i + 1}}</td>
+                    <td class="hide">{{item.idAsg}}</td>
+                    <td>{{item.persona.perCedula}}</td>
+                    <td>{{item.persona.perApellido}}</td>
+                    <td>{{item.persona.perNombre}}</td>
+                    <td>{{item.asgFechaRegistro}}</td>
+                    <td>{{getNombreTipoAsignado(item.asgIdTipo)}}</td>
+                </tr>
+            </tbody>
+        </table>   
+    </div>
+</div>

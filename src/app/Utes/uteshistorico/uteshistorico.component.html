@@ -22,6 +22,7 @@
                     <tbody>
                         <tr *ngFor="let item of listHistorico; index as i">
                             <td class="center" style="width: 30px;">{{i + 1}}</td>
+                            <td>{{item.hisTema}}</td>
                             <td>{{item.hisValor}}</td>
                             <td>{{item.hisPersona}}</td>
                         </tr>

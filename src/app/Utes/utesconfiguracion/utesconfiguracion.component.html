@@ -13,11 +13,19 @@
 
         <div id="tab-mistemas" class="tab-pane">
             <div id="cont-tab-mistemas">
+                <div class="widget-header">
+                    <button type="button" name="datosTema" (click)='dialogCreatePeriodo()' class="btn btn-primary btn-xs" title="Crear Nuevo Periodo">
+                        <i class="fa fa-pencil-square-o"></i> Nuevo Periodo
+                    </button>
+                </div>
+                <div style="clear: both;"></div>
                 <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
                     <thead class="thead-inverse">
                         <tr>
                             <th class="center" style="width: 30px;"></th>
-                            <th class="center" style="width: 100px;">Acciones</th>
+                            <th class="center" style="width: 100px;">Editar periodo</th>
+                            <th class="center" style="width: 100px;">Añadir docentes al periodo</th>
+                            <th class="center" style="width: 100px;">Editar horas de docentes añadidos</th>
                             <th>Periodo</th>
                             <th>Fecha inicio</th>
                             <th>Fecha fin</th>
@@ -29,11 +37,18 @@
                     <tbody>
                         <tr *ngFor="let item of listPeriodo; index as i">
                             <td class="center" style="width: 30px;">{{i + 1}}</td>
-                            <td class="actions center" style="width: 100px">
+                            <td class="actions center">
+                                <button type="button" name="editar" (click)='dialogEditPeriodo(item)'  class="btn btn-primary btn-xs" title="Editar periodo">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                </button>
+                            </td>
+                            <td class="actions center">
                                 <button type="button" name="detalle" (click)='openDialog(item)'  class="btn btn-primary btn-xs" title="Ver Detalle">
                                     <i class="fa fa-search"></i>
                                 </button>
-                                <button type="button" name="editar" [routerLink]="['/dashboard/estudianteevoluciondesarrollo', item.idTem]"  class="btn btn-primary btn-xs" title="Ver Evolución">
+                            </td>
+                            <td class="actions center">
+                                <button type="button" name="editar" (click)='openDialog(item)'  class="btn btn-primary btn-xs" title="Ver Evolución">
                                     <i class="fa fa-pencil-square-o"></i>
                                 </button>
                             </td>
@@ -42,7 +57,9 @@
                             <td>{{item.prdFechaFin}}</td>
                             <td>{{item.prdAnioInicio}}</td>
                             <td>{{item.prdAnioFin}}</td>
-                            <td>{{item.prdActivo}}</td>
+                            <td class="actions fixed-side center">
+                                <input name="chk_prdActivo_{{i}}" type="checkbox" [checked]="item.prdActivo" disabled=true>                                                                   
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -52,6 +69,11 @@
 
         <div id="tab-desarrollo" class="tab-pane">
             <div id="cont-tab-desarrollo">
+                <div class="widget-header">
+                    <button type="button" name="datosConvocatoria" (click)='dialogCreateConvocatoria()' class="btn btn-primary btn-xs" title="Crear Nueva Convocatoria">
+                        <i class="fa fa-pencil-square-o"></i> Nueva Convocatoria
+                    </button>
+                </div>
                 <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
                     <thead class="thead-inverse">
                         <tr>
@@ -70,7 +92,7 @@
                         <tr *ngFor="let item of listConvocatoria; index as i">
                             <td class="center" style="width: 30px;">{{i + 1}}</td>
                             <td class="actions center" style="width: 100px">
-                                <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                                <button type="button" name="detalle" (click)='dialogEditConvocatoria(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </td>
@@ -90,6 +112,11 @@
 
         <div id="tab-revision" class="tab-pane">
             <div id="cont-tab-revision">
+                <div class="widget-header">
+                    <button type="button" name="datosInscripcion" (click)='dialogCreateInscripcion()' class="btn btn-primary btn-xs" title="Crear Nueva Inscripcion">
+                        <i class="fa fa-pencil-square-o"></i> Nueva Inscripcion
+                    </button>
+                </div>
                 <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
                     <thead class="thead-inverse">
                         <tr>
@@ -107,7 +134,7 @@
                         <tr *ngFor="let item of listInscripcion; index as i">
                             <td class="center" style="width: 30px;">{{i + 1}}</td>
                             <td class="actions center" style="width: 100px">
-                                <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                                <button type="button" name="detalle" (click)='dialogEditInscripcion(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </td>
@@ -126,6 +153,11 @@
 
         <div id="tab-requisitos" class="tab-pane">
             <div id="cont-tab-requisitos">
+                <div class="widget-header">
+                    <button type="button" name="datosCuestionario" (click)='dialogCreateCuestionario()' class="btn btn-primary btn-xs" title="Crear Nuevo Requisito">
+                        <i class="fa fa-pencil-square-o"></i> Nuevo Requisito
+                    </button>
+                </div>
                 <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
                     <thead class="thead-inverse">
                         <tr>
@@ -142,7 +174,7 @@
                         <tr *ngFor="let item of listCuestionario; index as i">
                             <td class="center" style="width: 30px;">{{i + 1}}</td>
                             <td class="actions center" style="width: 100px">
-                                <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                                <button type="button" name="detalle" (click)='dialogEditCuestionario(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </td>

@@ -1,0 +1,37 @@
+<form>
+    <div class="form-group row">
+        <label for="temIdTipo" class="col-sm-2 col-form-label">Tipo</label>
+        <div class="col-sm-10">
+            <select class="form-control" name="miselect" [(ngModel)]="resolucionnew.idTipoResolucion">
+                <option [value]="item.idTrsl" *ngFor="let item of listResolucionTipo">{{item.trslTitulo}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="rslFechaResolucion" class="col-sm-2 col-form-label">Fecha Resolución</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control date-picker" name="rslFechaResolucion" [(ngModel)]="resolucionnew.rslFechaResolucion">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="rslNumero" class="col-sm-2 col-form-label">rslNumero</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="rslNumero" [(ngModel)]="resolucionnew.rslNumero">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="rslObservacion" class="col-sm-2 col-form-label">Observación</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" name="rslObservacion" [(ngModel)]='resolucionnew.rslObservacion' rows="4"></textarea>
+        </div>
+    </div>    
+    <input type="hidden" value="" name="id" [(ngModel)]="resolucionnew.idRsl">
+    <div class="form-group row">
+        <div class="col-sm-12 center">
+            <button class="btn btn-primary" role="button" (click)='create()'>
+                <i class="fa fa-save"></i> CREAR
+            </button>
+        </div>
+    </div>
+</form>
+

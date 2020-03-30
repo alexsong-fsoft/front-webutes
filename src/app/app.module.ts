@@ -154,6 +154,13 @@ import { PrerevisionexamendetalleComponent } from './Utes/prerevisionexamen/prer
 import { AdDirectivePaginator } from './Estudiante/estudiantetema/ad.directivepaginator';
 import { EstudiantehitoDetalleComponent } from './Estudiante/estudiantehito/estudiantehitodetalle.component';
 import { EstudiantehitodesarrolloDialogComponent } from './Estudiante/estudiantehito/estudiantehitodetalledialog.component';
+import { UtesresoluciondesarrolloComponent } from './Utes/utesresolucion/utesresoluciondesarrollo.component';
+import { UtesresoluciondialogComponentComponent } from './Utes/utesresolucion/utesresoluciondialog-component.component';
+import { UtesresolucionnuevodialogComponent } from './Utes/utesresolucion/utesresolucionnuevodialog.component';
+import { UtesconfiguracionnewperiodoComponent } from './Utes/utesconfiguracion/utesconfiguracionnewperiodo.component';
+import { UtesconfiguracionnewconvocatoriaComponent } from './Utes/utesconfiguracion/utesconfiguracionnewconvocatoria.component';
+import { UtesconfiguracionnewinscripcionComponent } from './Utes/utesconfiguracion/utesconfiguracionnewinscripcion.component';
+import { UtesconfiguracionnewrequisitoComponent } from './Utes/utesconfiguracion/utesconfiguracionnewrequisito.component';
 
 const routes: Routes = [
   //{path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -274,6 +281,7 @@ const routes: Routes = [
       { path: 'utesprerevision', component: PrerevisionComponent },
       { path: 'utesaprobar', component: AprobarComponent },
       { path: 'utesresolucion', component: UtesresolucionComponent },
+      { path: 'utesresoluciondesarrollo/:id', component: UtesresoluciondesarrolloComponent },
       { path: 'utesprerevisionexamen', component: PrerevisionexamenComponent },
       { path: 'utesconfiguracion', component: UtesconfiguracionComponent },
       { path: 'utesconsulta', component: UtesconsultaComponent },
@@ -354,7 +362,8 @@ const routes: Routes = [
     DocentehitoresoluciondialogComponent, 
     DocentehitodialogComponent, UtespresolicituddetalledialogComponent, 
     UtespresolicitudvalidarespuestadialogComponent, UtesasignacionrevisordialogComponent, 
-    UtesresoluciondetalleComponent, PrerevisionexamendetalleComponent
+    UtesresoluciondetalleComponent, PrerevisionexamendetalleComponent, 
+    UtesresoluciondesarrolloComponent, UtesresoluciondialogComponentComponent, UtesresolucionnuevodialogComponent, UtesconfiguracionnewperiodoComponent, UtesconfiguracionnewconvocatoriaComponent, UtesconfiguracionnewinscripcionComponent, UtesconfiguracionnewrequisitoComponent
   ],
   imports: [
     BrowserModule,
@@ -423,7 +432,13 @@ const routes: Routes = [
     AsignaciondetalleComponent,
     UtesresoluciondetalleComponent,
     PrerevisionexamendetalleComponent,
-    UtesasignacionrevisordialogComponent
+    UtesasignacionrevisordialogComponent,
+    UtesresoluciondialogComponentComponent,
+    UtesresolucionnuevodialogComponent,
+    UtesconfiguracionnewperiodoComponent,
+    UtesconfiguracionnewconvocatoriaComponent,
+    UtesconfiguracionnewinscripcionComponent,
+    UtesconfiguracionnewrequisitoComponent
   ]
 })
 export class AppModule { }

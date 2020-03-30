@@ -20,22 +20,31 @@
             <thead class="thead-inverse">
                 <tr>
                     <th class="center" style="width: 30px;"></th>
+                    <th>Inscripción</th>
                     <th>Requisito</th>
-                    <th scope="col" class="fixed-side center">
-                        <input id="chk_all_row" class="chk_all_row" type="checkbox" value="">                                                                   
-                    </th>
+                    <th>Respuesta</th>
+                    <th>Validación</th>
+                    <th>Revisión previa</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of listCuestionarioTodos; index as i">
+                <tr *ngFor="let item of presolicitudRespuestas; index as i">
                     <td class="center" style="width: 30px;">{{i + 1}}</td>
-                    <td>{{item.cuePregunta}}</td>
+                    <td>{{presolicitud.inscripcion.insNombre}}</td>
+                    <td>{{item.cuestionario.cuePregunta}}</td>
                     <td class="actions fixed-side center">
-                        <input id="row_{{item.idCue}}" name="chk_row" type="checkbox" value="{{item.idCue}}" (change)="onChange(item.idCue, $event.target.checked)">                                                                   
+                        <input name="chk_resValor_{{i}}" type="checkbox" [checked]="item.resValor" disabled=true>                                                                   
                     </td>
+                    <td class="actions fixed-side center">
+                        <input name="chk_resValidacion_{{i}}" type="checkbox" [checked]="item.resValidacion" disabled=true>                                                                   
+                    </td>
+                    <td class="actions fixed-side center">
+                        <input name="chk_resPrerevision_{{i}}" type="checkbox" [checked]="item.resPrerevision" disabled=true>                                                                   
+                    </td>
+                    <!-- <td>{{item.resValor}}</td> -->
                 </tr>
             </tbody>
-        </table>       
+        </table>     
     </div>
     
 </form>

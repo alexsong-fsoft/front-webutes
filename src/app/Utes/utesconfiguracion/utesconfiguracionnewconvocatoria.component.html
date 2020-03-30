@@ -1,0 +1,62 @@
+<!-- <h2 class="header header-efx">{{titulo}}</h2> -->
+<form>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Nombre de convocatoria: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input type="text" class="form-control" name="nombre" [(ngModel)]="convocatoria.conNombre">
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Número mínimo de temas: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input type="number" min="0" max="20" step="1" [(ngModel)]="convocatoria.conNumeroTema" [ngModelOptions]="{standalone: true}"/>
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Periodo: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <select class="form-control" name="miselect" [(ngModel)]="convocatoria.conPeriodo">
+                    <!-- <option [value]="item.idTrsl" *ngFor="let item of listResolucionTipo">{{item.trslTitulo}}</option> -->
+                </select>
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Fecha inicial: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input type="text" class="form-control date-picker" name="conFechaInicio" [(ngModel)]="convocatoria.conFechaInicio">
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Fecha final: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input type="text" class="form-control date-picker" name="conFechaFin" [(ngModel)]="convocatoria.conFechaFin">
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Actiado: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input name="chk_prdActivo" type="checkbox" [checked]="convocatoria.conActivo" [(ngModel)]="convocatoria.prdActivo">                                                                   
+            </span></div>
+        </div>
+    </div>
+    <input type="hidden" value="" name="id" [(ngModel)]="convocatoria.idCon">
+    <br/>
+    <div class="form-group row">
+        <div class="col-sm-12 center">
+            <button class="btn btn-primary" role="button" (click)='updateTemaconvocatoriaEstudiante()'>
+                <i class="fa fa-save"></i> GUARDAR
+            </button>
+        </div>
+    </div>
+</form>

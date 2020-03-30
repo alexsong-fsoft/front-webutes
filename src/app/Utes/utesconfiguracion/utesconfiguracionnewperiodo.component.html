@@ -1,0 +1,60 @@
+<!-- <h2 class="header header-efx">{{titulo}}</h2> -->
+<form>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Periodo: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input type="number" min="40" max="200" step="1" [(ngModel)]="periodo.prdNumero" [ngModelOptions]="{standalone: true}"/>
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Fecha inicial: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input type="text" class="form-control date-picker" name="prdFechaInicio" [(ngModel)]="periodo.prdFechaInicio">
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Fecha final: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input type="text" class="form-control date-picker" name="prdFechaFin" [(ngModel)]="periodo.prdFechaFin">
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Año inicial: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input type="number" min="2014" max="2050" step="1" [(ngModel)]="periodo.prdAnioInicio" [ngModelOptions]="{standalone: true}"/>
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Año final: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input type="number" min="2014" max="2050" step="1" [(ngModel)]="periodo.prdAnioFin" [ngModelOptions]="{standalone: true}"/>
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Actiado: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input name="chk_prdActivo" type="checkbox" [checked]="periodo.prdActivo" [(ngModel)]="periodo.prdActivo">                                                                   
+            </span></div>
+        </div>
+    </div>
+    <input type="hidden" value="" name="id" [(ngModel)]="periodo.idPrd">
+    <br/>
+    <div class="form-group row">
+        <div class="col-sm-12 center">
+            <button class="btn btn-primary" role="button" (click)='updateTemaperiodoEstudiante()'>
+                <i class="fa fa-save"></i> GUARDAR
+            </button>
+        </div>
+    </div>
+</form>

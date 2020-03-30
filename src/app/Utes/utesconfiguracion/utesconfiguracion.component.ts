@@ -14,6 +14,12 @@ import { Inscripcion } from 'src/app/inscripcion/inscripcion';
 import { InscripcionService } from 'src/app/inscripcion/inscripcion.service';
 import { Cuestionario } from 'src/app/cuestionario/cuestionario';
 import { CuestionarioService } from 'src/app/cuestionario/cuestionario.service';
+import { AdItem } from 'src/app/Estudiante/estudiantetema/ad-item';
+import { AdComponent } from 'src/app/Estudiante/estudiantetema/ad.component';
+import { UtesconfiguracionnewperiodoComponent } from './utesconfiguracionnewperiodo.component';
+import { UtesconfiguracionnewconvocatoriaComponent } from './utesconfiguracionnewconvocatoria.component';
+import { UtesconfiguracionnewinscripcionComponent } from './utesconfiguracionnewinscripcion.component';
+import { UtesconfiguracionnewrequisitoComponent } from './utesconfiguracionnewrequisito.component';
 
 declare var JQuery: any;
 declare var $: any;
@@ -24,7 +30,7 @@ declare var Gestor: any;
   templateUrl: './utesconfiguracion.component.html'
 })
 export class UtesconfiguracionComponent implements OnInit {
-  private titulo: string = "Gestión de Temas";
+  private titulo: string = "Configuraciones";
   public usserLogged: Sysusuario = null;
   listPeriodo: Periodo[];
   listConvocatoria: Convocatoria[];
@@ -90,5 +96,170 @@ export class UtesconfiguracionComponent implements OnInit {
   public showTab(tabid: String){
     $('#tabs_docentetema .tab-pane').hide();
     $('#'+tabid).show();
+  }
+
+  loadComponentPeriodo(idPrd: number) {
+    const adItem = new AdItem(UtesconfiguracionnewperiodoComponent, {idPrd: idPrd});
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
+    const viewContainerRef = this.adHost.viewContainerRef;
+    viewContainerRef.clear();
+    const componentRef = viewContainerRef.createComponent(componentFactory);
+    (<AdComponent>componentRef.instance).data = adItem.data;
+  }
+
+  dialogCreatePeriodo(): void {
+    this.loadComponentPeriodo(null);
+    try {
+      $('#dialog').dialog('destroy');
+    } catch (error) {
+      console.log(error);
+    }
+    $('#dialog').dialog({
+      title: 'Registro de Periodo',
+      modal: true,
+      minWidth: 500,
+      resizable: false
+    });
+    Gestor.fn.positionDialog();
+  }
+
+  dialogEditPeriodo(periodoSelected: Periodo): void {
+    this.loadComponentPeriodo(periodoSelected.idPrd);
+    try {
+      $('#dialog').dialog('destroy');
+    } catch (error) {
+      console.log(error);
+    }
+    $('#dialog').dialog({
+      title: 'Editar Periodo',
+      modal: true,
+      minWidth: 500,
+      resizable: false
+    });
+    Gestor.fn.positionDialog();
+  }
+
+  loadComponentConvocatoria(idCon: number) {
+    const adItem = new AdItem(UtesconfiguracionnewconvocatoriaComponent, {idCon: idCon});
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
+    const viewContainerRef = this.adHost.viewContainerRef;
+    viewContainerRef.clear();
+    const componentRef = viewContainerRef.createComponent(componentFactory);
+    (<AdComponent>componentRef.instance).data = adItem.data;
+  }
+
+  dialogCreateConvocatoria(): void {
+    this.loadComponentConvocatoria(null);
+    try {
+      $('#dialog').dialog('destroy');
+    } catch (error) {
+      console.log(error);
+    }
+    $('#dialog').dialog({
+      title: 'Registro de Convocatoria',
+      modal: true,
+      minWidth: 500,
+      resizable: false
+    });
+    Gestor.fn.positionDialog();
+  }
+
+  dialogEditConvocatoria(convocatoriaSelected: Convocatoria): void {
+    this.loadComponentConvocatoria(convocatoriaSelected.idCon);
+    try {
+      $('#dialog').dialog('destroy');
+    } catch (error) {
+      console.log(error);
+    }
+    $('#dialog').dialog({
+      title: 'Editar Convocatoria',
+      modal: true,
+      minWidth: 500,
+      resizable: false
+    });
+    Gestor.fn.positionDialog();
+  }
+
+  loadComponentInscripcion(idIns: number) {
+    const adItem = new AdItem(UtesconfiguracionnewinscripcionComponent, {idIns: idIns});
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
+    const viewContainerRef = this.adHost.viewContainerRef;
+    viewContainerRef.clear();
+    const componentRef = viewContainerRef.createComponent(componentFactory);
+    (<AdComponent>componentRef.instance).data = adItem.data;
+  }
+
+  dialogCreateInscripcion(): void {
+    this.loadComponentInscripcion(null);
+    try {
+      $('#dialog').dialog('destroy');
+    } catch (error) {
+      console.log(error);
+    }
+    $('#dialog').dialog({
+      title: 'Registro de Inscripcion',
+      modal: true,
+      minWidth: 500,
+      resizable: false
+    });
+    Gestor.fn.positionDialog();
+  }
+
+  dialogEditInscripcion(inscripcionSelected: Inscripcion): void {
+    this.loadComponentInscripcion(inscripcionSelected.idIns);
+    try {
+      $('#dialog').dialog('destroy');
+    } catch (error) {
+      console.log(error);
+    }
+    $('#dialog').dialog({
+      title: 'Editar Inscripcion',
+      modal: true,
+      minWidth: 500,
+      resizable: false
+    });
+    Gestor.fn.positionDialog();
+  }
+
+  
+  loadComponentCuestionario(idCue: number) {
+    const adItem = new AdItem(UtesconfiguracionnewrequisitoComponent, {idCue: idCue});
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
+    const viewContainerRef = this.adHost.viewContainerRef;
+    viewContainerRef.clear();
+    const componentRef = viewContainerRef.createComponent(componentFactory);
+    (<AdComponent>componentRef.instance).data = adItem.data;
+  }
+
+  dialogCreateCuestionario(): void {
+    this.loadComponentCuestionario(null);
+    try {
+      $('#dialog').dialog('destroy');
+    } catch (error) {
+      console.log(error);
+    }
+    $('#dialog').dialog({
+      title: 'Registro de Requisito',
+      modal: true,
+      minWidth: 500,
+      resizable: false
+    });
+    Gestor.fn.positionDialog();
+  }
+
+  dialogEditCuestionario(cuestionarioSelected: Cuestionario): void {
+    this.loadComponentCuestionario(cuestionarioSelected.idCue);
+    try {
+      $('#dialog').dialog('destroy');
+    } catch (error) {
+      console.log(error);
+    }
+    $('#dialog').dialog({
+      title: 'Editar Requisito',
+      modal: true,
+      minWidth: 500,
+      resizable: false
+    });
+    Gestor.fn.positionDialog();
   }
 }

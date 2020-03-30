@@ -29,11 +29,13 @@ export class PrerevisionexamendetalleComponent implements AdComponent {
   private presolicitud: Presolicitud = null;
   private titulo: string = "Inscripcion";
   private listCuestionarioTodos: Cuestionario[];
+  private presolicitudRespuestas: Respuesta[] = [];
 
   constructor(
     private presolicitudService: PresolicitudService,
     private inscripcionService: InscripcionService,
-    private cuestionarioService: CuestionarioService) { }
+    private cuestionarioService: CuestionarioService,
+    private respuestaService: RespuestaService) { }
 
   ngOnInit() {
     //this.usserLogged = this.userService.getUserLoggedIn();
@@ -44,6 +46,7 @@ export class PrerevisionexamendetalleComponent implements AdComponent {
     let id = this.data.idPsl;
     if (id) {
       this.presolicitudService.getById(id).subscribe((presolicitud) => this.presolicitud = presolicitud)
+      this.respuestaService.getAllByIdPresolicitud(id).subscribe((respuestas) => this.presolicitudRespuestas = respuestas)
     }
     this.inscripcionService.getUltimoRegistroInscripcion().subscribe(
       (idinscripcion) => {
