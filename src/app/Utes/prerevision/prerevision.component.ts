@@ -19,7 +19,6 @@ declare var Gestor: any;
   templateUrl: './prerevision.component.html'
 })
 export class PrerevisionComponent implements OnInit {
-  private titulo: string = "Gestión de Temas";
   public usserLogged: Sysusuario = null;
   listLectorAsigna: Tema[];
   

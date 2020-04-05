@@ -3,7 +3,6 @@ import { Sysusuario } from 'src/app/sysusuario/sysusuario';
 import { AdDirective } from 'src/app/Estudiante/estudiantetema/ad.directive';
 import { Presolicitud } from 'src/app/presolicitud/presolicitud';
 import { UserService } from 'src/app/login/user.service';
-import { PersonaService } from 'src/app/persona/persona.service';
 import { PresolicitudService } from 'src/app/presolicitud/presolicitud.service';
 import { AdItem } from 'src/app/Estudiante/estudiantetema/ad-item';
 import { AdComponent } from 'src/app/Estudiante/estudiantetema/ad.component';
@@ -27,7 +26,7 @@ declare var Gestor: any;
 })
 export class UtespresolicitudComponent implements OnInit, OnDestroy {
   titulo: string = "Validación de Inscripciones";
-  listPresolicitud: Presolicitud[];
+  listPresolicitud: Presolicitud[] = [];
   pageRender: PageRender<Presolicitud>;
   public usserLogged: Sysusuario = null;
   public destroyed = new Subject<any>();
@@ -36,13 +35,13 @@ export class UtespresolicitudComponent implements OnInit, OnDestroy {
   @ViewChild(AdDirectivePaginator, {static: true}) adHostPag: AdDirectivePaginator;
 
   constructor(private presolicitudService: PresolicitudService, 
-    private personaService: PersonaService,
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
     private componentFactoryResolver: ComponentFactoryResolver,
     private router: Router) { }
 
   ngOnInit() {
+    this.listPresolicitud = [];
     this.router.events.pipe(
       filter((event: RouterEvent) => event instanceof NavigationEnd),
       pairwise(),
@@ -50,6 +49,7 @@ export class UtespresolicitudComponent implements OnInit, OnDestroy {
       startWith('initial call'),
       takeUntil(this.destroyed)
     ).subscribe(() => {
+      console.log('reinicia.....');
       this.usserLogged = this.userService.getUserLoggedIn();
       this.loadPresolicitudes();
     })    
@@ -87,9 +87,14 @@ export class UtespresolicitudComponent implements OnInit, OnDestroy {
     (<AdComponent>componentRef.instance).data = adItem.data;
   }
   
-  openDialog(idPsl: number): void {
+  nuevaPresolicitud(idPsl: number): void {
     this.loadComponent(idPsl);
-    $('#dialog').dialog({
+    try {
+      $('#dialogUtesPresolicitud').dialog('destroy');
+    } catch (error) {
+      console.log(error);
+    }
+    $('#dialogUtesPresolicitud').dialog({
       title: 'Detalle', 
       modal: true,
       minWidth: 800,
@@ -107,9 +112,14 @@ export class UtespresolicitudComponent implements OnInit, OnDestroy {
     (<AdComponent>componentRef.instance).data = adItem.data;
   }
   
-  openDialog2(idPsl: number): void {
+  validarRespuesta(idPsl: number): void {
     this.loadComponent2(idPsl);
-    $('#dialog').dialog({
+    try {
+      $('#dialogUtesPresolicitud').dialog('destroy');
+    } catch (error) {
+      console.log(error);
+    }
+    $('#dialogUtesPresolicitud').dialog({
       title: 'Validación de inscripción', 
       modal: true,
       minWidth: 800,

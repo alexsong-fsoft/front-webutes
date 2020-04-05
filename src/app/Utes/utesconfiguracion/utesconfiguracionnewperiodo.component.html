@@ -52,9 +52,14 @@
     <br/>
     <div class="form-group row">
         <div class="col-sm-12 center">
-            <button class="btn btn-primary" role="button" (click)='updateTemaperiodoEstudiante()'>
-                <i class="fa fa-save"></i> GUARDAR
+            <button class="btn btn-primary" role="button" (click)='create()' *ngIf="!periodo.idPrd else elseBlock">
+                <i class="fa fa-save"></i> CREAR
             </button>
+            <ng-template #elseBlock>
+                <button class="btn btn-primary" role="button" (click)='update()'>
+                    <i class="fa fa-save"></i> EDITAR
+                </button>
+            </ng-template>
         </div>
     </div>
 </form>

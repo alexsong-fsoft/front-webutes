@@ -34,10 +34,11 @@ export class UtesresoluciondesarrolloComponent implements OnInit {
     private componentFactoryResolver: ComponentFactoryResolver) { }
 
   ngOnInit() {
+    this.tema = new Tema();
     this.load();
     this.listEstadoEvolucion = Estado.loadEvolucion();
     this.listTipoAsignacion = Tipo.loadAsignacion();
-    $("#dialog3").dialog({
+    $("#dialogAsignados").dialog({
       autoOpen: false
     });
   }
@@ -74,15 +75,15 @@ export class UtesresoluciondesarrolloComponent implements OnInit {
     (<AdComponent>componentRef.instance).data = adItem.data;
   }
 
-  openDialog(resolucion: Resolucion): void {
+  openResolucionDetail(resolucion: Resolucion): void {
     this.loadComponent(resolucion.idRsl);
     try {
-      $('#dialog2').dialog('destroy');
+      $('#dialogUtesResolucionNew').dialog('destroy');
     } catch (error) {
       console.log(error);
     }
-    $('#dialog2').dialog({
-      title: 'Detalle',
+    $('#dialogUtesResolucionNew').dialog({
+      title: 'Detalle Resolución',
       modal: true,
       minWidth: 800,
       resizable: false
@@ -99,14 +100,14 @@ export class UtesresoluciondesarrolloComponent implements OnInit {
     (<AdComponent>componentRef.instance).data = adItem.data;
   }
 
-  openDialog2(): void {
+  openResolucionNew(): void {
     this.loadComponent2();
     try {
-      $('#dialog2').dialog('destroy');
+      $('#dialogUtesResolucionNew').dialog('destroy');
     } catch (error) {
       console.log(error);
     }
-    $('#dialog2').dialog({
+    $('#dialogUtesResolucionNew').dialog({
       title: 'Nueva Resolución',
       modal: true,
       minWidth: 800,
@@ -115,14 +116,14 @@ export class UtesresoluciondesarrolloComponent implements OnInit {
     Gestor.fn.positionDialog();
   }
 
-  openDialog3(): void {
+  openAsignados(): void {
     try {
-      $('#dialog3').dialog('destroy');
+      $('#dialogAsignados').dialog('destroy');
     } catch (error) {
       console.log(error);
     }
-    $('#dialog3').dialog({
-      title: 'Detalle',
+    $('#dialogAsignados').dialog({
+      title: 'Asignados',
       modal: true,
       minWidth: 800,
       resizable: false

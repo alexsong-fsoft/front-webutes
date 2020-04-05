@@ -16,10 +16,10 @@
 </div>
 <div style="clear: both;"></div>
 <div class="widget-header">
-    <button type="button" name="datosTema" (click)='openDialog3()' class="btn btn-primary btn-xs" title="Datos de Tema">
+    <button type="button" name="datosTema" (click)='openAsignados()' class="btn btn-primary btn-xs" title="Datos de Tema">
         <i class="fa fa-pencil-square-o"></i> Datos de Tema
     </button>
-    <button type="button" name="crearResolucion" (click)='openDialog2()' class="btn btn-primary btn-xs" title="Crear Nueva Resolución">
+    <button type="button" name="crearResolucion" (click)='openResolucionNew()' class="btn btn-primary btn-xs" title="Crear Nueva Resolución">
         <i class="fa fa-pencil-square-o"></i> Nueva Resolución
     </button>
 </div>
@@ -39,11 +39,11 @@
         <tr *ngFor="let item of tema.resoluciones; index as i">
             <td class="center" style="width: 30px;">{{i + 1}}</td>
             <td class="actions center" style="width: 100px">
-                <button type="button" name="editar" (click)='openDialog2(item)' title="Registro de desarrollo de cita"
+                <button type="button" name="editar" (click)='openResolucionNew(item)' title="Registro de desarrollo de cita"
                     [className]="!habilitaProceso(item.rslIdEstado) ? 'btn btn-primary btn-xs' : 'btn btn-primary btn-xs disabled'">
                     <i class="fa fa-pencil-square-o"></i>
                 </button>
-                <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs"
+                <button type="button" name="detalle" (click)='openResolucionDetail(item)' class="btn btn-primary btn-xs"
                     title="Ver Detalle">
                     <i class="fa fa-search"></i>
                 </button>
@@ -65,7 +65,7 @@
 </div>
 
 
-<div id="dialog2">
+<div id="dialogUtesResolucionNew">
     <div>
         <div class="ad-banner-example">
             <ng-template ad-host></ng-template>
@@ -73,7 +73,7 @@
     </div>
 </div>
 
-<div id="dialog3">
+<div id="dialogAsignados">
     <div>
         <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
             <thead class="thead-inverse">

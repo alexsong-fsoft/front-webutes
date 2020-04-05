@@ -270,7 +270,7 @@ var Gestor = {
 				  	at: "center top"
 				});
 				$('div.ui-dialog-content.ui-widget-content').css('overflow-x', 'hidden');				
-			}, 100);
+			}, 300);
 		}
 		
 	},

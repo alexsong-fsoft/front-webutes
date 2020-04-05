@@ -17,12 +17,12 @@ export class UtesresolucionnuevodialogComponent implements AdComponent {
   @Input() data: any;
   private resolucionnew: Resolucion = new Resolucion();
   private listResolucionTipo: Tiporesolucion[] = [];
-  private titulo: string = "Resolución";
   
   constructor(private resolucionService: ResolucionService,
     private tiporesolucionService: TiporesolucionService) { }
 
   ngOnInit() {
+    this.resolucionnew = new Resolucion();
     this.tiporesolucionService.getAll().subscribe(
       (tiporesoluciones) => {
         this.listResolucionTipo = tiporesoluciones;

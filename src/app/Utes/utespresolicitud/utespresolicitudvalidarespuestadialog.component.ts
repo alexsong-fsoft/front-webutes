@@ -3,14 +3,10 @@ import { AdComponent } from 'src/app/Estudiante/estudiantetema/ad.component';
 import { Router } from '@angular/router';
 import { Sysusuario } from 'src/app/sysusuario/sysusuario';
 import { UserService } from 'src/app/login/user.service';
-import { Inscripcion } from 'src/app/inscripcion/inscripcion';
-import { InscripcionService } from 'src/app/inscripcion/inscripcion.service';
 import { Presolicitud } from 'src/app/presolicitud/presolicitud';
 import { Cuestionario } from 'src/app/cuestionario/cuestionario';
-import { CuestionarioService } from 'src/app/cuestionario/cuestionario.service';
 import { PresolicitudService } from 'src/app/presolicitud/presolicitud.service';
 import { RespuestaService } from 'src/app/respuesta/respuesta.service';
-import { Tipo } from 'src/app/tipo/Tipo';
 import { Estaticos } from 'src/app/app.constants';
 import swal from 'sweetalert2';
 import Lang from '../../../assets/app.lang.json';
@@ -31,15 +27,10 @@ export class UtespresolicitudvalidarespuestadialogComponent implements AdCompone
   private presolicitudRespuestas: Respuesta[] = null;
   private listEstadoPresolicitudAccion: Estado[];
   private listCuestionarioSeleccion: number[] = [];
-
-  private inscripcion: Inscripcion = new Inscripcion();
-  private enpresolicitud: Presolicitud;
   private titulo: string = "Inscripcion";
   private listCuestionario: Cuestionario[];
 
   constructor(private userService: UserService,
-    private inscripcionService: InscripcionService,
-    private cuestionarioService: CuestionarioService,
     private presolicitudService: PresolicitudService,
     private respuestaService: RespuestaService,
     private router: Router) { }
@@ -51,6 +42,8 @@ export class UtespresolicitudvalidarespuestadialogComponent implements AdCompone
 
   public load(): void {
     let id = this.data.idPsl;
+    this.presolicitud = null;
+    this.listCuestionarioSeleccion = [];
     if (id) {
       this.presolicitudService.getById(id).subscribe((presolicitud) => this.presolicitud = presolicitud)
       this.respuestaService.getAllByIdPresolicitud(id).subscribe((respuestas) => this.presolicitudRespuestas = respuestas)
@@ -119,9 +112,9 @@ export class UtespresolicitudvalidarespuestadialogComponent implements AdCompone
                     });
                   }
                   if (errores.length == 0) {
-                    $('#dialog2').dialog('close');
+                    $('#dialogUtesPresolicitud').dialog('close');
                     swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_ACTUALIZA, 'success');
-                    this.router.navigate(['/dashboard/utespresolicitud'])
+                    this.router.navigate(['/dashboard/utespresolicitud']);
                   } else {
                     swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_ACTUALIZA, 'error');
                   }                 

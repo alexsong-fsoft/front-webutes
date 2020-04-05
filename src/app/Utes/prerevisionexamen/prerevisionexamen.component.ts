@@ -64,12 +64,13 @@ export class PrerevisionexamenComponent implements OnInit {
     Gestor.fn.positionDialog();
   }
 
-  habilitaBotonEditaPresolicitud(idestado: number): boolean{
+  habilitaBotonEditaPresolicitudExamen(idestado: number): boolean{
     try {
-     if (idestado != Estaticos.ESTADO_PRESOLICITUD_ENVIADO) {
-      //deshabilito boton
-      return true;
-     }   
+     if (idestado == Estaticos.ESTADO_PRESOLICITUD_APROBADO || idestado == Estaticos.ESTADO_PRESOLICITUD_ENLISTAESPERA) {
+      return false;
+     } else {
+       return true;
+     }
     } catch (error) {
       console.error('Here is the error message', error);
     }  

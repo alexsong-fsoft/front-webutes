@@ -35,12 +35,12 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of listUtesEnviados; index as i">
-                            <td class="center" style="width: 30px;">{{i +1}}</td>
+                            <td class="center" style="width: 30px;">{{(pageRender.paginaActual - 1) * pageRender.numElementosPorPagina + i + 1}}</td>
                             <td class="actions center" style="width: 100px">
-                                <button type="button" name="editar" (click)='openDialog2(item)' title="Asignar Revisor" [className]="habilitaBotonAsignarRevisor(item.temIdEstado) ? 'btn btn-primary btn-xs disabled' : 'btn btn-primary btn-xs'">
+                                <button type="button" name="editar" (click)='asignarRevisor(item)' title="Asignar Revisor" [className]="habilitaBotonAsignarRevisor(item.temIdEstado) ? 'btn btn-primary btn-xs disabled' : 'btn btn-primary btn-xs'">
                                     <i class="fa fa-plus"></i>
                                 </button>
-                                <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                                <button type="button" name="detalle" (click)='loadDetalle(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </td>
@@ -103,9 +103,9 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of listComisionPublicado; index as i">
-                            <td class="center" style="width: 30px;">{{i + 1}}</td>
+                            <td class="center" style="width: 30px;">{{(pageRender2.paginaActual - 1) * pageRender2.numElementosPorPagina + i + 1}}</td>
                             <td class="actions center" style="width: 100px">
-                                <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                                <button type="button" name="detalle" (click)='loadDetalle(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </td>
@@ -163,9 +163,9 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of listUtesAprobados; index as i">
-                            <td class="center" style="width: 30px;">{{i + 1}}</td>
+                            <td class="center" style="width: 30px;">{{(pageRender3.paginaActual - 1) * pageRender3.numElementosPorPagina + i + 1}}</td>
                             <td class="actions center" style="width: 100px">
-                                <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                                <button type="button" name="detalle" (click)='loadDetalle(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </td>
@@ -210,7 +210,7 @@
     <br>
 </div>
 
-<div id="dialog">
+<div id="dialogUtesAsignacion">
     <div>
         <div class="ad-banner-example">
             <ng-template ad-host></ng-template>

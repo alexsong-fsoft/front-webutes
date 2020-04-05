@@ -10,11 +10,11 @@ import { ResolucionService } from 'src/app/resolucion/resolucion.service';
 export class UtesresoluciondialogComponentComponent implements AdComponent {
   @Input() data: any;
   private resolucion: Resolucion = new Resolucion();
-  private titulo: string = "Resolución";
   
   constructor(private resolucionService: ResolucionService) { }
 
   ngOnInit() {
+    this.resolucion = new Resolucion();
     this.load();
   }
 

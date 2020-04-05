@@ -23,7 +23,7 @@
         <tr *ngFor="let item of listEstudiantesExamen; index as i">
             <td class="center" style="width: 30px;">{{i + 1}}</td>
             <td class="actions center" style="width: 100px">
-                <button type="button" name="editar" (click)='openDialog2(item.idPsl)' title="Validar Respuesta" [className]="habilitaBotonEditaPresolicitud(item.pslIdEstado) ? 'btn btn-primary btn-xs disabled' : 'btn btn-primary btn-xs'">
+                <button type="button" name="editar" (click)='openDialog2(item.idPsl)' title="Validar Respuesta" [className]="habilitaBotonEditaPresolicitudExamen(item.pslIdEstado) ? 'btn btn-primary btn-xs disabled' : 'btn btn-primary btn-xs'">
                     <i class="fa fa-pencil-square-o"></i>
                 </button>
                 <button type="button" name="detalle" (click)='openDialog(item.idPsl)' class="btn btn-primary btn-xs" title="Detalle">

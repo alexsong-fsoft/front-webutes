@@ -2,7 +2,7 @@
     <div class="form-group row">
         <label for="temIdTipo" class="col-sm-2 col-form-label">Tipo</label>
         <div class="col-sm-8">
-            <select class="form-control" name="miselect" [(ngModel)]="tema.temIdTipo">
+            <select class="form-control" name="miselect" disabled="disabled" [(ngModel)]="tema.temIdTipo">
                 <option [value]="item.id" *ngFor="let item of listTipoDocumento">{{item.nombre}}</option>
             </select>
         </div>
@@ -17,11 +17,11 @@
         <label for="temIdTipo" class="col-sm-2 col-form-label">Revisor</label>
         <div class="col-sm-8">
             <select class="form-control" name="miselect2" [(ngModel)]="usserSelected.idUsr">
-                <option [value]="item.idUsr" *ngFor="let item of listUsuarioRevisor">{{item.persona.perNombre}}</option>
+                <option [value]="item.idUsr" *ngFor="let item of listUsuarioRevisor">{{item.persona.perApellido}} {{item.persona.perNombre}}</option>
             </select>
         </div>
         <div class="col-sm-2">
-            <button type="button" name="addrevisor" (click)='createUtesAsignaRevisor()' title="Asignar Revisor">
+            <button type="button" name="addrevisor" (click)='createUtesAsignaRevisor()' title="Asignar Revisor" class="btn btn-primary btn-xs">
                 <i class="fa fa-plus"></i>
             </button>
         </div>
@@ -34,15 +34,19 @@
                 <th class="center" style="width: 30px;"></th>
                 <th>Cédula</th>
                 <th>Docente</th>
-                <th>Acción</th>
+                <th class="center">Acciones</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let item of listPerAsignaRevisorSelected">
-                <td class="center" style="width: 30px;"></td>
+            <tr *ngFor="let item of listPerAsignaRevisorSelected; index as i">
+                <td class="center" style="width: 30px;">{{i + 1}}</td>
                 <td>{{item.persona.perCedula}}</td>
-                <td>{{item.persona.perNombre}}</td>
-                <td></td>
+                <td>{{item.persona.perApellido}} {{item.persona.perNombre}}</td>
+                <td class="actions center" style="width: 100px">
+                    <button type="button" name="delete" (click)='deleteUtesAsignaRevisor(item)' title="Eliminar Revisor" class="btn btn-danger btn-xs">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
             </tr>
         </tbody>
     </table>

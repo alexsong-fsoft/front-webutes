@@ -1,11 +1,8 @@
-import { Component, OnInit, ViewChild, ComponentFactoryResolver } from '@angular/core';
+import { Component, OnInit, ViewChild, ComponentFactoryResolver, OnDestroy } from '@angular/core';
 import { AdDirective } from 'src/app/Estudiante/estudiantetema/ad.directive';
 import { UserService } from 'src/app/login/user.service';
-import { TemaService } from 'src/app/tema/tema.service';
 import { AsignadoService } from 'src/app/asignado/asignado.service';
 import { Sysusuario } from 'src/app/sysusuario/sysusuario';
-import { Tema } from 'src/app/tema/tema';
-import { Estaticos } from 'src/app/app.constants';
 import { Periodo } from 'src/app/periodo/periodo';
 import { PeriodoService } from 'src/app/periodo/periodo.service';
 import { Convocatoria } from 'src/app/convocatoria/convocatoria';
@@ -20,6 +17,9 @@ import { UtesconfiguracionnewperiodoComponent } from './utesconfiguracionnewperi
 import { UtesconfiguracionnewconvocatoriaComponent } from './utesconfiguracionnewconvocatoria.component';
 import { UtesconfiguracionnewinscripcionComponent } from './utesconfiguracionnewinscripcion.component';
 import { UtesconfiguracionnewrequisitoComponent } from './utesconfiguracionnewrequisito.component';
+import { Subject } from 'rxjs';
+import { Router, RouterEvent, NavigationEnd } from '@angular/router';
+import { filter, pairwise, startWith, takeUntil } from 'rxjs/operators';
 
 declare var JQuery: any;
 declare var $: any;
@@ -29,13 +29,14 @@ declare var Gestor: any;
   selector: 'app-utesconfiguracion',
   templateUrl: './utesconfiguracion.component.html'
 })
-export class UtesconfiguracionComponent implements OnInit {
+export class UtesconfiguracionComponent implements OnInit, OnDestroy {
   private titulo: string = "Configuraciones";
   public usserLogged: Sysusuario = null;
   listPeriodo: Periodo[];
   listConvocatoria: Convocatoria[];
   listInscripcion: Inscripcion[];
   listCuestionario: Cuestionario[];
+  public destroyed = new Subject<any>();
 
   @ViewChild(AdDirective, {static: true}) adHost: AdDirective;
   
@@ -45,16 +46,43 @@ export class UtesconfiguracionComponent implements OnInit {
     private inscripcionService: InscripcionService,
     private cuestionarioService: CuestionarioService,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private asignadoService: AsignadoService) { }
+    private router: Router
+    ) { }
 
   ngOnInit() {
-    this.usserLogged = this.userService.getUserLoggedIn();
+    this.router.events.pipe(
+      filter((event: RouterEvent) => event instanceof NavigationEnd),
+      pairwise(),
+      filter((events: RouterEvent[]) => events[0].url === events[1].url),
+      startWith('initial call'),
+      takeUntil(this.destroyed)
+    ).subscribe(() => {
+      console.log('cargando....');
+      this.usserLogged = this.userService.getUserLoggedIn();
+      this.reset();
+      this.load();
+    })
+  }
+
+  ngOnDestroy() {
+    this.destroyed.next();
+    this.destroyed.complete();
+  }
+
+  reset(): void{
+    this.listPeriodo = [];
+    this.listConvocatoria = [];
+    this.listInscripcion = [];
+    this.listCuestionario = [];
+    $("#tabs_docentetema").tabs();
+    this.showTab('tab-mistemas');
+  }
+
+  load(): void {
     this.getListPeriodo();
     this.getListConvocatoria();
     this.getListInscripcion();
     this.getListCuestionario();
-    $("#tabs_docentetema").tabs();
-    this.showTab('tab-mistemas');
   }
 
   getListPeriodo(): Periodo[] {
@@ -110,11 +138,11 @@ export class UtesconfiguracionComponent implements OnInit {
   dialogCreatePeriodo(): void {
     this.loadComponentPeriodo(null);
     try {
-      $('#dialog').dialog('destroy');
+      $('#dialogUtesConfiguracion').dialog('destroy');
     } catch (error) {
       console.log(error);
     }
-    $('#dialog').dialog({
+    $('#dialogUtesConfiguracion').dialog({
       title: 'Registro de Periodo',
       modal: true,
       minWidth: 500,
@@ -126,11 +154,11 @@ export class UtesconfiguracionComponent implements OnInit {
   dialogEditPeriodo(periodoSelected: Periodo): void {
     this.loadComponentPeriodo(periodoSelected.idPrd);
     try {
-      $('#dialog').dialog('destroy');
+      $('#dialogUtesConfiguracion').dialog('destroy');
     } catch (error) {
       console.log(error);
     }
-    $('#dialog').dialog({
+    $('#dialogUtesConfiguracion').dialog({
       title: 'Editar Periodo',
       modal: true,
       minWidth: 500,
@@ -151,11 +179,11 @@ export class UtesconfiguracionComponent implements OnInit {
   dialogCreateConvocatoria(): void {
     this.loadComponentConvocatoria(null);
     try {
-      $('#dialog').dialog('destroy');
+      $('#dialogUtesConfiguracion').dialog('destroy');
     } catch (error) {
       console.log(error);
     }
-    $('#dialog').dialog({
+    $('#dialogUtesConfiguracion').dialog({
       title: 'Registro de Convocatoria',
       modal: true,
       minWidth: 500,
@@ -167,11 +195,11 @@ export class UtesconfiguracionComponent implements OnInit {
   dialogEditConvocatoria(convocatoriaSelected: Convocatoria): void {
     this.loadComponentConvocatoria(convocatoriaSelected.idCon);
     try {
-      $('#dialog').dialog('destroy');
+      $('#dialogUtesConfiguracion').dialog('destroy');
     } catch (error) {
       console.log(error);
     }
-    $('#dialog').dialog({
+    $('#dialogUtesConfiguracion').dialog({
       title: 'Editar Convocatoria',
       modal: true,
       minWidth: 500,
@@ -192,11 +220,11 @@ export class UtesconfiguracionComponent implements OnInit {
   dialogCreateInscripcion(): void {
     this.loadComponentInscripcion(null);
     try {
-      $('#dialog').dialog('destroy');
+      $('#dialogUtesConfiguracion').dialog('destroy');
     } catch (error) {
       console.log(error);
     }
-    $('#dialog').dialog({
+    $('#dialogUtesConfiguracion').dialog({
       title: 'Registro de Inscripcion',
       modal: true,
       minWidth: 500,
@@ -208,11 +236,11 @@ export class UtesconfiguracionComponent implements OnInit {
   dialogEditInscripcion(inscripcionSelected: Inscripcion): void {
     this.loadComponentInscripcion(inscripcionSelected.idIns);
     try {
-      $('#dialog').dialog('destroy');
+      $('#dialogUtesConfiguracion').dialog('destroy');
     } catch (error) {
       console.log(error);
     }
-    $('#dialog').dialog({
+    $('#dialogUtesConfiguracion').dialog({
       title: 'Editar Inscripcion',
       modal: true,
       minWidth: 500,
@@ -234,11 +262,11 @@ export class UtesconfiguracionComponent implements OnInit {
   dialogCreateCuestionario(): void {
     this.loadComponentCuestionario(null);
     try {
-      $('#dialog').dialog('destroy');
+      $('#dialogUtesConfiguracion').dialog('destroy');
     } catch (error) {
       console.log(error);
     }
-    $('#dialog').dialog({
+    $('#dialogUtesConfiguracion').dialog({
       title: 'Registro de Requisito',
       modal: true,
       minWidth: 500,
@@ -250,11 +278,11 @@ export class UtesconfiguracionComponent implements OnInit {
   dialogEditCuestionario(cuestionarioSelected: Cuestionario): void {
     this.loadComponentCuestionario(cuestionarioSelected.idCue);
     try {
-      $('#dialog').dialog('destroy');
+      $('#dialogUtesConfiguracion').dialog('destroy');
     } catch (error) {
       console.log(error);
     }
-    $('#dialog').dialog({
+    $('#dialogUtesConfiguracion').dialog({
       title: 'Editar Requisito',
       modal: true,
       minWidth: 500,

@@ -1,6 +1,3 @@
-<h2 class="header header-efx">{{titulo}}</h2>
-
-
 <div id="tabs_docentetema" class="tabbable">
     <ul class="nav nav-tabs">
         <li><a href="javascript:void(0)" (click)="showTab('tab-mistemas')"><i class="fa fa-certificate"></i>&nbsp; Resolución - Temas</a></li>
@@ -25,7 +22,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of listAprobados; index as i">
-                            <td class="center" style="width: 30px;">{{i + 1}}</td>
+                            <td class="center" style="width: 30px;">{{(pageRender.paginaActual - 1) * pageRender.numElementosPorPagina + i + 1}}</td>
                             <td class="actions center" style="width: 100px">
                                 <button type="button" name="detalle" (click)='openDialog(item)'  class="btn btn-primary btn-xs" title="Ver Detalle">
                                     <i class="fa fa-search"></i>
@@ -43,6 +40,30 @@
                         </tr>
                     </tbody>
                 </table>
+                <nav>
+                    <ul class="pagination">
+                        <li [className]="pageRender.first ? 'page-item disabled' : 'page-item'">
+                            <span [className]="pageRender.first ? 'page-link show' : 'page-link hide'"> Primera</span>
+                            <a [className]="pageRender.first ? 'page-link hide' : 'page-link show'" (click)='getListAprobados(0)' page='0'> Primera</a>
+                        </li>
+                        <li [className]="!pageRender.hasPrevious ? 'page-item disabled' : 'page-item'">
+                            <span [className]="!pageRender.hasPrevious ? 'page-link show' : 'page-link hide'">&laquo;</span>
+                            <a [className]="!pageRender.hasPrevious ? 'page-link hide' : 'page-link show'" (click)='getListAprobados(pageRender.paginaActual-2)' page='pageRender.paginaActual-2'>&laquo;</a>
+                        </li>
+                        <li [className]="itemPage.actual ? 'page-item active' : 'page-item'" *ngFor="let itemPage of pageRender.paginas">
+                            <span [className]="itemPage.actual ? 'page-link show' : 'page-link hide'">{{itemPage.numero}}</span>
+                            <a [className]="itemPage.actual ? 'page-link hide' : 'page-link show'" (click)='getListAprobados(itemPage.numero-1)' page='itemPage.numero-1'>{{itemPage.numero}}</a>
+                        </li>	
+                        <li [className]="!pageRender.hasNext ? 'page-item disabled' : 'page-item'">
+                            <span [className]="!pageRender.hasNext ? 'page-link show' : 'page-link hide'">&raquo;</span>
+                            <a [className]="!pageRender.hasNext ? 'page-link hide' : 'page-link show'" (click)='getListAprobados(pageRender.paginaActual)' page='pageRender.paginaActual'>&raquo;</a>
+                        </li>
+                        <li [className]="pageRender.last ? 'page-item disabled' : 'page-item'">
+                            <span [className]="pageRender.last ? 'page-link show' : 'page-link hide'">&Uacute;ltima</span>
+                            <a [className]="pageRender.last ? 'page-link hide' : 'page-link show'" (click)='getListAprobados(pageRender.totalPaginas-1)' page='pageRender.totalPaginas-1'>&Uacute;ltima</a>
+                        </li>
+                    </ul>                 
+                </nav>
             </div>
             <div class="space-4" style="clear:both"></div>
         </div>
@@ -51,7 +72,7 @@
     <br>
 </div>
 
-<div id="dialog">
+<div id="dialogUtesResolucion">
     <div>
         <div class="ad-banner-example">
             <ng-template ad-host></ng-template>

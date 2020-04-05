@@ -23,7 +23,6 @@ declare var Gestor: any;
   templateUrl: './asignacion.component.html'
 })
 export class AsignacionComponent implements OnInit {
-  private titulo: string = "Gestión de Temas";
   public usserLogged: Sysusuario = null;
   listUtesEnviados: Tema[];
   listComisionPublicado: Tema[];
@@ -42,6 +41,18 @@ export class AsignacionComponent implements OnInit {
 
   ngOnInit() {
     this.usserLogged = this.userService.getUserLoggedIn();
+    this.reset();
+    this.load();
+  }
+
+  reset(): void{
+    this.listUtesEnviados = [];
+    this.listComisionPublicado = [];
+    this.listUtesAprobados = [];
+    this.listUtesEnviadosSeleccion = [];
+  }
+
+  load(): void{
     this.getListUtesEnviados(0);
     this.getListComisionPublicado(0);
     this.getListUtesAprobados(0);
@@ -120,20 +131,31 @@ export class AsignacionComponent implements OnInit {
     (<AdComponent>componentRef.instance).data = adItem.data;
   }
 
-  openDialog(tema: Tema): void {
+  loadDetalle(tema: Tema): void {
     this.loadComponent(tema.idTem);
-    $('#dialog').dialog({
+    try {
+      $('#dialogUtesAsignacion').dialog('destroy');
+    } catch (error) {
+      console.log(error);
+    }
+    $('#dialogUtesAsignacion').dialog({
+      title: 'Detalle',
       modal: true,
-      minWidth: 800,
+      minWidth: 1000,
       resizable: false
     });
     Gestor.fn.positionDialog();
   }
 
-  openDialog2(tema: Tema): void {
+  asignarRevisor(tema: Tema): void {
     this.loadComponent2(tema.idTem);
-    $('#dialog').dialog({
-      tittle: 'Asignación de revisor de tema',
+    try {
+      $('#dialogUtesAsignacion').dialog('destroy');
+    } catch (error) {
+      console.log(error);
+    }
+    $('#dialogUtesAsignacion').dialog({
+      title: 'Asignación de revisor de tema',
       modal: true,
       minWidth: 800,
       resizable: false
@@ -188,8 +210,9 @@ export class AsignacionComponent implements OnInit {
         });
         
         if (errores.length == 0) {
-          swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_ACTUALIZA, 'success');
-          //this.router.navigate(['/dashboard/docentetema'])
+          swal.fire("Publicar Temas", Estaticos.MENSAJE_OK_ACTUALIZA, 'success');
+          this.reset();
+          this.load();
           // if (daoconfigura.activaProcesoByCampo(CONFIG_TEMA_ENVIADO)) {
           //   utilcorreo.setDataUsuario(enusuariosesion, "Envio de temas", "Se ha enviado los siguiente(s) tema(s) para su revisión:", tematexto.toString().replace('[', ' ').replace(']', ' '));
           //   utilcorreo.sendNotificaNuevo();

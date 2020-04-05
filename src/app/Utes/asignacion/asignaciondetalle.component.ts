@@ -17,7 +17,6 @@ declare var Gestor: any;
 export class AsignaciondetalleComponent implements AdComponent {
   @Input() data: any;
   private tema: Tema = new Tema();
-  private titulo: string = "Detalle";
   private listEstadoAsignadoLectorRevisorUtes: Estado[] = [];
   private listTipoAsignacion: Tipo[] = [];
 
@@ -27,6 +26,7 @@ export class AsignaciondetalleComponent implements AdComponent {
     private componentFactoryResolver: ComponentFactoryResolver) { }
 
   ngOnInit() {
+    this.tema = new Tema();
     this.load();
     this.listEstadoAsignadoLectorRevisorUtes = Estado.loadAsignaLectorRevisor();
     this.listTipoAsignacion = Tipo.loadAsignacion();

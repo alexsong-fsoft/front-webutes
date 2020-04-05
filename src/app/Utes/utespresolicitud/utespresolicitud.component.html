@@ -1,7 +1,7 @@
 <h2 class="header header-efx">{{titulo}}</h2>
 <div class="widget-box widget-color-dark ui-sortable-handle hide" id="widget-box-11">
     <div class="widget-header">
-        <button type="button" name="nuevo" (click)='openDialog()' class="btn btn-primary" title="Nuevo" *ngIf="habilitaBotonInscripcion">
+        <button type="button" name="nuevo" (click)='nuevaPresolicitud()' class="btn btn-primary" title="Nuevo" *ngIf="habilitaBotonInscripcion">
             <i class="fa fa-pencil-square-o"></i> NUEVO
         </button>
     </div>
@@ -12,7 +12,7 @@
         <tr>
             <th class="center" style="width: 30px;"></th>
             <th>Acciones</th>
-            <th class="center" style="width: 30px;">ID</th>
+            <th class="center hide" style="width: 30px;">ID</th>
             <th>Estudiante</th>
             <th>Inscripción</th>
             <th>Opción</th> 
@@ -24,14 +24,14 @@
         <tr *ngFor="let item of listPresolicitud; index as i">
             <td class="center" style="width: 30px;">{{(pageRender.paginaActual - 1) * pageRender.numElementosPorPagina + i + 1}}</td>
             <td class="actions center" style="width: 100px">
-                <button type="button" name="editar" (click)='openDialog2(item.idPsl)' title="Validar Respuesta" [className]="habilitaBotonEditaPresolicitud(item.pslIdEstado) ? 'btn btn-primary btn-xs disabled' : 'btn btn-primary btn-xs'">
+                <button type="button" name="editar" (click)='validarRespuesta(item.idPsl)' title="Validar Respuesta" [className]="habilitaBotonEditaPresolicitud(item.pslIdEstado) ? 'btn btn-primary btn-xs disabled' : 'btn btn-primary btn-xs'">
                     <i class="fa fa-pencil-square-o"></i>
                 </button>
-                <button type="button" name="detalle" (click)='openDialog(item.idPsl)' class="btn btn-primary btn-xs" title="Detalle">
+                <button type="button" name="detalle" (click)='nuevaPresolicitud(item.idPsl)' class="btn btn-primary btn-xs" title="Detalle">
                     <i class="fa fa-search"></i>
                 </button>
             </td>
-            <td class="">{{item.idPsl}}</td>
+            <td class="hide">{{item.idPsl}}</td>
             <td>{{item.persona.perApellido}} {{item.persona.perNombre}}</td>
             <td>{{item.inscripcion.insNombre}} - {{item.inscripcion.insPeriodo}}</td>
             <td>{{item.nombreTipo}}</td>
@@ -42,9 +42,8 @@
 </table>
 <ng-template ad-host-paginator></ng-template>
 
-<div id="dialog">
+<div id="dialogUtesPresolicitud">
     <div>
-        <!-- <app-ad-banner [ads]="ads"></app-ad-banner> -->
         <div class="ad-banner-example">
             <ng-template ad-host></ng-template>
         </div>

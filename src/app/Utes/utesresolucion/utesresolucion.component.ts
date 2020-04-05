@@ -8,6 +8,7 @@ import { Estaticos } from 'src/app/app.constants';
 import { UtesresoluciondetalleComponent } from './utesresoluciondetalle.component';
 import { AdItem } from 'src/app/Estudiante/estudiantetema/ad-item';
 import { AdComponent } from 'src/app/Estudiante/estudiantetema/ad.component';
+import { PageRender } from 'src/app/Page/pagerender';
 
 declare var JQuery: any;
 declare var $: any;
@@ -18,9 +19,9 @@ declare var Gestor: any;
   templateUrl: './utesresolucion.component.html'
 })
 export class UtesresolucionComponent implements OnInit {
-  private titulo: string = "Resolución - Temas";
   public usserLogged: Sysusuario = null;
   listAprobados: Tema[];
+  pageRender: PageRender<Tema>;
   
   @ViewChild(AdDirective, {static: true}) adHost: AdDirective;
 
@@ -30,16 +31,17 @@ export class UtesresolucionComponent implements OnInit {
 
   ngOnInit() {
     this.usserLogged = this.userService.getUserLoggedIn();
-    this.getListAprobados();
+    this.getListAprobados(0);
     $("#tabs_docentetema").tabs();
     this.showTab('tab-mistemas');
   }
 
-  getListAprobados(): Tema[] {
+  getListAprobados(page:number): Tema[] {
     let estadoslst: string = Estaticos.ESTADO_TEMA_POST_APROBADO + "," + Estaticos.ESTADO_TEMA_POST_PRORROGA + "," + Estaticos.ESTADO_TEMA_POST_ANULADO + "," + Estaticos.ESTADO_TEMA_POST_CERRADO + "," + Estaticos.ESTADO_TEMA_POST_LECTORPROYECTO;
-    this.temaService.getAllByEstado(estadoslst).subscribe(
-      (temas: Tema[]) => {
-        this.listAprobados = temas;
+    this.temaService.getAllByEstadoPageable(estadoslst, page).subscribe(
+      response => {
+        this.listAprobados = response.content;
+        this.pageRender = new PageRender("/dashboard/utesasignacion", response);          
       }
     );
     return this.listAprobados;
@@ -61,7 +63,8 @@ export class UtesresolucionComponent implements OnInit {
 
   openDialog(tema: Tema): void {
     this.loadComponent(tema.idTem);
-    $('#dialog').dialog({
+    $('#dialogUtesResolucion').dialog({
+      title: 'Detalle',
       modal: true,
       minWidth: 1000,
       resizable: false

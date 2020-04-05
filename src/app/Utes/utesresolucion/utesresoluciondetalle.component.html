@@ -1,6 +1,3 @@
-<h2 class="header header-efx">{{titulo}}</h2>
-
-
 <div id="tabs_docentetema_detalle" class="tabbable">
     <ul class="nav nav-tabs">
         <li><a href="javascript:void(0)" (click)="showTab2('tab-tema')"><i class="fa fa-certificate"></i>&nbsp; Tema</a></li>
@@ -111,8 +108,8 @@
                             <td>{{item.persona.perCedula}}</td>
                             <td>{{item.persona.perApellido}} {{item.persona.perNombre}}</td>
                             <td>{{item.asgFechaRegistro}}</td>
-                            <td>{{item.asgIdEstadoTema}}</td>
-                            <td>{{item.asgIdTipo}}</td>
+                            <td>{{getNombreEstadoAsignado(item.asgIdEstadoTema)}}</td>
+                            <td>{{getNombreTipoAsignado(item.asgIdTipo)}}</td>
                         </tr>
                     </tbody>
                 </table>                

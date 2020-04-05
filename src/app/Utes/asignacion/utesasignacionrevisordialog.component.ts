@@ -11,7 +11,14 @@ import { TemaService } from 'src/app/tema/tema.service';
 import { AsignadoService } from 'src/app/asignado/asignado.service';
 import { Asignado } from 'src/app/asignado/asignado';
 import { PersonaService } from 'src/app/persona/persona.service';
-import { Persona } from 'src/app/persona/persona';
+import swal from 'sweetalert2';
+import Lang from '../../../assets/app.lang.json';
+import { Informe } from 'src/app/informe/informe';
+import { InformeService } from 'src/app/informe/informe.service';
+
+declare var JQuery: any;
+declare var $: any;
+declare var Gestor: any;
 
 @Component({
   // selector: 'app-utesasignacionrevisordialog',
@@ -25,33 +32,43 @@ export class UtesasignacionrevisordialogComponent implements AdComponent {
   private listUsuarioRevisor: Sysusuario[];
   private listTipoDocumento: Tipo[];
   private listPerAsignaRevisorSelected: Asignado[];
-  
+
   constructor(private userService: UserService,
     private periodoService: PeriodoService,
     private temaService: TemaService,
     private sysusuarioService: SysusuarioService,
     private asignadoService: AsignadoService,
-    private personaService: PersonaService) { }
+    private personaService: PersonaService,
+    private informeService: InformeService) { }
 
   ngOnInit() {
     this.usserLogged = this.userService.getUserLoggedIn();
+    this.listTipoDocumento = Tipo.loadDocumento();
+    this.reset();
     this.load();
   }
 
   public load(): void {
-    this.listTipoDocumento = Tipo.loadDocumento();
-    let id = this.data.idTema;
-    if (id) {      
+    console.log('reset ' + this.data.idTema);
+    let id = this.data.idTema;    
+    if (id) {
       this.getListUsuarioRevisor(id);
       this.getListPerAsignaRevisorSelected(id);
       this.temaService.getById(id).subscribe(
         (tema) => {
           if (tema != null) {
-            this.tema = tema; 
-          } 
+            this.tema = tema;
+          }
         }
       )
     }
+  }
+
+  public reset(): void {
+    this.tema = new Tema();
+    this.usserSelected = new Sysusuario();
+    this.usserSelected.idUsr = null;
+    this.listPerAsignaRevisorSelected = [];    
   }
 
   public getListUsuarioRevisor(idtem: number): void {
@@ -68,61 +85,70 @@ export class UtesasignacionrevisordialogComponent implements AdComponent {
                 );
               }
             );
-          } 
+          }
         }
       );
     }
   }
-  
+
   public createUtesAsignaRevisor(): void {
-    if(this.validar()){
+    if (this.validar()) {
       this.asignadoService.getByIdPersonaIdTemaAsgIdTipoIdEstadorev(this.usserSelected.idUsr, this.tema.idTem, Estaticos.TIPO_ID_ASIGNACION_REVISOR, Estaticos.ESTADO_ID_TEMA_REVISA_PROCESO).subscribe(
         (auxasigando) => {
+          console.log(auxasigando);
           if (auxasigando == null) {
+            console.log('no existe asignado');
             this.personaService.getById(this.usserSelected.idUsr).subscribe(
               (persona) => {
-                let utilfecha = new Date();
-                let enasignado:Asignado = new Asignado();
-                enasignado.tema = this.tema;
-                enasignado.persona = persona;
-                enasignado.asgIdTipo = Estaticos.TIPO_ID_ASIGNACION_REVISOR;
-                enasignado.asgFechaRegistro = utilfecha;
-                enasignado.asgActivo = true;
-                enasignado.asgIdEstadoTema = Estaticos.ESTADO_ID_TEMA_REVISA_PROCESO;
-                this.asignadoService.create(enasignado).subscribe(
-                  (response) => {
-                    if (response) {
-                      this.tema.temIdEstado = Estaticos.ESTADO_TEMA_PRE_ASIGNAREVISOR;
-                      this.temaService.update(this.tema).subscribe(
-                        (response2) => {
-                          if (response2) {
-                            this.usserSelected.idUsr = null;
-                            this.load();
-                            // if (daoconfigura.activaProcesoByCampo(CONFIG_ASIGNA_TEMAREVISOR)) {
-                            //   auxuser: Sysusuario = daousuario.obtenerUsuarioPorPersonaId(enasignado.getPersona().getIdPer());
-                            //   utilcorreo.setDataUsuario(auxuser, "Asignacción revisión de tema", "Se ha asigando el tema: " + enTemaDetalleSeleccion.getTemNombre() + ", Para la respectiva revisión.", "");
-                            //   utilcorreo.sendNotificaNuevo();
-                            // }
-                            // this.enUsuarioValorUtes = null;
-                            //Mensajes.mensajeInfo(null, MENSAJE_OK_REGISTRA, null);
+                if (persona != null) {
+                  console.log('existe persona');
+                  let utilfecha = new Date();
+                  let enasignado: Asignado = new Asignado();
+                  //enasignado.tema = this.tema;
+                  enasignado.idTema = this.tema.idTem;
+                  //enasignado.persona = persona;
+                  enasignado.idPersona = persona.idPer;
+                  enasignado.asgIdTipo = Estaticos.TIPO_ID_ASIGNACION_REVISOR;
+                  enasignado.asgFechaRegistro = utilfecha;
+                  enasignado.asgActivo = true;
+                  enasignado.asgIdEstadoTema = Estaticos.ESTADO_ID_TEMA_REVISA_PROCESO;
+                  this.asignadoService.create(enasignado).subscribe(
+                    (response) => {
+                      if (response) {
+                        console.log('se creó asignado');
+                        this.tema.temIdEstado = Estaticos.ESTADO_TEMA_PRE_ASIGNAREVISOR;
+                        this.temaService.update(this.tema).subscribe(
+                          (response2) => {
+                            if (response2) {
+                              console.log('se actualizó estado tema');
+                              this.reset();
+                              this.load();
+                              swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_REGISTRA, 'success');                    
+                              // if (daoconfigura.activaProcesoByCampo(CONFIG_ASIGNA_TEMAREVISOR)) {
+                              //   auxuser: Sysusuario = daousuario.obtenerUsuarioPorPersonaId(enasignado.getPersona().getIdPer());
+                              //   utilcorreo.setDataUsuario(auxuser, "Asignacción revisión de tema", "Se ha asigando el tema: " + enTemaDetalleSeleccion.getTemNombre() + ", Para la respectiva revisión.", "");
+                              //   utilcorreo.sendNotificaNuevo();
+                              // }
+                              // this.enUsuarioValorUtes = null;
+                            }
+                            else {
+                              swal.fire(Lang.messages.register_update, "Error al actualizar estado del tema", 'warning');  
+                            }
                           }
-                          else {
-                            //Mensajes.mensajeError(null, "TEMA " + MENSAJE_ERROR_ACTUALIZA, null);
-                          }
-                        }
-                      );                      
+                        );
+                      }
+                      else {
+                        swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_REGISTRA, 'warning');  
+                      }
                     }
-                    else {
-                      //Mensajes.mensajeError(null, "ASIGNACIÓN " + MENSAJE_ERROR_REGISTRA, null);
-                    }
-                  }
-                );
+                  );
+                }
               }
             );
           }
           else {
             // this.enUsuarioValorUtes = null;
-            // Mensajes.mensajeError(null, "TEMA YA ASIGNADO AL DOCENTE", null);
+            swal.fire(Lang.messages.register_new, "TEMA YA ASIGNADO AL DOCENTE", 'warning');  
           }
         }
       );
@@ -130,9 +156,51 @@ export class UtesasignacionrevisordialogComponent implements AdComponent {
     }
   }
 
+  public deleteUtesAsignaRevisor(asignado: Asignado): void{
+    try {
+      if (asignado != null) {
+        this.informeService.getAllByIdTemaIdPersona(asignado.tema.idTem, asignado.persona.idPer).subscribe(
+          (informes) => {
+            if (informes == null || informes.length == 0) {
+              this.asignadoService.getByIdPersonaAsgIdTipoIdTema(asignado.persona.idPer, Estaticos.TIPO_ID_ASIGNACION_REVISOR, asignado.tema.idTem).subscribe(
+                (auxasignado) => {
+                  if (auxasignado != null) {
+                    this.asignadoService.delete(auxasignado.idAsg).subscribe(
+                      (response) => {
+                        if (response) {
+                          this.tema.temIdEstado = Estaticos.ESTADO_TEMA_PRE_ENVIADO;
+                          this.temaService.update(this.tema).subscribe(
+                            (response2) => {
+                              if (response2) {
+                                this.reset();
+                                this.load();
+                                swal.fire(Lang.messages.register_delete, Estaticos.MENSAJE_OK_REGISTRA, 'success');  
+                              }
+                              else {
+                                swal.fire(Lang.messages.register_delete, "Error al actualizar estado del tema", 'warning');  
+                              }
+                            }
+                          );
+                        }
+                      }
+                    ); 
+                  }
+                }
+              );  
+            } else {
+              swal.fire(Lang.messages.register_delete, Estaticos.MENSAJE_ERROR_DATORELACION, 'warning');
+            }
+          }
+        );
+      }
+    } catch (error) {
+      console.error('Here is the error message', error);
+    }
+  }
+
   public validar(): boolean {
-    let validacion:boolean = false;
-    if(this.usserSelected != null && this.usserSelected.idUsr != null){
+    let validacion: boolean = false;
+    if (this.usserSelected != null && this.usserSelected.idUsr != null) {
       validacion = true;
     }
     return validacion;
