@@ -54,7 +54,7 @@ export class UtesconfiguracionnewperiodoComponent implements AdComponent {
               this.periodoService.create(this.periodo).subscribe( 
                 response => {
                   if(response){
-                    $('#dialog').dialog('close');
+                    $('#dialogUtesConfiguracion').dialog('close');
                     swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_REGISTRA, 'success');
                     this.router.navigate(['/dashboard/utesconfiguracion']);
                     validacion = true;
@@ -86,7 +86,7 @@ export class UtesconfiguracionnewperiodoComponent implements AdComponent {
       this.periodoService.update(this.periodo).subscribe( 
         response => {
           if(response){
-            $('#dialog').dialog('close');
+            $('#dialogUtesConfiguracion').dialog('close');
             swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_ACTUALIZA, 'success');
             this.router.navigate(['/dashboard/utesconfiguracion']);
             validacion = true;

@@ -269,7 +269,7 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
     $('#dialogUtesConfiguracion').dialog({
       title: 'Registro de Requisito',
       modal: true,
-      minWidth: 500,
+      minWidth: 700,
       resizable: false
     });
     Gestor.fn.positionDialog();
@@ -285,7 +285,7 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
     $('#dialogUtesConfiguracion').dialog({
       title: 'Editar Requisito',
       modal: true,
-      minWidth: 500,
+      minWidth: 700,
       resizable: false
     });
     Gestor.fn.positionDialog();

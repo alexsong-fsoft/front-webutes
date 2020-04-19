@@ -3,38 +3,331 @@
 
 <div id="tabs_docentetema" class="tabbable">
     <ul class="nav nav-tabs">
-        <li><a href="javascript:void(0)" (click)="showTab('tab-mistemas')"><i class="fa fa-certificate"></i>&nbsp; Inscripción</a></li>
-        <li><a href="javascript:void(0)" (click)="showTab('tab-desarrollo')"><i class="fa fa-certificate"></i>&nbsp; General</a></li>
-        <li><a href="javascript:void(0)" (click)="showTab('tab-revision')"><i class="fa fa-certificate"></i>&nbsp; Trabajo Docentes</a></li>
-        <li><a href="javascript:void(0)" (click)="showTab('tab-requisitos')"><i class="fa fa-certificate"></i>&nbsp; Estado de Proyectos</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-inscripcion')"><i class="fa fa-certificate"></i>&nbsp; Inscripción</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-general')"><i class="fa fa-certificate"></i>&nbsp; General</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-docentes')"><i class="fa fa-certificate"></i>&nbsp; Trabajo Docentes</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-proyecto')"><i class="fa fa-certificate"></i>&nbsp; Estado de Proyectos</a></li>
     </ul>
     
     <div class="tab-content">
 
-        <div id="tab-mistemas" class="tab-pane">
-            <div id="cont-tab-mistemas">
-                
+        <div id="tab-inscripcion" class="tab-pane">
+            <div id="cont-tab-inscripcion">
+                <div class="widget-box ui-sortable-handle" id="widget-box-11">
+                    <div class="widget-body" style="display: block; padding: 5px 10px;">
+                        <div class="content font-small">
+                            <fieldset>
+                                <legend>Reporte de inscripciones a la Unidad de Titulación :</legend>
+                                <form>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="profile-info-name">Fecha inscripción: </div>
+                                            <div class="profile-info-name" style="width: 15px;">De </div>
+                                            <div class="profile-info-value" style="width: 35%;"><span>
+                                                <input type="text" class="form-control date-picker" name="insFechaInicio" [(ngModel)]="inscripcionSearch.insFechaInicio">
+                                            </span></div>
+                                            <div class="profile-info-name" style="width: 15px;">a </div>
+                                            <div class="profile-info-value" style="width: 35%;"><span>
+                                                <input type="text" class="form-control date-picker" name="insFechaFin" [(ngModel)]="inscripcionSearch.insFechaFin">
+                                            </span></div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="profile-info-name">Inscripción: </div>
+                                            <div class="profile-info-value" style="width: 80%;"><span>
+                                                <input type="text" class="form-control" name="insNombre" [(ngModel)]="inscripcionSearch.insNombre">
+                                            </span></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="profile-info-name">Opción: </div>
+                                            <div class="profile-info-value" style="width: 80%;"><span>
+                                                <input type="text" class="form-control" name="insFechaInicio">
+                                            </span></div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="profile-info-name">Estado: </div>
+                                            <div class="profile-info-value" style="width: 80%;"><span>
+                                                <input type="text" class="form-control" name="insActivo">
+                                            </span></div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="widget-header">
+                        <button type="button" id="btnFormFilter" class="btn btn-xs btn-primary">
+                            <i class="fa fa-search"></i> Consultar
+                        </button>
+                    </div>
+                </div>
+                <div style="clear: both;"></div>
+                <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th>Estudiante</th>
+                            <th>Estado</th>
+                            <th>Opción</th>
+                            <th>Mensaje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr *ngFor="let item of inscripciones">
+                            <td class="center" style="width: 30px;"></td>
+                            <td class="actions center" style="width: 100px">
+                                <button type="button" name="editar" [routerLink]="['/inscripcion/form', item.idIns]" class="btn btn-primary btn-xs" title="Editar">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                </button>
+                                <button type="button" name="eliminar" (click)='delete(item)' class="btn btn-danger btn-xs" title="Eliminar">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                            </td>
+                            <td>{{item.idIns}}</td>
+                            <td>{{item.insNombre}}</td>
+                            <td>{{item.insPeriodo}}</td>
+                            <td>{{item.insFechaInicio}}</td>            
+                            <td>{{item.insFechaFin}}</td>
+                            <td>{{item.insActivo}}</td>
+                            <td>{{item.insSecuencia}}</td>
+                        </tr> -->
+                    </tbody>
+                </table>
             </div>
             <div class="space-4" style="clear:both"></div>
         </div>
 
-        <div id="tab-desarrollo" class="tab-pane">
-            <div id="cont-tab-desarrollo">
-                
+        <div id="tab-general" class="tab-pane">
+            <div id="cont-tab-general">
+                <div class="widget-box ui-sortable-handle" id="widget-box-11">
+                    <div class="widget-body" style="display: block; padding: 5px 10px;">
+                        <div class="content font-small">
+                            <fieldset>
+                                <legend>Reporte avance de proyectos por cada docente :</legend>
+                                <form>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="profile-info-name">Docente: </div>
+                                            <div class="profile-info-value" style="width: 80%;"><span>
+                                                <input type="text" class="form-control" name="insFechaInicio">
+                                            </span></div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="profile-info-name">Periodo: </div>
+                                            <div class="profile-info-value" style="width: 80%;"><span>
+                                                <input type="text" class="form-control" name="insActivo">
+                                            </span></div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="widget-header">
+                        <button type="button" id="btnFormFilter" class="btn btn-xs btn-primary">
+                            <i class="fa fa-search"></i> Consultar
+                        </button>
+                    </div>
+                </div>
+                <div style="clear: both;"></div>
+                <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th>Docente</th>
+                            <th># Proyectos vigentes</th>
+                            <th>% promedio avance</th>
+                            <th>Avance igual 0%</th>
+                            <th>Avance entre 0% y 50%</th>
+                            <th>Avance entre 50% y 70%</th>
+                            <th>Avance entre 70% y 90%</th>
+                            <th>Avance 90% o mas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr *ngFor="let item of inscripciones">
+                            <td class="center" style="width: 30px;"></td>
+                            <td class="actions center" style="width: 100px">
+                                <button type="button" name="editar" [routerLink]="['/inscripcion/form', item.idIns]" class="btn btn-primary btn-xs" title="Editar">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                </button>
+                                <button type="button" name="eliminar" (click)='delete(item)' class="btn btn-danger btn-xs" title="Eliminar">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                            </td>
+                            <td>{{item.idIns}}</td>
+                            <td>{{item.insNombre}}</td>
+                            <td>{{item.insPeriodo}}</td>
+                            <td>{{item.insFechaInicio}}</td>            
+                            <td>{{item.insFechaFin}}</td>
+                            <td>{{item.insActivo}}</td>
+                            <td>{{item.insSecuencia}}</td>
+                        </tr> -->
+                    </tbody>
+                </table>
             </div>
             <div class="space-4" style="clear:both"></div>
         </div>
 
-        <div id="tab-revision" class="tab-pane">
-            <div id="cont-tab-revision">
-                
+        <div id="tab-docentes" class="tab-pane">
+            <div id="cont-tab-docentes">
+                <div class="widget-box ui-sortable-handle" id="widget-box-11">
+                    <div class="widget-body" style="display: block; padding: 5px 10px;">
+                        <div class="content font-small">
+                            <fieldset>
+                                <legend>Reporte de proyectos por docente :</legend>
+                                <form>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="profile-info-name">Docente: </div>
+                                            <div class="profile-info-value" style="width: 80%;"><span>
+                                                <input type="text" class="form-control" name="insFechaInicio">
+                                            </span></div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="profile-info-name">Periodo: </div>
+                                            <div class="profile-info-value" style="width: 80%;"><span>
+                                                <input type="text" class="form-control" name="insActivo">
+                                            </span></div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="profile-info-name">Fecha: </div>
+                                            <div class="profile-info-value" style="width: 80%;"><span>
+                                                <input type="text" class="form-control" name="insActivo">
+                                            </span></div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="widget-header">
+                        <button type="button" id="btnFormFilter" class="btn btn-xs btn-primary">
+                            <i class="fa fa-search"></i> Consultar
+                        </button>
+                    </div>
+                </div>
+                <div style="clear: both;"></div>
+                <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th>Autor</th>
+                            <th>Tema</th>
+                            <th>% avance tema</th>
+                            <th># prorroga</th>
+                            <th>Fecha inicio</th>
+                            <th>Autor 1</th>
+                            <th>Autor 2</th>
+                            <th>No. resolución aprobación</th>
+                            <th>Fecha de resolución</th>
+                            <th>Fecha inicio</th>
+                            <th>Fecha entrega prevista	</th>
+                            <th>Periodo</th>
+                            <th>Tipo proyecto</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr *ngFor="let item of inscripciones">
+                            <td class="center" style="width: 30px;"></td>
+                            <td class="actions center" style="width: 100px">
+                                <button type="button" name="editar" [routerLink]="['/inscripcion/form', item.idIns]" class="btn btn-primary btn-xs" title="Editar">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                </button>
+                                <button type="button" name="eliminar" (click)='delete(item)' class="btn btn-danger btn-xs" title="Eliminar">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                            </td>
+                            <td>{{item.idIns}}</td>
+                            <td>{{item.insNombre}}</td>
+                            <td>{{item.insPeriodo}}</td>
+                            <td>{{item.insFechaInicio}}</td>            
+                            <td>{{item.insFechaFin}}</td>
+                            <td>{{item.insActivo}}</td>
+                            <td>{{item.insSecuencia}}</td>
+                        </tr> -->
+                    </tbody>
+                </table>
             </div>
             <div class="space-4" style="clear:both"></div>
         </div>
 
-        <div id="tab-requisitos" class="tab-pane">
-            <div id="cont-tab-requisitos">
-                
+        <div id="tab-proyecto" class="tab-pane">
+            <div id="cont-tab-proyecto">
+                <div class="widget-box ui-sortable-handle" id="widget-box-11">
+                    <div class="widget-body" style="display: block; padding: 5px 10px;">
+                        <div class="content font-small">
+                            <fieldset>
+                                <legend>Reporte de estado de proyecto :</legend>
+                                <form>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="profile-info-name">Docente: </div>
+                                            <div class="profile-info-value" style="width: 80%;"><span>
+                                                <input type="text" class="form-control" name="insFechaInicio">
+                                            </span></div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="profile-info-name">Periodo: </div>
+                                            <div class="profile-info-value" style="width: 80%;"><span>
+                                                <input type="text" class="form-control" name="insActivo">
+                                            </span></div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="widget-header">
+                        <button type="button" id="btnFormFilter" class="btn btn-xs btn-primary">
+                            <i class="fa fa-search"></i> Consultar
+                        </button>
+                    </div>
+                </div>
+                <div style="clear: both;"></div>
+                <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th>Autor</th>
+                            <th>Tema</th>
+                            <th>% avance tema</th>
+                            <th># prorroga</th>
+                            <th>Fecha inicio</th>
+                            <th>Autor 1</th>
+                            <th>Autor 2</th>
+                            <th>No. resolución aprobación</th>
+                            <th>Fecha de resolución</th>
+                            <th>Fecha inicio</th>
+                            <th>Fecha entrega prevista	</th>
+                            <th>Periodo</th>
+                            <th>Tipo proyecto</th>
+                            <th>Estado proyecto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr *ngFor="let item of inscripciones">
+                            <td class="center" style="width: 30px;"></td>
+                            <td class="actions center" style="width: 100px">
+                                <button type="button" name="editar" [routerLink]="['/inscripcion/form', item.idIns]" class="btn btn-primary btn-xs" title="Editar">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                </button>
+                                <button type="button" name="eliminar" (click)='delete(item)' class="btn btn-danger btn-xs" title="Eliminar">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                            </td>
+                            <td>{{item.idIns}}</td>
+                            <td>{{item.insNombre}}</td>
+                            <td>{{item.insPeriodo}}</td>
+                            <td>{{item.insFechaInicio}}</td>            
+                            <td>{{item.insFechaFin}}</td>
+                            <td>{{item.insActivo}}</td>
+                            <td>{{item.insSecuencia}}</td>
+                        </tr> -->
+                    </tbody>
+                </table>
             </div>
             <div class="space-4" style="clear:both"></div>
         </div>

@@ -166,3 +166,7 @@ span.ui-dialog-title{
 .navbar {
    background: #1f6b9b !important;
 }
+
+.profile-info-name {
+	min-width: 125px !important;
+}

@@ -4,8 +4,8 @@
 <div id="tabs_docentetema" class="tabbable">
     <ul class="nav nav-tabs">
         <li><a href="javascript:void(0)" (click)="showTab('tab-mistemas')"><i class="fa fa-certificate"></i>&nbsp; Periodo</a></li>
-        <li><a href="javascript:void(0)" (click)="showTab('tab-desarrollo')"><i class="fa fa-certificate"></i>&nbsp; Convocatoria</a></li>
-        <li><a href="javascript:void(0)" (click)="showTab('tab-revision')"><i class="fa fa-certificate"></i>&nbsp; Inscripción</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-convocatoria')"><i class="fa fa-certificate"></i>&nbsp; Convocatoria</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-inscripcion')"><i class="fa fa-certificate"></i>&nbsp; Inscripción</a></li>
         <li><a href="javascript:void(0)" (click)="showTab('tab-requisitos')"><i class="fa fa-certificate"></i>&nbsp; Requisitos</a></li>
     </ul>
     
@@ -67,8 +67,8 @@
             <div class="space-4" style="clear:both"></div>
         </div>
 
-        <div id="tab-desarrollo" class="tab-pane">
-            <div id="cont-tab-desarrollo">
+        <div id="tab-convocatoria" class="tab-pane">
+            <div id="cont-tab-convocatoria">
                 <div class="widget-header">
                     <button type="button" name="datosConvocatoria" (click)='dialogCreateConvocatoria()' class="btn btn-primary btn-xs" title="Crear Nueva Convocatoria">
                         <i class="fa fa-pencil-square-o"></i> Nueva Convocatoria
@@ -110,8 +110,8 @@
             <div class="space-4" style="clear:both"></div>
         </div>
 
-        <div id="tab-revision" class="tab-pane">
-            <div id="cont-tab-revision">
+        <div id="tab-inscripcion" class="tab-pane">
+            <div id="cont-tab-inscripcion">
                 <div class="widget-header">
                     <button type="button" name="datosInscripcion" (click)='dialogCreateInscripcion()' class="btn btn-primary btn-xs" title="Crear Nueva Inscripcion">
                         <i class="fa fa-pencil-square-o"></i> Nueva Inscripcion
@@ -122,7 +122,7 @@
                         <tr>
                             <th class="center" style="width: 30px;"></th>
                             <th class="center" style="width: 100px;">Acciones</th>
-                            <th class="center" style="width: 30px;">ID</th>
+                            <th class="center hide" style="width: 30px;">ID</th>
                             <th>Código</th>
                             <th>Periodo</th>
                             <th>Fecha inicio</th>
@@ -138,7 +138,7 @@
                                     <i class="fa fa-search"></i>
                                 </button>
                             </td>
-                            <td>{{item.idIns}}</td>
+                            <td class="hide">{{item.idIns}}</td>
                             <td>{{item.insNombre}}</td>
                             <td>{{item.insPeriodo}}</td>
                             <td>{{item.insFechaInicio}}</td>
@@ -163,7 +163,7 @@
                         <tr>
                             <th class="center" style="width: 30px;"></th>
                             <th class="center" style="width: 100px;">Acciones</th>
-                            <th class="center" style="width: 30px;">ID</th>
+                            <th class="center hide" style="width: 30px;">ID</th>
                             <th>tab-requisitos</th>
                             <th>Tipo</th>
                             <th>Inscripción</th>
@@ -178,7 +178,7 @@
                                     <i class="fa fa-search"></i>
                                 </button>
                             </td>
-                            <td>{{item.idCue}}</td>
+                            <td class="hide">{{item.idCue}}</td>
                             <td>{{item.cuePregunta}}</td>
                             <td>{{item.cueIdTipo}}</td>
                             <td>{{item.cueIdInscripcion}}</td>

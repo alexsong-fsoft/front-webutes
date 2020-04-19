@@ -1,1 +1,60 @@
-<p>utesconfiguracionnewinscripcion works!</p>
+<!-- <h2 class="header header-efx">{{titulo}}</h2> -->
+<form>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Código: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input type="text" class="form-control" name="insNombre" [(ngModel)]="inscripcion.insNombre" disabled="disabled">
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Periodo: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <select class="form-control" name="miselect" [(ngModel)]="inscripcion.insPeriodo">
+                    <option [value]="item.idPrd" *ngFor="let item of listPeriodo">{{item.prdNumero}}</option>
+                </select>
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Fecha inicial: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input type="text" class="form-control date-picker" name="insFechaInicio" [(ngModel)]="inscripcion.insFechaInicio">
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Fecha final: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input type="text" class="form-control date-picker" name="insFechaFin" [(ngModel)]="inscripcion.insFechaFin">
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Activado: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input name="chk_insActivo" type="checkbox" [checked]="inscripcion.insActivo" [(ngModel)]="inscripcion.insActivo">                                                                   
+            </span></div>
+        </div>
+    </div>
+    <input type="hidden" value="" name="insSecuencia" [(ngModel)]="inscripcion.insSecuencia">
+    <input type="hidden" value="" name="id" [(ngModel)]="inscripcion.idIns">
+    <br/>
+    <div class="form-group row">
+        <div class="col-sm-12 center">
+            <button class="btn btn-primary" role="button" (click)='createInscripcion()' *ngIf="!inscripcion.idIns else elseBlock">
+                <i class="fa fa-save"></i> CREAR
+            </button>
+            <ng-template #elseBlock>
+                <button class="btn btn-primary" role="button" (click)='update()'>
+                    <i class="fa fa-save"></i> EDITAR
+                </button>
+            </ng-template>
+        </div>
+    </div>
+</form>

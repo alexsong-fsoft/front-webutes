@@ -1,1 +1,53 @@
-<p>utesconfiguracionnewrequisito works!</p>
+<!-- <h2 class="header header-efx">{{titulo}}</h2> -->
+<form>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Pregunta: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input type="text" class="form-control" name="cuePregunta" [(ngModel)]="cuestionario.cuePregunta">
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Tipo: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <select class="form-control" name="miselect" [(ngModel)]="cuestionario.cueIdTipo">
+                    <option [value]="item.id" *ngFor="let item of listTipoRequisito">{{item.nombre}}</option>
+                </select>
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Inscripción: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <select class="form-control" name="miselect" [(ngModel)]="cuestionario.cueIdInscripcion">
+                    <option [value]="item.idIns" *ngFor="let item of listInscripcion">{{item.insNombre}}</option>
+                </select>
+            </span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="profile-info-name">Activado: </div>
+            <div class="profile-info-value" style="width: 80%;"><span>
+                <input name="chk_insActivo" type="checkbox" [checked]="cuestionario.cueActivo" [(ngModel)]="cuestionario.cueActivo">                                                                   
+            </span></div>
+        </div>
+    </div>
+    <input type="hidden" value="" name="id" [(ngModel)]="cuestionario.idCue">
+    <br/>
+    <div class="form-group row">
+        <div class="col-sm-12 center">
+            <button class="btn btn-primary" role="button" (click)='create()' *ngIf="!cuestionario.idCue else elseBlock">
+                <i class="fa fa-save"></i> CREAR
+            </button>
+            <ng-template #elseBlock>
+                <button class="btn btn-primary" role="button" (click)='update()'>
+                    <i class="fa fa-save"></i> EDITAR
+                </button>
+            </ng-template>
+        </div>
+    </div>
+</form>
