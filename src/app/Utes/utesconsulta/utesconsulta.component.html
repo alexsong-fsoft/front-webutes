@@ -21,20 +21,23 @@
                                 <form>
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <div class="profile-info-name">Fecha inscripción: </div>
-                                            <div class="profile-info-name" style="width: 15px;">De </div>
-                                            <div class="profile-info-value" style="width: 35%;"><span>
-                                                <input type="text" class="form-control date-picker" name="insFechaInicio" [(ngModel)]="inscripcionSearch.insFechaInicio">
+                                            <div class="profile-info-name" style="float: left;">Fecha inscripción: </div>
+                                            <div class="" style="width: 50px;float:left;text-align: right;padding: 6px 10px 6px 4px;">Desde </div>
+                                            <div class="profile-info-value" style="width: 30%;float: left;"><span>
+                                                <input type="text" class="form-control date-picker" name="pslFecha" [(ngModel)]="presolicitudSearch.pslFecha">
                                             </span></div>
-                                            <div class="profile-info-name" style="width: 15px;">a </div>
-                                            <div class="profile-info-value" style="width: 35%;"><span>
-                                                <input type="text" class="form-control date-picker" name="insFechaFin" [(ngModel)]="inscripcionSearch.insFechaFin">
+                                            <div class="" style="width: 50px;float:left;text-align: right;padding: 6px 10px 6px 4px;">Hasta </div>
+                                            <div class="profile-info-value" style="width: 30%;float: left;"><span>
+                                                <input type="text" class="form-control date-picker" name="pslFechaPrerevision" [(ngModel)]="presolicitudSearch.pslFechaPrerevision">
                                             </span></div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="profile-info-name">Inscripción: </div>
                                             <div class="profile-info-value" style="width: 80%;"><span>
-                                                <input type="text" class="form-control" name="insNombre" [(ngModel)]="inscripcionSearch.insNombre">
+                                                <select class="form-control" name="miselectIdInscripcion" [(ngModel)]="presolicitudSearch.idInscripcion">
+                                                    <option value="">Todos</option>
+                                                    <option [value]="item.idIns" *ngFor="let item of listInscripciones">{{item.insNombre}}</option>
+                                                </select>
                                             </span></div>
                                         </div>
                                     </div>
@@ -42,13 +45,19 @@
                                         <div class="col-sm-6">
                                             <div class="profile-info-name">Opción: </div>
                                             <div class="profile-info-value" style="width: 80%;"><span>
-                                                <input type="text" class="form-control" name="insFechaInicio">
+                                                <select class="form-control" name="miselectPslIdOpcion" [(ngModel)]="presolicitudSearch.pslIdOpcion">
+                                                    <option value="">Todos</option>
+                                                    <option [value]="item.id" *ngFor="let item of listTipoOpcionTitulacion">{{item.nombre}}</option>
+                                                </select>
                                             </span></div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="profile-info-name">Estado: </div>
                                             <div class="profile-info-value" style="width: 80%;"><span>
-                                                <input type="text" class="form-control" name="insActivo">
+                                                <select class="form-control" name="miselectPslIdEstado" [(ngModel)]="presolicitudSearch.pslIdEstado">
+                                                    <option value="">Todos</option>
+                                                    <option [value]="item.id" *ngFor="let item of listEstadoPresolicitud">{{item.titulo}}</option>
+                                                </select>
                                             </span></div>
                                         </div>
                                     </div>
@@ -57,7 +66,7 @@
                         </div>
                     </div>
                     <div class="widget-header">
-                        <button type="button" id="btnFormFilter" class="btn btn-xs btn-primary">
+                        <button type="button" id="btnFormFilter" class="btn btn-xs btn-primary" (click)='consultaPreaprobados()'>
                             <i class="fa fa-search"></i> Consultar
                         </button>
                     </div>
@@ -74,24 +83,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- <tr *ngFor="let item of inscripciones">
-                            <td class="center" style="width: 30px;"></td>
-                            <td class="actions center" style="width: 100px">
-                                <button type="button" name="editar" [routerLink]="['/inscripcion/form', item.idIns]" class="btn btn-primary btn-xs" title="Editar">
-                                    <i class="fa fa-pencil-square-o"></i>
-                                </button>
-                                <button type="button" name="eliminar" (click)='delete(item)' class="btn btn-danger btn-xs" title="Eliminar">
-                                    <i class="fa fa-trash-o"></i>
-                                </button>
-                            </td>
-                            <td>{{item.idIns}}</td>
-                            <td>{{item.insNombre}}</td>
-                            <td>{{item.insPeriodo}}</td>
-                            <td>{{item.insFechaInicio}}</td>            
-                            <td>{{item.insFechaFin}}</td>
-                            <td>{{item.insActivo}}</td>
-                            <td>{{item.insSecuencia}}</td>
-                        </tr> -->
+                    <tr *ngFor="let item of listPreaprobados; index as i">
+                        <td class="center" style="width: 30px;">{{i + 1}}</td>
+                        <td>{{item.persona.perNombre}} {{item.persona.perApellido}}</td>
+                        <td>{{getNombreEstadoPorLista(item.pslIdEstado)}}</td>
+                        <td>{{getNombreTipoPorLista(item.pslIdOpcion)}}</td>
+                        <td>{{item.pslMensaje}}</td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -110,13 +108,19 @@
                                         <div class="col-sm-6">
                                             <div class="profile-info-name">Docente: </div>
                                             <div class="profile-info-value" style="width: 80%;"><span>
-                                                <input type="text" class="form-control" name="insFechaInicio">
+                                                <select class="form-control" name="miselect2">
+                                                    <option value="">TODOS LOS DOCENTES</option>
+                                                    <option [value]="item.idUsr" *ngFor="let item of listUsuarioDocente">{{item.persona.perApellido}} {{item.persona.perNombre}}</option>
+                                                </select>
                                             </span></div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="profile-info-name">Periodo: </div>
                                             <div class="profile-info-value" style="width: 80%;"><span>
-                                                <input type="text" class="form-control" name="insActivo">
+                                                <select class="form-control" name="miselect">
+                                                    <option value="">TODOS</option>
+                                                    <option [value]="item.idPrd" *ngFor="let item of listPeriodo">{{item.prdNumero}}</option>
+                                                </select>
                                             </span></div>
                                         </div>
                                     </div>
@@ -125,7 +129,7 @@
                         </div>
                     </div>
                     <div class="widget-header">
-                        <button type="button" id="btnFormFilter" class="btn btn-xs btn-primary">
+                        <button type="button" id="btnFormFilter" class="btn btn-xs btn-primary" (click)='consultaGeneral()'>
                             <i class="fa fa-search"></i> Consultar
                         </button>
                     </div>
@@ -182,19 +186,41 @@
                                         <div class="col-sm-6">
                                             <div class="profile-info-name">Docente: </div>
                                             <div class="profile-info-value" style="width: 80%;"><span>
-                                                <input type="text" class="form-control" name="insFechaInicio">
+                                                <select class="form-control" name="miselect2">
+                                                    <option value="">TODOS LOS DOCENTES</option>
+                                                    <option [value]="item.idUsr" *ngFor="let item of listUsuarioDocente">{{item.persona.perApellido}} {{item.persona.perNombre}}</option>
+                                                </select>
                                             </span></div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="profile-info-name">Periodo: </div>
                                             <div class="profile-info-value" style="width: 80%;"><span>
-                                                <input type="text" class="form-control" name="insActivo">
+                                                <select class="form-control" name="miselect">
+                                                    <option value="">TODOS</option>
+                                                    <option [value]="item.idPrd" *ngFor="let item of listPeriodo">{{item.prdNumero}}</option>
+                                                </select>
                                             </span></div>
                                         </div>
                                         <div class="col-sm-6">
-                                            <div class="profile-info-name">Fecha: </div>
-                                            <div class="profile-info-value" style="width: 80%;"><span>
-                                                <input type="text" class="form-control" name="insActivo">
+                                            <div class="profile-info-name" style="float: left;">Fecha Resolucion: </div>
+                                            <div class="" style="width: 50px;float:left;text-align: right;padding: 6px 10px 6px 4px;">Desde </div>
+                                            <div class="profile-info-value" style="width: 30%;float: left;"><span>
+                                                <input type="text" class="form-control date-picker" name="pslFecha" [(ngModel)]="presolicitudSearch.pslFecha">
+                                            </span></div>
+                                            <div class="" style="width: 50px;float:left;text-align: right;padding: 6px 10px 6px 4px;">Hasta </div>
+                                            <div class="profile-info-value" style="width: 30%;float: left;"><span>
+                                                <input type="text" class="form-control date-picker" name="pslFechaPrerevision" [(ngModel)]="presolicitudSearch.pslFechaPrerevision">
+                                            </span></div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="profile-info-name" style="float: left;">Fecha Inicio: </div>
+                                            <div class="" style="width: 50px;float:left;text-align: right;padding: 6px 10px 6px 4px;">Desde </div>
+                                            <div class="profile-info-value" style="width: 30%;float: left;"><span>
+                                                <input type="text" class="form-control date-picker" name="pslFecha" [(ngModel)]="presolicitudSearch.pslFecha">
+                                            </span></div>
+                                            <div class="" style="width: 50px;float:left;text-align: right;padding: 6px 10px 6px 4px;">Hasta </div>
+                                            <div class="profile-info-value" style="width: 30%;float: left;"><span>
+                                                <input type="text" class="form-control date-picker" name="pslFechaPrerevision" [(ngModel)]="presolicitudSearch.pslFechaPrerevision">
                                             </span></div>
                                         </div>
                                     </div>

@@ -137,8 +137,8 @@ var Gestor = {
 				$('.date-picker').datepicker({
 					clearBtn: true,
 					//autoclose: true,
-					todayHighlight: true
-	                
+					todayHighlight: true,
+					format: 'dd/mm/yyyy'	                
 				});
 				$('.date-picker').mask('99/99/9999');
 				$('.date-picker').attr('placeholder','dd/mm/yyyy');
