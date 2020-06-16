@@ -12,6 +12,10 @@ import { SysusuarioService } from 'src/app/sysusuario/sysusuario.service';
 import { Estaticos } from 'src/app/app.constants';
 import { Periodo } from 'src/app/periodo/periodo';
 import { PeriodoService } from 'src/app/periodo/periodo.service';
+import { TemaService } from 'src/app/tema/tema.service';
+import { ConsultaDocente } from 'src/app/tema/consultaDocente';
+import { parseDate } from 'src/app/app.constants';
+import { DocenteReporte } from 'src/app/tema/DocenteReporte';
 
 declare var JQuery: any;
 declare var $: any;
@@ -25,20 +29,27 @@ export class UtesconsultaComponent implements OnInit {
   private titulo: string = "Gestión de Temas";
   public usserLogged: Sysusuario = null;
   private presolicitudSearch: Presolicitud = new Presolicitud();  
+  private consultaDoc: ConsultaDocente = new ConsultaDocente();
+  private consultaDocEstado: ConsultaDocente = new ConsultaDocente();
   private listTipoOpcionTitulacion: Tipo[];
   private listInscripciones: Inscripcion[];
   private listEstadoPresolicitud: Estado[];
+  private listEstadoPostTema: Estado[];
   private listPreaprobados: Presolicitud[];
   private listUsuarioDocente: Sysusuario[];
   private listPeriodo: Periodo[];
-
+  private listDocenteReporte: DocenteReporte[]; 
+  private listDocenteReporteEstado: DocenteReporte[]; 
+  public parseDate2 = parseDate;
+  
   @ViewChild(AdDirective, {static: true}) adHost: AdDirective;
   
   constructor(private userService: UserService,
     private inscripcionService: InscripcionService,
     private presolicitudService: PresolicitudService,
     private sysusuarioService: SysusuarioService,
-    private periodoService: PeriodoService
+    private periodoService: PeriodoService,
+    private temaService: TemaService
     ) { }
 
   ngOnInit() {
@@ -54,6 +65,7 @@ export class UtesconsultaComponent implements OnInit {
   public load() {
     this.listTipoOpcionTitulacion = Tipo.loadDocumentoAll();    
     this.listEstadoPresolicitud = Estado.loadInscripcion();
+    this.listEstadoPostTema = Estado.loadPostTema();
     this.getListUsuarioDocente();
     this.loadPeriodo();
     this.inscripcionService.getAllByEstado().subscribe(
@@ -76,6 +88,24 @@ export class UtesconsultaComponent implements OnInit {
     );
   }
 
+  public consultaDocente() {
+    console.log(this.consultaDoc);
+    this.temaService.getConsultaDocente(this.consultaDoc).subscribe(
+      (listDocenteReporte) => {
+        this.listDocenteReporte = listDocenteReporte;
+      }
+    );
+  }
+
+  public consultaDocenteEstado() {
+    console.log(this.consultaDoc);
+    this.temaService.getConsultaDocente(this.consultaDoc).subscribe(
+      (listDocenteReporte) => {
+        this.listDocenteReporteEstado = listDocenteReporte;
+      }
+    );
+  }
+  
   public getNombreEstadoPorLista(idEstado: number): String {
     return Estado.getNombreEstadoPorLista(idEstado, this.listEstadoPresolicitud);
   }
@@ -102,7 +132,5 @@ export class UtesconsultaComponent implements OnInit {
       }
     ) 
   }
-
-
 
 }
