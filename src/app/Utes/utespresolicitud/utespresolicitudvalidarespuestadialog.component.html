@@ -29,8 +29,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let item of presolicitudRespuestas">
-                <td class="center" style="width: 30px;"></td>
+            <tr *ngFor="let item of presolicitudRespuestas; index as i">
+                <td class="center" style="width: 30px;">{{i + 1}}</td>
                 <td>{{item.cuestionario.cuePregunta}}</td>
                 <td class="actions fixed-side center">
                     <input name="chk_resValor_{{i}}" type="checkbox" [checked]="item.resValor" disabled=true>                                                                   

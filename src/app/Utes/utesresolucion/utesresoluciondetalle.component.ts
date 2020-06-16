@@ -5,6 +5,7 @@ import { Tema } from 'src/app/tema/tema';
 import { TemaService } from 'src/app/tema/tema.service';
 import { Estado } from 'src/app/estado/Estado';
 import { Tipo } from 'src/app/tipo/Tipo';
+import { Estaticos } from 'src/app/app.constants';
 
 declare var JQuery: any;
 declare var $: any;
@@ -40,7 +41,12 @@ export class UtesresoluciondetalleComponent implements AdComponent {
       this.temaService.getById(id).subscribe(
         (tema) => {
           if (tema != null) {
-            this.tema = tema; 
+            this.tema = tema;
+            this.tema.asignados = this.tema.asignados.filter(
+              (x) => (x.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_ESTUDIANTE || 
+                x.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_LECTORPLAN ||
+                x.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_LECTORPROYECTO ) 
+            );
           } 
         }
 
