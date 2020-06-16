@@ -5,6 +5,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import Lang from '../../assets/app.lang.json';
 import { Page } from '../Page/page';
+import { ConsultaDocente } from './consultaDocente';
+import { DocenteReporte } from './DocenteReporte';
 
 
 @Injectable({
@@ -139,9 +141,9 @@ export class TemaService {
     );
   }
 
-  getByUsuarioEstadosIdPeriodo(nameuser: string, estados: string, idperiodo: number): Observable<Tema[]> {
-    return this.http.get(`${this.urlEndPoint}/obtenerTemasxUsuarioEstado/${nameuser}/${estados}/${idperiodo}`).pipe(
-      map( response => response as Tema[] )
+  getConsultaDocente(consulta: ConsultaDocente): Observable<DocenteReporte[]> {
+    return this.http.post<DocenteReporte[]>(`${this.urlEndPoint}/consultaDocente`, consulta).pipe(
+      map( response => response as DocenteReporte[] )
     );
   }
 

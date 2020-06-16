@@ -89,6 +89,12 @@ export class PresolicitudService {
     return this.http.get<Presolicitud>(`${this.urlEndPoint}/obtenerListadoPresolicitudPorId/${idpresolicitud}`);
   }
 
+  getListadoPresolicitudConsulta(presolicitud: Presolicitud): Observable<Presolicitud[]> {
+    return this.http.post<Presolicitud[]>(`${this.urlEndPoint}/obtenerListadoPresolicitudConsulta`, { presolicitud: presolicitud } , {headers: this.httpHeaders}).pipe(
+      map( response => response as Presolicitud[] )
+    );
+  }
+
   getByIdPeronaIdInscripcion2(idpersona: number, idinscripcion: number): Observable<Presolicitud> {
     return this.http.get<Presolicitud>(`${this.urlEndPoint}/obtenerPresolicitudPorPersonaIdInscripcion/${idpersona}/${idinscripcion}`);
   }

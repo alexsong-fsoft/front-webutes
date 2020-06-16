@@ -160,3 +160,17 @@ export class Estaticos {
     static readonly PERSONAID_ESTUDIANTE = 161;  //42 tiene tema - 161 no tiene
     static readonly PERSONACEDULA_ESTUDIANTE = '1714075916'; //1802727485 tiene - 1714075916 no tiene
 }
+
+export function stringSplit(string : string, separator : string = '/') : any {
+    return string.split(separator);
+}
+
+export function parseDate(dateString: string): Date {
+    console.log(dateString);
+    if (dateString) {
+        var d = new Date(dateString);
+        d.setMinutes(d.getMinutes() + d.getTimezoneOffset());
+        return d;
+    }
+    return null;
+  }
