@@ -47,7 +47,12 @@ export class UtesresoluciondetalleComponent implements AdComponent {
       this.temaService.getById(id).subscribe(
         (tema) => {
           if (tema != null) {
-            this.tema = tema; 
+            this.tema = tema;
+            this.tema.asignados = this.tema.asignados.filter(
+              (x) => (x.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_ESTUDIANTE || 
+                x.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_LECTORPLAN ||
+                x.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_LECTORPROYECTO ) 
+            );
           } 
         }
 
