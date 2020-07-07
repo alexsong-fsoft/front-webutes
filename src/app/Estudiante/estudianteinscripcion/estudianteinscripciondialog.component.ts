@@ -3,8 +3,6 @@ import { Component, Input } from '@angular/core';
 import { Inscripcion } from 'src/app/inscripcion/inscripcion';
 import { InscripcionService } from 'src/app/inscripcion/inscripcion.service';
 import { AdComponent } from '../estudiantetema/ad.component';
-import swal from 'sweetalert2';
-import Lang from '../../../assets/app.lang.json';
 import { Presolicitud } from 'src/app/presolicitud/presolicitud';
 import { Tipo } from 'src/app/tipo/Tipo';
 import { Cuestionario } from 'src/app/cuestionario/cuestionario';
@@ -18,6 +16,8 @@ import { PresolicitudService } from 'src/app/presolicitud/presolicitud.service';
 import { Respuesta } from 'src/app/respuesta/respuesta';
 import { RespuestaService } from 'src/app/respuesta/respuesta.service';
 import { Router } from '@angular/router';
+import swal from 'sweetalert2';
+import Lang from '../../../assets/app.lang.json';
 
 declare var JQuery: any;
 declare var $: any;

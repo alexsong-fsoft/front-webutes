@@ -15,6 +15,13 @@ import { filter, takeUntil, pairwise, startWith } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { InscripcionService } from 'src/app/inscripcion/inscripcion.service';
 import { Estado } from 'src/app/estado/Estado';
+import { Tipo } from 'src/app/tipo/Tipo';
+import { Cuestionario } from 'src/app/cuestionario/cuestionario';
+import { CuestionarioService } from 'src/app/cuestionario/cuestionario.service';
+import swal from 'sweetalert2';
+import Lang from '../../../assets/app.lang.json';
+import { Respuesta } from 'src/app/respuesta/respuesta';
+import { RespuestaService } from 'src/app/respuesta/respuesta.service';
 
 declare var JQuery: any;
 declare var $: any;
@@ -25,12 +32,18 @@ declare var Gestor: any;
   templateUrl: './estudianteinscripcion.component.html'
 })
 export class EstudianteinscripcionComponent implements OnInit, OnDestroy {
-  titulo: string = "Estudiante - Inscripción";
-  persona: Persona = null;
-  listPresolicitud: Presolicitud[];
-  listDataEstadoInscripcion: Estado[];
-  maxsecuencial: number = null;
-  habilitaBotonInscripcion: boolean = false;
+  private persona: Persona = null;
+  private listPresolicitud: Presolicitud[];
+  private listDataEstadoInscripcion: Estado[];
+  private maxsecuencial: number = null;
+  private habilitaBotonInscripcion: boolean = false;
+
+  private presolicitud: Presolicitud = new Presolicitud();
+  private listTipoOpcionTitulacion: Tipo[];
+  private listCuestionario: Cuestionario[];
+  private listCuestionarioSeleccion: number[] = [];
+  private enpresolicitud: Presolicitud;
+
   public usserLogged: Sysusuario = null;
   public destroyed = new Subject<any>();
 
@@ -40,6 +53,8 @@ export class EstudianteinscripcionComponent implements OnInit, OnDestroy {
     private personaService: PersonaService,
     private userService: UserService,
     private inscripcionService: InscripcionService,
+    private cuestionarioService: CuestionarioService,
+    private respuestaService: RespuestaService,
     private componentFactoryResolver: ComponentFactoryResolver,
     private router: Router) { }
 
@@ -54,12 +69,42 @@ export class EstudianteinscripcionComponent implements OnInit, OnDestroy {
       this.usserLogged = this.userService.getUserLoggedIn();
       this.habilitaBotonEvolucionEstado();
       this.loadListaPresolicitud();
+      this.load();
+      setTimeout(function () {
+        Gestor.fn.initForms();
+      }, 1000);
     })
   }
 
   ngOnDestroy() {
     this.destroyed.next();
     this.destroyed.complete();
+  }
+
+  onChange(idcue: number, isChecked: boolean) {
+    let selectedCuestionario = this.listCuestionarioSeleccion;
+    if (isChecked) {
+      selectedCuestionario.push(idcue);
+    } else {
+      selectedCuestionario = this.listCuestionarioSeleccion.filter(item => item !== idcue);
+    }
+    this.listCuestionarioSeleccion = selectedCuestionario;
+    console.log(selectedCuestionario);
+  }
+
+  public load(): void {
+    this.listTipoOpcionTitulacion = Tipo.loadDocumentoAll();
+    this.inscripcionService.getUltimoRegistroInscripcion().subscribe(
+      (idinscripcion) => {
+        if (idinscripcion != null) {
+          this.cuestionarioService.getByIdsTipoIdInscripcion(Estaticos.TIPO_ID_CUESTIONARIO_INSCRIPCION.toString(), idinscripcion).subscribe(
+            (cuestionarios: Cuestionario[]) => {
+              this.listCuestionario = cuestionarios;
+            }
+          );
+        }
+      }
+    );
   }
 
   loadListaPresolicitud() {
@@ -102,10 +147,11 @@ export class EstudianteinscripcionComponent implements OnInit, OnDestroy {
                         }
                       });
                       if (errores.length > 0) {
-                        this.habilitaBotonInscripcion = false;
-                      } else {
                         this.habilitaBotonInscripcion = true;
+                      } else {
+                        this.habilitaBotonInscripcion = false;
                       }
+                      console.log(this.habilitaBotonInscripcion);
                     }
                   }
                 );                  
@@ -126,14 +172,140 @@ export class EstudianteinscripcionComponent implements OnInit, OnDestroy {
     (<AdComponent>componentRef.instance).data = adItem.data;
   }
 
-  openDialog(): void {
-    this.loadComponent();
-    $('#dialog').dialog({
+  openDialogCrear(): void {
+    Gestor.fn.destroyDialog('dialogCrear');
+    $('#dialogCrear').dialog({
       title: 'Formulario Presolicitud',
       modal: true,
       minWidth: 800,
       resizable: false
     });
+    //this.loadComponent();
     Gestor.fn.positionDialog();
+    this.presolicitud = new Presolicitud();
+    $('#dialogCrear div.dialog-content').show();
+  }
+
+  public verificaSeleccionRequisitos(): boolean {
+    let valida: boolean = true;
+    try {
+      if (this.presolicitud.pslIdOpcion == null || this.presolicitud.pslIdOpcion == 0) {
+        swal.fire("Campos imcompletos", "Seleccione una Opción de Titulación", 'warning');
+        return false;
+      }
+      if (this.listCuestionario != null && this.listCuestionarioSeleccion != null) {
+        if (this.listCuestionario.length != this.listCuestionarioSeleccion.length) {
+          swal.fire("Campos imcompletos", "No puede seguir con el proceso de inscripción debido a que es necesario cumplir con todos los requisitos", 'warning');
+          return false;
+        }
+      }
+    } catch (error) {
+      console.error('Here is the error message', error);
+      return false;
+    }
+    return valida;
+  }
+
+  public create(): void {
+    if (this.verificaSeleccionRequisitos()) {
+      let mensaje = 'Los siguientes datos serán verificados por el personal administrativo de la Universidad Politécnica Salesiana. <br>'
+        + ' En caso de que la información registrada sea errónea : <br>'
+        + ' - Se penalizará con la DENEGACIÓN de su inscripción en la presente convocatoria de inscripción. <br>'
+        + ' - No podrá aplicar hasta la próxima convocatoria de inscripciones. <br>';
+      swal.fire(mensaje).then((result) => {
+        if (result.value) {
+          let errores: String[] = [];
+          try {
+            if (this.verificaSeleccionRequisitos() == true) {
+              let utilfecha = new Date();
+              if (this.listCuestionarioSeleccion != null) {
+                this.inscripcionService.getUltimoRegistroInscripcion().subscribe(
+                  (idultimo) => {
+                    if (idultimo != null) {
+                      this.inscripcionService.getInscripcionActivaMaxSecuencial().subscribe(
+                        (maxsecuencial) => {
+                          if (maxsecuencial != null) {
+                            this.inscripcionService.getById(maxsecuencial).subscribe(
+                              (auxinscripcion) => {
+                                if (auxinscripcion != null) {
+                                  this.enpresolicitud = new Presolicitud();
+                                  //this.enpresolicitud.inscripcion = auxinscripcion;
+                                  //this.enpresolicitud.persona = this.usserLogged2.persona;
+                                  this.enpresolicitud.idInscripcion = auxinscripcion.idIns;
+                                  this.enpresolicitud.idPersona = this.usserLogged.persona.idPer;
+                                  this.enpresolicitud.pslIdEstado = Estaticos.ESTADO_PRESOLICITUD_ENVIADO;
+                                  this.enpresolicitud.pslMensaje = (this.presolicitud.pslMensaje != null ? this.presolicitud.pslMensaje.toUpperCase().trim() : this.presolicitud.pslMensaje);
+                                  this.enpresolicitud.pslIdOpcion = this.presolicitud.pslIdOpcion;
+                                  this.enpresolicitud.pslFecha = utilfecha;
+                                  this.enpresolicitud.pslActivo = true;
+                                  this.presolicitudService.create(this.enpresolicitud).subscribe(
+                                    (response) => {
+                                      if (response) {
+                                        this.listCuestionario.forEach(objcue => {
+                                          this.listCuestionarioSeleccion.forEach(objcuesel => {
+                                            if (objcue.idCue == objcuesel) {
+                                              let enrespuesta: Respuesta = new Respuesta();
+                                              //enrespuesta.cuestionario = objcue;
+                                              //enrespuesta.presolicitud = this.enpresolicitud;
+                                              enrespuesta.idCuestionario = objcue.idCue;
+                                              enrespuesta.idPresolicitud = this.enpresolicitud.idPsl;
+                                              enrespuesta.resValor = true;
+                                              this.respuestaService.create(enrespuesta).subscribe(
+                                                (response2) => {
+                                                  if (response2) {
+                                                    // $('#dialog').dialog('close');
+                                                    // swal.fire(Lang.messages.register_new, "Se registro un nueva inscripción", 'success');
+                                                    // this.router2.navigate(['/dashboard/estudianteinscripcion'])
+                                                    //notificacionGlobal("Notificaciones", "Se registro un nueva inscripción", "/convocatoriatema");
+                                                  } else {
+                                                    errores.push("" + enrespuesta);
+                                                  }
+                                                }
+                                              );
+                                            }
+                                          });
+                                        });
+                                        if (errores.length == 0) {
+                                          //reloadLists(1);
+                                          swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_REGISTRA, 'success');
+                                          //Mensajes.mensajeInfo(null, MENSAJE_OK_REGISTRA, null);
+                                          $('#dialogCrear').dialog('close');
+                                          swal.fire(Lang.messages.register_new, "Se registro un nueva inscripción", 'success');
+                                          //this.router2.navigate(['/dashboard/estudianteinscripcion'])
+                                          this.ngOnInit();                                          
+                                        } else {
+                                          swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_REGISTRA, 'error');
+                                          //Mensajes.mensajeError(null, MENSAJE_ERROR_REGISTRA, null);
+                                        }
+                                      }
+                                    }
+                                  );
+                                } else {
+                                  swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_REGISTRA, 'error');
+                                  //Mensajes.mensajeError(null, MENSAJE_ERROR_REGISTRA, null);
+                                }
+                              }
+                            );
+                          }
+                        }
+                      );
+                    }
+                  }
+                );
+              } else {
+                swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_SELECCION, 'error');
+                //Mensajes.mensajeError(null, MENSAJE_ERROR_SELECCION, null);
+              }
+            } else {
+              swal.fire(Lang.messages.register_new, "No puede seguir con el proceso de inscripción debido a que es necesario cumplir con todos los requisitos", 'error');
+              //Mensajes.mensajeError(null, "No puede seguir con el proceso de inscripción debido a que es necesario cumplir con todos los requisitos", null);
+            }
+          } catch (error) {
+            console.error('Here is the error message', error);
+            return false;
+          }
+        }
+      });
+    }
   }
 }

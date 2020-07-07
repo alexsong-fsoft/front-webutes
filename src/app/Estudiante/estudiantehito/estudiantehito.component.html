@@ -1,4 +1,4 @@
-<h2 class="header header-efx">{{titulo}}</h2>
+<h2 class="header header-efx">Estudiante - Hito de Proyecto</h2>
 <div class="widget-box widget-color-dark ui-sortable-handle hide" id="widget-box-11">
     <div class="widget-header">
         
@@ -48,8 +48,8 @@
             <td>{{item.temNombre}}</td>
             <td>{{item.temNumEst}}</td>
             <td>{{item.convocatoria.conNombre}}</td>
-            <td>{{item.nombreEstado}}</td>
-            <td>{{item.nombreTipo}}</td>
+            <td>{{getNombreEstadoPorLista(item.temIdEstado)}}</td>
+            <td>{{getNombreTipoPorLista(item.temIdTipo)}}</td>
         </tr>
     </tbody>
 </table>

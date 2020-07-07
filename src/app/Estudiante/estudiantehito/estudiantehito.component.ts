@@ -7,6 +7,8 @@ import { Estaticos } from 'src/app/app.constants';
 import { Asignado } from 'src/app/asignado/asignado';
 import { Sysusuario } from 'src/app/sysusuario/sysusuario';
 import { UserService } from 'src/app/login/user.service';
+import { Estado } from 'src/app/estado/Estado';
+import { Tipo } from 'src/app/tipo/Tipo';
 
 declare var JQuery: any;
 declare var $: any;
@@ -18,9 +20,10 @@ declare var Gestor: any;
 })
 
 export class EstudiantehitoComponent {
-  titulo: string = "Estudiante - Hito de Proyecto";
-  asig: Asignado = null;
-  listEstudianteHito: Tema[];
+  private asig: Asignado = null;
+  private listEstudianteHito: Tema[];
+  private listEstadoPostTema: Estado[];
+  private listTipoDocumento: Tipo[];
   public usserLogged: Sysusuario = null;
   
   constructor(private userService: UserService,
@@ -29,6 +32,8 @@ export class EstudiantehitoComponent {
 
   ngOnInit() {
     this.usserLogged = this.userService.getUserLoggedIn();
+    this.listEstadoPostTema = Estado.loadPostTema();
+    this.listTipoDocumento = Tipo.loadDocumento();
     this.getListEstudianteEvolucion();
   }
 
@@ -49,5 +54,12 @@ export class EstudiantehitoComponent {
     return this.listEstudianteHito;
   }
 
+  public getNombreEstadoPorLista(idEstado: number): String {
+    return Estado.getNombreEstadoPorLista(idEstado, this.listEstadoPostTema);
+  }
+
+  public getNombreTipoPorLista(idTipo: number): String {
+    return Tipo.getNombreTipoPorLista(idTipo, this.listTipoDocumento);
+  }
   
 }

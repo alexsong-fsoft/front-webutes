@@ -1,3 +1,5 @@
+import { DatePipe } from '@angular/common';
+
 export class Estaticos {
     static readonly UTES_SITIO_SIGLAS = 'CUTS';
     static readonly UTES_SITIO_TITULO = 'COORDINACI\u00d3N DE LA UNIDAD DE TITULACI\u00d3N INGENIER\u00cdA DE SISTEMAS QUITO';
@@ -159,9 +161,11 @@ export class Estaticos {
 
     static readonly PERSONAID_ESTUDIANTE = 161;  //42 tiene tema - 161 no tiene
     static readonly PERSONACEDULA_ESTUDIANTE = '1714075916'; //1802727485 tiene - 1714075916 no tiene
+    static readonly FORMAT_DATE = 'dd-MM-yyyy';
+    static readonly FORMAT_DATE_PATH = 'yyyy-MM-dd';
 }
 
-export function stringSplit(string : string, separator : string = '/') : any {
+export function stringSplit(string: string, separator: string = '/'): any {
     return string.split(separator);
 }
 
@@ -173,4 +177,38 @@ export function parseDate(dateString: string): Date {
         return d;
     }
     return null;
-  }
+}
+
+export function parseDateToString(date: Date): String{
+    let datepipe: DatePipe;
+    return datepipe.transform(date, 'dd/MM/yyyy');
+}
+
+export function reporteDownload(x: any, nameDocDownload: string): void {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([x], { type: "application/pdf" });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(newBlob);
+        return;
+    }
+
+    // For other browsers: 
+    // Create a link pointing to the ObjectURL containing the blob.
+    const data = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = data;
+    link.download = nameDocDownload;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+        // For Firefox it is necessary to delay revoking the ObjectURL
+        window.URL.revokeObjectURL(data);
+        link.remove();
+    }, 100);
+}

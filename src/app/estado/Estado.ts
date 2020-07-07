@@ -126,14 +126,14 @@ export class Estado {
 
 
     static loadAsignaLectorRevisor(): Estado[] {
-        return this.loadAsignaLector().concat(this.loadAsignaRevisor());
-        // return [
-        //     new Estado(Estaticos.ESTADO_ID_TEMA_LECTOR_PROCESO, Estaticos.ESTADO_LABEL_TEMA_LECTOR_PROCESO, Estaticos.ESTADO_FASE_ASIGNACION),
-        //     new Estado(Estaticos.ESTADO_ID_TEMA_LECTOR_TERMINADO, Estaticos.ESTADO_LABEL_TEMA_LECTOR_TERMINADO, Estaticos.ESTADO_FASE_ASIGNACION),
-        //     new Estado(Estaticos.ESTADO_ID_TEMA_REVISA_PROCESO, Estaticos.ESTADO_LABEL_TEMA_REVISA_PROCESO, Estaticos.ESTADO_FASE_ASIGNACION),
-        //     new Estado(Estaticos.ESTADO_ID_TEMA_REVISA_REVISADO, Estaticos.ESTADO_LABEL_TEMA_REVISA_REVISADO, Estaticos.ESTADO_FASE_ASIGNACION),
-        //     new Estado(Estaticos.ESTADO_ID_TEMA_REVISA_TERMINADO, Estaticos.ESTADO_LABEL_TEMA_REVISA_TERMINADO, Estaticos.ESTADO_FASE_ASIGNACION)
-        // ];
+        //return this.loadAsignaLector().concat(this.loadAsignaRevisor());
+        return [
+            new Estado(Estaticos.ESTADO_ID_TEMA_LECTOR_PROCESO, Estaticos.ESTADO_LABEL_TEMA_LECTOR_PROCESO, Estaticos.ESTADO_FASE_ASIGNACION),
+            new Estado(Estaticos.ESTADO_ID_TEMA_LECTOR_TERMINADO, Estaticos.ESTADO_LABEL_TEMA_LECTOR_TERMINADO, Estaticos.ESTADO_FASE_ASIGNACION),
+            new Estado(Estaticos.ESTADO_ID_TEMA_REVISA_PROCESO, Estaticos.ESTADO_LABEL_TEMA_REVISA_PROCESO, Estaticos.ESTADO_FASE_ASIGNACION),
+            new Estado(Estaticos.ESTADO_ID_TEMA_REVISA_REVISADO, Estaticos.ESTADO_LABEL_TEMA_REVISA_REVISADO, Estaticos.ESTADO_FASE_ASIGNACION),
+            new Estado(Estaticos.ESTADO_ID_TEMA_REVISA_TERMINADO, Estaticos.ESTADO_LABEL_TEMA_REVISA_TERMINADO, Estaticos.ESTADO_FASE_ASIGNACION)
+        ];
     }
 
     static loadRevisorTema(): Estado[] {

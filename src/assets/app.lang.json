@@ -28,7 +28,8 @@
 		"tema": "http://localhost:8090/api/tema",
 		"tipoopcion": "http://localhost:8090/api/tipoOpcion",
         "tiporesolucion": "http://localhost:8090/api/tipoResolucion",
-        "login": "http://localhost:8090/api/login"
+        "login": "http://localhost:8090/api/login",
+        "reporte": "http://localhost:8090/api/reporte"
     },
     "Swal":{
         "confirmDelete": {

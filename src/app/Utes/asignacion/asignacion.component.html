@@ -1,28 +1,33 @@
 <div id="tabs_docentetema" class="tabbable">
     <ul class="nav nav-tabs">
-        <li><a href="javascript:void(0)" (click)="showTab('tab-mistemas')"><i class="fa fa-certificate"></i>&nbsp; Asignación - Revisor</a></li>
-        <li><a href="javascript:void(0)" (click)="showTab('tab-desarrollo')"><i class="fa fa-certificate"></i>&nbsp; Temas publicados</a></li>
-        <li><a href="javascript:void(0)" (click)="showTab('tab-revision')"><i class="fa fa-certificate"></i>&nbsp; Asignación - Lector plan</a></li>        
+        <li><a href="javascript:void(0)" (click)="showTab('tab-mistemas')"><i class="fa fa-certificate"></i>&nbsp;
+                Asignación - Revisor</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-desarrollo')"><i class="fa fa-certificate"></i>&nbsp;
+                Temas publicados</a></li>
+        <li><a href="javascript:void(0)" (click)="showTab('tab-revision')"><i class="fa fa-certificate"></i>&nbsp;
+                Asignación - Lector plan</a></li>
     </ul>
-    
+
     <div class="tab-content">
 
         <div id="tab-mistemas" class="tab-pane">
             <div id="cont-tab-mistemas">
                 <div class="widget-header">
-                    <button type="button" name="nuevo" (click)='updateTemaEstado()' class="btn btn-primary btn-xs" title="Publicar Temas Seleccionados">
+                    <button type="button" name="nuevo" (click)='updateTemaEstado()' class="btn btn-primary btn-xs"
+                        title="Publicar Temas Seleccionados">
                         <i class="fa fa-pencil-square-o"></i> Publicar Temas
                     </button>
                 </div>
                 <div style="clear: both;"></div>
-                <table class="table table-striped table-bordered tbl_chk font-small" style="width:100%; margin-bottom:0px;">
+                <table class="table table-striped table-bordered tbl_chk font-small"
+                    style="width:100%; margin-bottom:0px;">
                     <thead class="thead-inverse">
                         <tr>
                             <th class="center" style="width: 30px;"></th>
                             <th class="center" style="width: 100px;">Acciones</th>
                             <th class="center hide" style="width: 30px;">ID</th>
                             <th scope="col" class="fixed-side center">
-                                <input id="chk_all_row" class="chk_all_row" type="checkbox" value="">                                                                   
+                                <input id="chk_all_row" class="chk_all_row" type="checkbox" value="">
                             </th>
                             <th>Autor</th>
                             <th>Título</th>
@@ -35,26 +40,31 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of listUtesEnviados; index as i">
-                            <td class="center" style="width: 30px;">{{(pageRender.paginaActual - 1) * pageRender.numElementosPorPagina + i + 1}}</td>
+                            <td class="center" style="width: 30px;">
+                                {{(pageRender.paginaActual - 1) * pageRender.numElementosPorPagina + i + 1}}</td>
                             <td class="actions center" style="width: 100px">
-                                <button type="button" name="editar" (click)='asignarRevisor(item)' title="Asignar Revisor" [className]="habilitaBotonAsignarRevisor(item.temIdEstado) ? 'btn btn-primary btn-xs disabled' : 'btn btn-primary btn-xs'">
+                                <button type="button" name="editar" (click)='asignarRevisor(item)'
+                                    title="Asignar Revisor"
+                                    [className]="habilitaBotonAsignarRevisor(item.temIdEstado) ? 'btn btn-primary btn-xs disabled' : 'btn btn-primary btn-xs'">
                                     <i class="fa fa-plus"></i>
                                 </button>
-                                <button type="button" name="detalle" (click)='loadDetalle(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                                <button type="button" name="detalle" (click)='loadDetalle(item)'
+                                    class="btn btn-primary btn-xs" title="Ver Detalle">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </td>
                             <td class="hide">{{item.idTem}}</td>
                             <td class="actions fixed-side center">
-                                <input id="row_{{item.idTem}}" name="chk_row" type="checkbox" value="{{item.idTem}}" (change)="onChange(item.idTem, $event.target.checked)">
+                                <input id="row_{{item.idTem}}" name="chk_row" type="checkbox" value="{{item.idTem}}"
+                                    (change)="onChange(item.idTem, $event.target.checked)">
                             </td>
                             <td>{{item.persona.perApellido}} {{item.persona.perNombre}}</td>
                             <td>{{item.temNombre}}</td>
                             <td>{{item.temNumEst}}</td>
                             <td>{{item.convocatoria ? item.convocatoria.conNombre : ''}}</td>
-                            <td>{{item.nombreEstado}}</td>
-                            <td>{{item.nombreTipo}}</td>
-                            <td>{{item.temFechaCreado}}</td>
+                            <td>{{getNombreEstadoPorLista(item.temIdEstado)}}</td>
+                            <td>{{getNombreTipoPorLista(item.temIdTipo)}}</td>
+                            <td>{{parseDateToString(item.temFechaCreado)}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -62,25 +72,38 @@
                     <ul class="pagination">
                         <li [className]="pageRender.first ? 'page-item disabled' : 'page-item'">
                             <span [className]="pageRender.first ? 'page-link show' : 'page-link hide'"> Primera</span>
-                            <a [className]="pageRender.first ? 'page-link hide' : 'page-link show'" (click)='getListUtesEnviados(0)' page='0'> Primera</a>
+                            <a [className]="pageRender.first ? 'page-link hide' : 'page-link show'"
+                                (click)='getListUtesEnviados(0)' page='0'> Primera</a>
                         </li>
                         <li [className]="!pageRender.hasPrevious ? 'page-item disabled' : 'page-item'">
-                            <span [className]="!pageRender.hasPrevious ? 'page-link show' : 'page-link hide'">&laquo;</span>
-                            <a [className]="!pageRender.hasPrevious ? 'page-link hide' : 'page-link show'" (click)='getListUtesEnviados(pageRender.paginaActual-2)' page='pageRender.paginaActual-2'>&laquo;</a>
+                            <span
+                                [className]="!pageRender.hasPrevious ? 'page-link show' : 'page-link hide'">&laquo;</span>
+                            <a [className]="!pageRender.hasPrevious ? 'page-link hide' : 'page-link show'"
+                                (click)='getListUtesEnviados(pageRender.paginaActual-2)'
+                                page='pageRender.paginaActual-2'>&laquo;</a>
                         </li>
-                        <li [className]="itemPage.actual ? 'page-item active' : 'page-item'" *ngFor="let itemPage of pageRender.paginas">
-                            <span [className]="itemPage.actual ? 'page-link show' : 'page-link hide'">{{itemPage.numero}}</span>
-                            <a [className]="itemPage.actual ? 'page-link hide' : 'page-link show'" (click)='getListUtesEnviados(itemPage.numero-1)' page='itemPage.numero-1'>{{itemPage.numero}}</a>
-                        </li>	
+                        <li [className]="itemPage.actual ? 'page-item active' : 'page-item'"
+                            *ngFor="let itemPage of pageRender.paginas">
+                            <span
+                                [className]="itemPage.actual ? 'page-link show' : 'page-link hide'">{{itemPage.numero}}</span>
+                            <a [className]="itemPage.actual ? 'page-link hide' : 'page-link show'"
+                                (click)='getListUtesEnviados(itemPage.numero-1)'
+                                page='itemPage.numero-1'>{{itemPage.numero}}</a>
+                        </li>
                         <li [className]="!pageRender.hasNext ? 'page-item disabled' : 'page-item'">
                             <span [className]="!pageRender.hasNext ? 'page-link show' : 'page-link hide'">&raquo;</span>
-                            <a [className]="!pageRender.hasNext ? 'page-link hide' : 'page-link show'" (click)='getListUtesEnviados(pageRender.paginaActual)' page='pageRender.paginaActual'>&raquo;</a>
+                            <a [className]="!pageRender.hasNext ? 'page-link hide' : 'page-link show'"
+                                (click)='getListUtesEnviados(pageRender.paginaActual)'
+                                page='pageRender.paginaActual'>&raquo;</a>
                         </li>
                         <li [className]="pageRender.last ? 'page-item disabled' : 'page-item'">
-                            <span [className]="pageRender.last ? 'page-link show' : 'page-link hide'">&Uacute;ltima</span>
-                            <a [className]="pageRender.last ? 'page-link hide' : 'page-link show'" (click)='getListUtesEnviados(pageRender.totalPaginas-1)' page='pageRender.totalPaginas-1'>&Uacute;ltima</a>
+                            <span
+                                [className]="pageRender.last ? 'page-link show' : 'page-link hide'">&Uacute;ltima</span>
+                            <a [className]="pageRender.last ? 'page-link hide' : 'page-link show'"
+                                (click)='getListUtesEnviados(pageRender.totalPaginas-1)'
+                                page='pageRender.totalPaginas-1'>&Uacute;ltima</a>
                         </li>
-                    </ul>                 
+                    </ul>
                 </nav>
             </div>
             <div class="space-4" style="clear:both"></div>
@@ -93,9 +116,10 @@
                         <tr>
                             <th class="center" style="width: 30px;"></th>
                             <th class="center" style="width: 100px;">Acciones</th>
-                            <th class="center" style="width: 30px;">ID</th>
+                            <th class="center hide" style="width: 30px;">ID</th>
+                            <th>Autor</th>
                             <th>Título</th>
-                            <th>N° Est</th>
+                            <th>Fecha enviado</th>
                             <th>Convocatoria</th>
                             <th>Estado</th>
                             <th>Tipo</th>
@@ -103,18 +127,21 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of listComisionPublicado; index as i">
-                            <td class="center" style="width: 30px;">{{(pageRender2.paginaActual - 1) * pageRender2.numElementosPorPagina + i + 1}}</td>
+                            <td class="center" style="width: 30px;">
+                                {{(pageRender2.paginaActual - 1) * pageRender2.numElementosPorPagina + i + 1}}</td>
                             <td class="actions center" style="width: 100px">
-                                <button type="button" name="detalle" (click)='loadDetalle(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                                <button type="button" name="detalle" (click)='loadDetalle(item)'
+                                    class="btn btn-primary btn-xs" title="Ver Detalle">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </td>
-                            <td>{{item.idTem}}</td>
+                            <td class="hide">{{item.idTem}}</td>
+                            <td>{{item.persona.perApellido}} {{item.persona.perNombre}}</td>
                             <td>{{item.temNombre}}</td>
-                            <td>{{item.temNumEst}}</td>
+                            <td>{{parseDateToString(item.temFechaEnviado)}}</td>
                             <td>{{item.convocatoria.conNombre}}</td>
-                            <td>{{item.nombreEstado}}</td>
-                            <td>{{item.nombreTipo}}</td>
+                            <td>{{getNombreEstadoPorLista(item.temIdEstado)}}</td>
+                            <td>{{getNombreTipoPorLista(item.temIdTipo)}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -122,25 +149,39 @@
                     <ul class="pagination">
                         <li [className]="pageRender2.first ? 'page-item disabled' : 'page-item'">
                             <span [className]="pageRender2.first ? 'page-link show' : 'page-link hide'"> Primera</span>
-                            <a [className]="pageRender2.first ? 'page-link hide' : 'page-link show'" (click)='getListComisionPublicado(0)' page='0'> Primera</a>
+                            <a [className]="pageRender2.first ? 'page-link hide' : 'page-link show'"
+                                (click)='getListComisionPublicado(0)' page='0'> Primera</a>
                         </li>
                         <li [className]="!pageRender2.hasPrevious ? 'page-item disabled' : 'page-item'">
-                            <span [className]="!pageRender2.hasPrevious ? 'page-link show' : 'page-link hide'">&laquo;</span>
-                            <a [className]="!pageRender2.hasPrevious ? 'page-link hide' : 'page-link show'" (click)='getListComisionPublicado(pageRender2.paginaActual-2)' page='pageRender2.paginaActual-2'>&laquo;</a>
+                            <span
+                                [className]="!pageRender2.hasPrevious ? 'page-link show' : 'page-link hide'">&laquo;</span>
+                            <a [className]="!pageRender2.hasPrevious ? 'page-link hide' : 'page-link show'"
+                                (click)='getListComisionPublicado(pageRender2.paginaActual-2)'
+                                page='pageRender2.paginaActual-2'>&laquo;</a>
                         </li>
-                        <li [className]="itemPage.actual ? 'page-item active' : 'page-item'" *ngFor="let itemPage of pageRender2.paginas">
-                            <span [className]="itemPage.actual ? 'page-link show' : 'page-link hide'">{{itemPage.numero}}</span>
-                            <a [className]="itemPage.actual ? 'page-link hide' : 'page-link show'" (click)='getListComisionPublicado(itemPage.numero-1)' page='itemPage.numero-1'>{{itemPage.numero}}</a>
-                        </li>	
+                        <li [className]="itemPage.actual ? 'page-item active' : 'page-item'"
+                            *ngFor="let itemPage of pageRender2.paginas">
+                            <span
+                                [className]="itemPage.actual ? 'page-link show' : 'page-link hide'">{{itemPage.numero}}</span>
+                            <a [className]="itemPage.actual ? 'page-link hide' : 'page-link show'"
+                                (click)='getListComisionPublicado(itemPage.numero-1)'
+                                page='itemPage.numero-1'>{{itemPage.numero}}</a>
+                        </li>
                         <li [className]="!pageRender2.hasNext ? 'page-item disabled' : 'page-item'">
-                            <span [className]="!pageRender2.hasNext ? 'page-link show' : 'page-link hide'">&raquo;</span>
-                            <a [className]="!pageRender2.hasNext ? 'page-link hide' : 'page-link show'" (click)='getListComisionPublicado(pageRender2.paginaActual)' page='pageRender2.paginaActual'>&raquo;</a>
+                            <span
+                                [className]="!pageRender2.hasNext ? 'page-link show' : 'page-link hide'">&raquo;</span>
+                            <a [className]="!pageRender2.hasNext ? 'page-link hide' : 'page-link show'"
+                                (click)='getListComisionPublicado(pageRender2.paginaActual)'
+                                page='pageRender2.paginaActual'>&raquo;</a>
                         </li>
                         <li [className]="pageRender2.last ? 'page-item disabled' : 'page-item'">
-                            <span [className]="pageRender2.last ? 'page-link show' : 'page-link hide'">&Uacute;ltima</span>
-                            <a [className]="pageRender2.last ? 'page-link hide' : 'page-link show'" (click)='getListComisionPublicado(pageRender2.totalPaginas-1)' page='pageRender2.totalPaginas-1'>&Uacute;ltima</a>
+                            <span
+                                [className]="pageRender2.last ? 'page-link show' : 'page-link hide'">&Uacute;ltima</span>
+                            <a [className]="pageRender2.last ? 'page-link hide' : 'page-link show'"
+                                (click)='getListComisionPublicado(pageRender2.totalPaginas-1)'
+                                page='pageRender2.totalPaginas-1'>&Uacute;ltima</a>
                         </li>
-                    </ul>                 
+                    </ul>
                 </nav>
             </div>
             <div class="space-4" style="clear:both"></div>
@@ -153,28 +194,39 @@
                         <tr>
                             <th class="center" style="width: 30px;"></th>
                             <th class="center" style="width: 100px;">Acciones</th>
-                            <th class="center" style="width: 30px;">ID</th>
+                            <th class="center hide" style="width: 30px;">ID</th>
+                            <th>Autor</th>
                             <th>Título</th>
                             <th>N° Est</th>
                             <th>Convocatoria</th>
                             <th>Estado</th>
                             <th>Tipo</th>
+                            <th>Fecha</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of listUtesAprobados; index as i">
-                            <td class="center" style="width: 30px;">{{(pageRender3.paginaActual - 1) * pageRender3.numElementosPorPagina + i + 1}}</td>
+                            <td class="center" style="width: 30px;">
+                                {{(pageRender3.paginaActual - 1) * pageRender3.numElementosPorPagina + i + 1}}</td>
                             <td class="actions center" style="width: 100px">
-                                <button type="button" name="detalle" (click)='loadDetalle(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                                <button type="button" name="editar" (click)='asignarLector(item)'
+                                    title="Asignar Revisor"
+                                    [className]="!habilitaBotonAddLectorPlan(item.temIdEstado) ? 'btn btn-primary btn-xs disabled' : 'btn btn-primary btn-xs'">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                                <button type="button" name="detalle" (click)='loadDetalle(item)'
+                                    class="btn btn-primary btn-xs" title="Ver Detalle">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </td>
-                            <td>{{item.idTem}}</td>
+                            <td class="hide">{{item.idTem}}</td>
+                            <td>{{item.persona.perApellido}} {{item.persona.perNombre}}</td>
                             <td>{{item.temNombre}}</td>
                             <td>{{item.temNumEst}}</td>
                             <td>{{item.convocatoria.conNombre}}</td>
-                            <td>{{item.nombreEstado}}</td>
-                            <td>{{item.nombreTipo}}</td>
+                            <td>{{getNombreEstadoPorLista(item.temIdEstado)}}</td>
+                            <td>{{getNombreTipoPorLista(item.temIdTipo)}}</td>
+                            <td>{{parseDateToString(item.temFechaEnviado)}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -182,25 +234,39 @@
                     <ul class="pagination">
                         <li [className]="pageRender3.first ? 'page-item disabled' : 'page-item'">
                             <span [className]="pageRender3.first ? 'page-link show' : 'page-link hide'"> Primera</span>
-                            <a [className]="pageRender3.first ? 'page-link hide' : 'page-link show'" (click)='getListUtesAprobados(0)' page='0'> Primera</a>
+                            <a [className]="pageRender3.first ? 'page-link hide' : 'page-link show'"
+                                (click)='getListUtesAprobados(0)' page='0'> Primera</a>
                         </li>
                         <li [className]="!pageRender3.hasPrevious ? 'page-item disabled' : 'page-item'">
-                            <span [className]="!pageRender3.hasPrevious ? 'page-link show' : 'page-link hide'">&laquo;</span>
-                            <a [className]="!pageRender3.hasPrevious ? 'page-link hide' : 'page-link show'" (click)='getListUtesAprobados(pageRender3.paginaActual-2)' page='pageRender3.paginaActual-2'>&laquo;</a>
+                            <span
+                                [className]="!pageRender3.hasPrevious ? 'page-link show' : 'page-link hide'">&laquo;</span>
+                            <a [className]="!pageRender3.hasPrevious ? 'page-link hide' : 'page-link show'"
+                                (click)='getListUtesAprobados(pageRender3.paginaActual-2)'
+                                page='pageRender3.paginaActual-2'>&laquo;</a>
                         </li>
-                        <li [className]="itemPage.actual ? 'page-item active' : 'page-item'" *ngFor="let itemPage of pageRender3.paginas">
-                            <span [className]="itemPage.actual ? 'page-link show' : 'page-link hide'">{{itemPage.numero}}</span>
-                            <a [className]="itemPage.actual ? 'page-link hide' : 'page-link show'" (click)='getListUtesAprobados(itemPage.numero-1)' page='itemPage.numero-1'>{{itemPage.numero}}</a>
-                        </li>	
+                        <li [className]="itemPage.actual ? 'page-item active' : 'page-item'"
+                            *ngFor="let itemPage of pageRender3.paginas">
+                            <span
+                                [className]="itemPage.actual ? 'page-link show' : 'page-link hide'">{{itemPage.numero}}</span>
+                            <a [className]="itemPage.actual ? 'page-link hide' : 'page-link show'"
+                                (click)='getListUtesAprobados(itemPage.numero-1)'
+                                page='itemPage.numero-1'>{{itemPage.numero}}</a>
+                        </li>
                         <li [className]="!pageRender3.hasNext ? 'page-item disabled' : 'page-item'">
-                            <span [className]="!pageRender3.hasNext ? 'page-link show' : 'page-link hide'">&raquo;</span>
-                            <a [className]="!pageRender3.hasNext ? 'page-link hide' : 'page-link show'" (click)='getListUtesAprobados(pageRender3.paginaActual)' page='pageRender3.paginaActual'>&raquo;</a>
+                            <span
+                                [className]="!pageRender3.hasNext ? 'page-link show' : 'page-link hide'">&raquo;</span>
+                            <a [className]="!pageRender3.hasNext ? 'page-link hide' : 'page-link show'"
+                                (click)='getListUtesAprobados(pageRender3.paginaActual)'
+                                page='pageRender3.paginaActual'>&raquo;</a>
                         </li>
                         <li [className]="pageRender3.last ? 'page-item disabled' : 'page-item'">
-                            <span [className]="pageRender3.last ? 'page-link show' : 'page-link hide'">&Uacute;ltima</span>
-                            <a [className]="pageRender3.last ? 'page-link hide' : 'page-link show'" (click)='getListUtesAprobados(pageRender3.totalPaginas-1)' page='pageRender3.totalPaginas-1'>&Uacute;ltima</a>
+                            <span
+                                [className]="pageRender3.last ? 'page-link show' : 'page-link hide'">&Uacute;ltima</span>
+                            <a [className]="pageRender3.last ? 'page-link hide' : 'page-link show'"
+                                (click)='getListUtesAprobados(pageRender3.totalPaginas-1)'
+                                page='pageRender3.totalPaginas-1'>&Uacute;ltima</a>
                         </li>
-                    </ul>                 
+                    </ul>
                 </nav>
             </div>
             <div class="space-4" style="clear:both"></div>
@@ -210,10 +276,208 @@
     <br>
 </div>
 
-<div id="dialogUtesAsignacion">
+<div id="dialogDetalle">
     <div>
         <div class="ad-banner-example">
             <ng-template ad-host></ng-template>
         </div>
     </div>
 </div>
+
+<div id="dialogAsignacionRevisor">
+    <div class="dialog-content" style="display: none;">
+        <form>
+            <div class="form-group row">
+                <label for="temIdTipo" class="col-sm-2 col-form-label">Tipo</label>
+                <div class="col-sm-8">
+                    <select class="form-control" name="miselect" disabled="disabled" [(ngModel)]="tema.temIdTipo">
+                        <option [value]="item.id" *ngFor="let item of listTipoDocumento">{{item.nombre}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Autor</label>
+                <div class="col-sm-8">
+                    <label>{{tema.persona.perApellido}} {{tema.persona.perNombre}}</label>
+                </div>
+            </div>
+            <div *ngIf="tipoRevisorLector === 'LECTOR'">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Estudiantes asignados :</label>
+                </div>
+                <div class="col-sm-12">
+                    <table class="table table-striped table-bordered tbl_chk font-small"
+                        style="width:100%; margin-bottom:0px;">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th class="center" style="width: 30px;"></th>
+                                <th>Cédula</th>
+                                <th>Docente</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of listPersonaAsignarSelected; index as i">
+                                <td class="center" style="width: 30px;">{{i + 1}}</td>
+                                <td>{{item.persona.perCedula}}</td>
+                                <td>{{item.persona.perApellido}} {{item.persona.perNombre}}</td>
+                                <td></td>
+                                <!-- <td>{{getEstadobyInscripcion(item.persona.perCedula)}}</td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="temIdTipo" class="col-sm-2 col-form-label">{{tipoRevisorLector}}</label>
+                <div class="col-sm-8">
+                    <select class="form-control" name="miselect2" [(ngModel)]="usserSelected.idUsr">
+                        <option [value]="item.idUsr" *ngFor="let item of listUsuario">
+                            {{item.persona.perApellido}} {{item.persona.perNombre}}</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" name="addrevisor" (click)='createUtesAsignaRevisor()' title="Asignar Revisor"
+                        class="btn btn-primary btn-xs">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <div style="clear: both;"></div>
+            <div class="col-sm-12">
+                <table class="table table-striped table-bordered tbl_chk font-small"
+                    style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th>Cédula</th>
+                            <th>Docente</th>
+                            <th class="center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listPersonaAsignarSelected; index as i">
+                            <td class="center" style="width: 30px;">{{i + 1}}</td>
+                            <td>{{item.persona.perCedula}}</td>
+                            <td>{{item.persona.perApellido}} {{item.persona.perNombre}}</td>
+                            <td class="actions center" style="width: 100px">
+                                <button type="button" name="delete" (click)='deleteUtesAsignaRevisor(item)'
+                                    title="Eliminar Revisor" class="btn btn-danger btn-xs">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <input type="hidden" value="" name="id" [(ngModel)]="tema.idTem">
+            <div class="form-group row">
+                <div class="col-sm-12 center">
+                    <!-- <button class="btn btn-primary" role="button" (click)='create()' *ngIf="!tema.idTem else elseBlock">
+                        <i class="fa fa-save"></i> CREAR
+                    </button>
+                    <ng-template #elseBlock>
+                        <button class="btn btn-primary" role="button" (click)='update()'>
+                            <i class="fa fa-save"></i> EDITAR
+                        </button>
+                    </ng-template> -->
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- <div id="dialogAsignacionLector">
+    <div class="dialog-content" style="display: none;">
+        <form>
+            <div class="form-group row">
+                <label for="temIdTipo" class="col-sm-2 col-form-label">Tipo</label>
+                <div class="col-sm-8">
+                    <select class="form-control" name="miselect" disabled="disabled" [(ngModel)]="tema2.temIdTipo">
+                        <option [value]="item.id" *ngFor="let item of listTipoDocumento">{{item.nombre}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Autor</label>
+                <div class="col-sm-8">
+                    <label>{{tema2.persona.perApellido}} {{tema2.persona.perNombre}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Estudiantes asignados :</label>
+            </div>
+            <div class="col-sm-12">
+                <table class="table table-striped table-bordered tbl_chk font-small"
+                    style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th>Cédula</th>
+                            <th>Docente</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listPersonaAsignarSelected; index as i">
+                            <td class="center" style="width: 30px;">{{i + 1}}</td>
+                            <td>{{item.persona.perCedula}}</td>
+                            <td>{{item.persona.perApellido}} {{item.persona.perNombre}}</td>
+                            <td>{{getEstadobyInscripcion(item.persona.perCedula)}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group row">
+                <label for="temIdTipo" class="col-sm-2 col-form-label">Revisor</label>
+                <div class="col-sm-8">
+                    <select class="form-control" name="miselect2" [(ngModel)]="usserSelected.idUsr">
+                        <option [value]="item.idUsr" *ngFor="let item of listUsuarioDocente">
+                            {{item.persona.perApellido}} {{item.persona.perNombre}}</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" name="addrevisor" (click)='createUtesAsignaLector()' title="Asignar Revisor"
+                        class="btn btn-primary btn-xs">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <div style="clear: both;"></div>
+            <div class="col-sm-12">
+                <table class="table table-striped table-bordered tbl_chk font-small"
+                    style="width:100%; margin-bottom:0px;">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th class="center" style="width: 30px;"></th>
+                            <th>Cédula</th>
+                            <th>Docente</th>
+                            <th class="center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listPersonaAsignarSelected; index as i">
+                            <td class="center" style="width: 30px;">{{i + 1}}</td>
+                            <td>{{item.persona.perCedula}}</td>
+                            <td>{{item.persona.perApellido}} {{item.persona.perNombre}}</td>
+                            <td class="actions center" style="width: 100px">
+                                <button type="button" name="delete" (click)='deleteUtesAsignaRevisor(item)'
+                                    title="Eliminar Revisor" class="btn btn-danger btn-xs">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <input type="hidden" value="" name="id" [(ngModel)]="tema2.idTem">
+            <div class="form-group row">
+                <div class="col-sm-12 center">
+                </div>
+            </div>
+        </form>
+    </div>
+</div> -->

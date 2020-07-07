@@ -35,8 +35,8 @@
                             <td>{{item.temNombre}}</td>
                             <td>{{item.temNumEst}}</td>
                             <td>{{item.convocatoria.conNombre}}</td>
-                            <td>{{item.nombreEstado}}</td>
-                            <td>{{item.nombreTipo}}</td>
+                            <td>{{getNombreEstadoPorLista(item.temIdEstado)}}</td>
+                            <td>{{getNombreTipoPorLista(item.temIdTipo)}}</td>
                         </tr>
                     </tbody>
                 </table>

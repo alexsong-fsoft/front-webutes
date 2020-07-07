@@ -54,4 +54,7 @@ export class EvolucionService {
     return this.http.get<number>(`${this.urlEndPoint}/obtenerUltimoRegistroporTema/${idtema}/${idestadoevolucion}`)
   }
 
+  getEntidadaEvolucionPorFecha(idtema: number, hora: String, date: String): Observable<Evolucion[]>{
+    return this.http.post<Evolucion[]>(`${this.urlEndPoint}/obtenerEntidadaEvolucionPorFecha/${idtema}/${hora}/${date}`, {}, {headers: this.httpHeaders})
+  }
 }

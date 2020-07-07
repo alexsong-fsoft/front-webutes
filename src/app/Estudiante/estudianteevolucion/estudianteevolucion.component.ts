@@ -7,6 +7,8 @@ import { Estaticos } from 'src/app/app.constants';
 import { Asignado } from 'src/app/asignado/asignado';
 import { Sysusuario } from 'src/app/sysusuario/sysusuario';
 import { UserService } from 'src/app/login/user.service';
+import { Estado } from 'src/app/estado/Estado';
+import { Tipo } from 'src/app/tipo/Tipo';
 
 declare var JQuery: any;
 declare var $: any;
@@ -18,9 +20,10 @@ declare var Gestor: any;
 })
 
 export class EstudianteevolucionComponent {
-  titulo: string = "Estudiante - Evolución de Trabajo";
-  asig: Asignado = null;
-  listEstudianteEvolucion: Tema[];
+  private asig: Asignado = null;
+  private listEstudianteEvolucion: Tema[];
+  private listEstadoPostTema: Estado[];
+  private listTipoDocumento: Tipo[];
   public usserLogged: Sysusuario = null;
   
   constructor(private userService: UserService,
@@ -30,6 +33,8 @@ export class EstudianteevolucionComponent {
   ngOnInit() {
     this.usserLogged = this.userService.getUserLoggedIn();
     this.getListEstudianteEvolucion();
+    this.listEstadoPostTema = Estado.loadPostTema();
+    this.listTipoDocumento = Tipo.loadDocumento();
   }
 
   getListEstudianteEvolucion(): Tema[] {
@@ -49,5 +54,13 @@ export class EstudianteevolucionComponent {
     return this.listEstudianteEvolucion;
   }
 
+  public getNombreEstadoPorLista(idEstado: number): String {
+    return Estado.getNombreEstadoPorLista(idEstado, this.listEstadoPostTema);
+  }
+
+  public getNombreTipoPorLista(idTipo: number): String {
+    return Tipo.getNombreTipoPorLista(idTipo, this.listTipoDocumento);
+  }
+  
   
 }

@@ -95,7 +95,7 @@ import { TiporesolucionService } from './tiporesolucion/tiporesolucion.service';
 import { EstudiantetemaComponent } from './Estudiante/estudiantetema/estudiantetema.component';
 import { FormestudiantetemaComponent } from './Estudiante/estudiantetema/formestudiantetema.component';
 import { LoginComponent } from './login/login.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { HeroJobAdComponent } from './Estudiante/estudiantetema/hero-job-ad.component';
 import { HeroProfileComponent } from './Estudiante/estudiantetema/hero-profile.component';
 import { AdDirective } from './Estudiante/estudiantetema/ad.directive';
@@ -161,6 +161,7 @@ import { UtesconfiguracionnewperiodoComponent } from './Utes/utesconfiguracion/u
 import { UtesconfiguracionnewconvocatoriaComponent } from './Utes/utesconfiguracion/utesconfiguracionnewconvocatoria.component';
 import { UtesconfiguracionnewinscripcionComponent } from './Utes/utesconfiguracion/utesconfiguracionnewinscripcion.component';
 import { UtesconfiguracionnewrequisitoComponent } from './Utes/utesconfiguracion/utesconfiguracionnewrequisito.component';
+import { ReporteService } from './reporte/reporte.service';
 
 const routes: Routes = [
   //{path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -405,7 +406,9 @@ const routes: Routes = [
     TemaService,
     TipoopcionService,
     TiporesolucionService,
-    AdService
+    ReporteService,
+    AdService,
+    DatePipe
   ],
   bootstrap: [AppComponent],
   entryComponents: [

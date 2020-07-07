@@ -1,9 +1,9 @@
-<h2 class="header header-efx">{{titulo}}</h2>
+<h2 class="header header-efx">Hitos de proyecto</h2>
 <div class="col-xs-12">
     <div class="row">
         <div class="col-sm-4">
             <div class="profile-info-name">Tipo :</div>
-            <div class="profile-info-value" style="background-color: #b5d4fb;"><span><b>{{tema.nombreTipo}}</b></span></div>
+            <div class="profile-info-value" style="background-color: #b5d4fb;"><span><b>{{getNombreTipoPorLista(tema.temIdTipo)}}</b></span></div>
         </div>				
     </div>
     <div class="row">
@@ -12,6 +12,15 @@
             <div class="profile-info-value"><span >{{tema.temNombre}}</span></div>
         </div>				
     </div>
+</div>
+<div style="clear: both;"></div>
+<div class="widget-header">
+    <button type="button" name="nuevo" (click)='openDialogCrear()' class="btn btn-primary btn-xs" title="Crear nueva cita">
+        <i class="fa fa-pencil-square-o"></i> Hito
+    </button>
+    <button type="button" name="reporteHito" (click)='reporteHito()' class="btn btn-primary btn-xs" title="Reporte de hitos">
+        <i class="fa fa-print"></i> Reporte
+    </button>
 </div>
 <div style="clear: both;"></div>
 <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
@@ -28,35 +37,80 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let item of listHitoPorTema">
+        <tr *ngFor="let item of tema.hitos">
             <td class="center" style="width: 30px;"></td>
             <td class="actions center" style="width: 100px">
-                <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                <button type="button" name="detalle" (click)='openDialogDetalle(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
                     <i class="fa fa-search"></i>
                 </button>
             </td>
             <td class="hide">{{item.idEvl}}</td>
             <td>{{item.hitCodigo}}</td>
-            <td>{{item.hitFechaEntrega}}</td>
-            <td>{{item.hitFechavalida}}</td>
-            <td>{{item.hitValida}}</td>
-            <td>{{item.hitIdEstado}}</td>
+            <td>{{parseDateToString(item.hitFechaEntrega)}}</td>
+            <td>{{parseDateToString(item.hitFechavalida)}}</td>
+            <td class="actions fixed-side center">
+                <input name="chk_evlValida_{{i}}" type="checkbox" [checked]="item.hitValida" disabled=true>                                                                   
+            </td>
+            <td>{{getNombreEstadoPorLista(item.hitIdEstado)}}</td>   
         </tr>
     </tbody>
 </table>
 <br>
     <div class="form-group row">
         <div class="col-sm-12 center">
-            <a routerLink="/dashboard/estudianteevolucion" class="btn btn-danger">
+            <a routerLink="/dashboard/estudiantehito" class="btn btn-danger">
                 <i class="fa fa-reply"></i> VOLVER
             </a>
         </div>
     </div>
 
-<div id="dialog2">
+<div id="dialog">
     <div>
         <div class="ad-banner-example">
             <ng-template ad-host></ng-template>
         </div>
     </div>
 </div>
+
+
+<div id="dialogCrear">
+    <div class="dialog-content" style="display: none;">
+        <form>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="profile-info-name">Código: </div>
+                    <div class="profile-info-value" style="background-color: #b5d4fb;"><span><b>{{hito.hitCodigo}}</b></span></div>
+                    <input type="hidden" value="" name="id" [(ngModel)]="hito.hitCodigo">
+                </div>		
+            </div>
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="profile-info-name">Fecha entrega: </div>
+                    <div class="profile-info-value" style="width: 80%;"><span>
+                        <input type="date" [value]="hito.hitFechaEntrega | date:'yyyy-MM-dd'" (input)="hito.hitFechaEntrega = parseDate2($event.target.value)" />
+                    </span></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="profile-info-name">Descripción: </div>
+                    <div class="profile-info-value" style="width: 80%;"><span>
+                        <textarea class="form-control" name="hitDescripcion" [(ngModel)]='hito.hitDescripcion' rows="6"></textarea>
+                    </span></div>
+                </div>
+            </div>
+            <input type="hidden" value="" name="id" [(ngModel)]="hito.idHit">
+            <br/>
+            <div class="form-group row">
+                <div class="col-sm-12 center">
+                    <button class="btn btn-primary" role="button" (click)='saveTemaHito()'>
+                        <i class="fa fa-save"></i> GUARDAR
+                    </button>
+                </div>
+            </div>
+        </form>
+        
+    </div>
+</div>
+
+

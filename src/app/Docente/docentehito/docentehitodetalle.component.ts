@@ -7,6 +7,11 @@ import { Tema } from 'src/app/tema/tema';
 import { TemaService } from 'src/app/tema/tema.service';
 import { Resolucion } from 'src/app/resolucion/resolucion';
 import { DocentehitoresoluciondialogComponent } from './docentehitoresoluciondialog.component';
+import { DatePipe } from '@angular/common';
+import { Estado } from 'src/app/estado/Estado';
+import { Tipo } from 'src/app/tipo/Tipo';
+import { reporteDownload, Estaticos } from 'src/app/app.constants';
+import { ReporteService } from 'src/app/reporte/reporte.service';
 
 declare var JQuery: any;
 declare var $: any;
@@ -18,17 +23,27 @@ declare var Gestor: any;
 })
 export class DocentehitodetalleComponent implements OnInit {
   private tema: Tema = new Tema();
-  private titulo: string = "Detalle";
+  private listEstadoPrePostTema: Estado[];
+  private listEstadoAsignadoLector: Estado[] = [];
+  private listTipoDocumento: Tipo[];
+  private listTipoAsignacion: Tipo[] = [];
+  public reporteDownload = reporteDownload;
 
   @ViewChild(AdDirective, {static: true}) adHost: AdDirective;
   
   constructor(private temaService: TemaService, 
     private router: Router, 
     private activatedRoute: ActivatedRoute,
-    private componentFactoryResolver: ComponentFactoryResolver) { }
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private reporteService: ReporteService,
+    private datepipe: DatePipe) { }
 
   ngOnInit() {
     this.load();
+    this.listEstadoAsignadoLector = Estado.loadAsignaLector();
+    this.listEstadoPrePostTema = Estado.loadPrePostTema();
+    this.listTipoDocumento = Tipo.loadDocumento();
+    this.listTipoAsignacion = Tipo.loadAsignacion();
     $("#tabs_evolucion_detalle").tabs();
     this.showTab('tab-tema');
   }
@@ -41,6 +56,7 @@ export class DocentehitodetalleComponent implements OnInit {
           (tema) => {
             if (tema != null) {
               this.tema = tema;
+              this.tema.asignados = this.tema.asignados.filter(s => (s.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_ESTUDIANTE || s.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_LECTORPLAN || s.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_LECTORPROYECTO));
             } 
           }
 
@@ -69,8 +85,33 @@ export class DocentehitodetalleComponent implements OnInit {
     Gestor.fn.positionDialog();
   }
 
+  public parseDateToString(date: Date): String{
+    return this.datepipe.transform(date, Estaticos.FORMAT_DATE);
+  }
+
   public showTab(tabid: String){
-    $('.tab-pane').hide();
-    $('#'+tabid).show();
+    Gestor.fn.showTab(tabid);
+  }
+
+  public getNombreEstadoAsignadoLector(idEstado: number): String {
+    return Estado.getNombreEstadoPorLista(idEstado, this.listEstadoAsignadoLector);
+  }
+
+  public getNombreTipoAsignado(idTipo: number): String {
+    return Tipo.getNombreTipoPorLista(idTipo, this.listTipoAsignacion);
+  }
+
+  public getNombreEstadoPorLista(idEstado: number, tab: string): String {
+    return Estado.getNombreEstadoPorLista(idEstado, this.listEstadoPrePostTema);
+  }
+
+  public getNombreTipoPorLista(idTipo: number): String {
+    return Tipo.getNombreTipoPorLista(idTipo, this.listTipoDocumento);
+  }
+
+  public reporteTema(): void {
+    this.reporteService.getReporteTema(this.tema.idPersona, this.tema.idTem).subscribe(x => {
+      this.reporteDownload(x, "reporteTema.pdf");
+    });
   }
 }

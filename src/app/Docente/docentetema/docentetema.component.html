@@ -1,4 +1,4 @@
-<h2 class="header header-efx">{{titulo}}</h2>
+<h2 class="header header-efx">Gestión de Temas</h2>
 
 
 <div id="tabs_docentetema" class="tabbable">
@@ -13,7 +13,7 @@
         <div id="tab-mistemas" class="tab-pane">
             <div id="cont-tab-mistemas">
                 <div class="widget-header">
-                    <button type="button" name="nuevo" (click)='openDialog3()' class="btn btn-primary btn-xs" title="Crear Tema">
+                    <button type="button" name="nuevo" (click)='openDialogCrear()' class="btn btn-primary btn-xs" title="Crear Tema">
                         <i class="fa fa-pencil-square-o"></i> Crear Tema
                     </button>
                     <button type="button" name="updateTemaAddConvocatoria" (click)='updateTemaAddConvocatoria()' class="btn btn-primary btn-xs" title="Enviar Temas Seleccionados">
@@ -42,10 +42,10 @@
                         <tr *ngFor="let item of listDocente; index as i">
                             <td class="center" style="width: 30px;">{{i + 1}}</td>
                             <td class="actions center" style="width: 100px">
-                                <button type="button" name="detalle" (click)='openDialog(item)'  class="btn btn-primary btn-xs" title="Ver Detalle">
+                                <button type="button" name="detalle" (click)='openDialogDetalle(item, "1")'  class="btn btn-primary btn-xs" title="Ver Detalle">
                                     <i class="fa fa-search"></i>
                                 </button>
-                                <button type="button" name="editar" (click)='openDialog2(item)' [className]="habilitaBotonActualiza(item.temIdEstado) ? 'btn btn-primary btn-xs disabled' : 'btn btn-primary btn-xs'" title="Editar">
+                                <button type="button" name="editar" (click)='openDialogEditar(item)' [className]="habilitaBotonActualiza(item.temIdEstado) ? 'btn btn-primary btn-xs disabled' : 'btn btn-primary btn-xs'" title="Editar">
                                     <i class="fa fa-pencil-square-o"></i>
                                 </button>
                             </td>
@@ -57,9 +57,9 @@
                             <td>{{item.temNumEst}}</td>
                             <td></td>
                             <!-- <td>{{item.convocatoria.conNombre}}</td> -->
-                            <td>{{item.nombreEstado}}</td>
-                            <td>{{item.nombreTipo}}</td>
-                            <td>{{item.temFechaCreado}}</td>
+                            <td>{{getNombreEstadoPorLista(item.temIdEstado, '1')}}</td>
+                            <td>{{getNombreTipoPorLista(item.temIdTipo)}}</td>
+                            <td>{{parseDateToString(item.temFechaCreado)}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -87,7 +87,7 @@
                         <tr *ngFor="let item of listTemaPost; index as i">
                             <td class="center" style="width: 30px;">{{i + 1}}</td>
                             <td class="actions center" style="width: 100px">
-                                <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                                <button type="button" name="detalle" (click)='openDialogDetalle(item, "2")' class="btn btn-primary btn-xs" title="Ver Detalle">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </td>
@@ -95,9 +95,9 @@
                             <td>{{item.temNombre}}</td>
                             <td>{{item.temNumEst}}</td>
                             <td>{{item.convocatoria.conNombre}}</td>
-                            <td>{{item.nombreEstado}}</td>
-                            <td>{{item.nombreTipo}}</td>
-                            <td>{{item.temFechaCreado}}</td>
+                            <td>{{getNombreEstadoPorLista(item.temIdEstado, '2')}}</td>
+                            <td>{{getNombreTipoPorLista(item.temIdTipo)}}</td>
+                            <td>{{parseDateToString(item.temFechaCreado)}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -125,17 +125,17 @@
                         <tr *ngFor="let item of listTemaAsignaRevisar; index as i">
                             <td class="center" style="width: 30px;">{{i + 1}}</td>
                             <td class="actions center" style="width: 100px">
-                                <button type="button" name="detalle" (click)='openDialog(item)' class="btn btn-primary btn-xs" title="Ver Detalle">
+                                <button type="button" name="detalle" (click)='openDialogDetalle(item, "3")' class="btn btn-primary btn-xs" title="Ver Detalle">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </td>
                             <td class="hide">{{item.idTem}}</td>
                             <td>{{item.temNombre}}</td>
-                            <td>{{item.temFechaEnviado}}</td>
+                            <td>{{parseDateToString(item.temFechaEnviado)}}</td>
                             <td>{{item.temNumEst}}</td>
                             <td>{{item.convocatoria.conNombre}}</td>
-                            <td>{{item.nombreEstado}}</td>
-                            <td>{{item.nombreTipo}}</td>
+                            <td>{{getNombreEstadoPorLista(item.temIdEstado, '3')}}</td>
+                            <td>{{getNombreTipoPorLista(item.temIdTipo)}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -147,10 +147,200 @@
     <br>
 </div>
 
-<div id="dialog">
+
+<div id="dialogDetalle">
+    <div class="dialog-content" style="display: none;">
+        <div id="tabs_docentetema_detalle" class="tabbable">
+            <ul class="nav nav-tabs">
+                <li><a href="javascript:void(0)" (click)="showTab('tab-tema')"><i class="fa fa-certificate"></i>&nbsp; Tema</a></li>
+                <li><a href="javascript:void(0)" (click)="showTab('tab-informe')"><i class="fa fa-certificate"></i>&nbsp; Informe</a></li>
+                <li><a href="javascript:void(0)" (click)="showTab('tab-resolucion')"><i class="fa fa-certificate"></i>&nbsp; Resolución</a></li>        
+            </ul>
+            
+            <div class="tab-content">
+        
+                <div id="tab-tema" class="tab-pane">
+                    <div id="cont-tab-tema">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="profile-info-name">Autor : </div>
+                                    <div class="profile-info-value"><span >{{temaDetalle.persona.perApellido + " " + temaDetalle.persona.perNombre}}</span></div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="profile-info-name">Estado</div>
+                                    <div class="profile-info-value" style="background-color: #b5d4fb;"><span><b>{{getNombreEstadoPorLista(temaDetalle.temIdEstado, tab)}}</b></span></div>
+                                </div>				
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="profile-info-name">Título</div>
+                                    <div class="profile-info-value"><span >{{temaDetalle.temNombre}}</span></div>
+                                </div>				
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="profile-info-name">Descripción</div>
+                                    <div class="profile-info-value"><span >{{temaDetalle.temDescripcion}}</span></div>
+                                </div>				
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="profile-info-name">No Estudiantes</div>
+                                    <div class="profile-info-value"><span >{{temaDetalle.temNumEst}}</span></div>
+                                </div>				
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="profile-info-name">Fecha</div>
+                                    <div class="profile-info-value"><span >{{parseDateToString(temaDetalle.temFechaCreado)}}</span></div>
+                                </div>				
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="profile-info-name">Tipo Documento</div>
+                                    <div class="profile-info-value"><span >{{getNombreTipoPorLista(temaDetalle.temIdTipo)}}</span></div>
+                                </div>				
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="profile-info-name">% Avance</div>
+                                    <div class="profile-info-value"><span >{{temaDetalle.temPorcAvance}}</span></div>
+                                </div>				
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="space-4" style="clear:both"></div>
+                </div>
+        
+                <div id="tab-informe" class="tab-pane">
+                    <div id="cont-tab-informe">
+                        <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                            <thead class="thead-inverse">
+                                <tr>
+                                    <th class="center" style="width: 30px;"></th>
+                                    <th class="center hide" style="width: 30px;">ID</th>
+                                    <th>Informe</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of temaDetalle.informes; index as i">
+                                    <td class="center" style="width: 30px;">{{i + 1}}</td>
+                                    <td class="hide">{{item.idInf}}</td>
+                                    <td>{{item.infInforme}}</td>
+                                    <td>{{parseDateToString(item.infFecha)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>                
+                    </div>
+                    <div class="space-4" style="clear:both"></div>
+                </div>
+        
+                <div id="tab-resolucion" class="tab-pane">
+                    <div id="cont-tab-resolucion">
+                        <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                            <thead class="thead-inverse">
+                                <tr>
+                                    <th class="center" style="width: 30px;"></th>
+                                    <th class="center hide" style="width: 30px;">ID</th>
+                                    <th>Resolución</th>
+                                    <th>Fecha Resolución</th>
+                                    <th>Tipo</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Entrega</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of temaDetalle.resoluciones; index as i">
+                                    <td class="center" style="width: 30px;">{{i + 1}}</td>
+                                    <td class="hide">{{item.idRsl}}</td>
+                                    <td>{{item.rslNumero}}</td>
+                                    <td>{{parseDateToString(item.rslFechaResolucion)}}</td>
+                                    <td>{{item.tipoResolucion.idTrsl}}</td>
+                                    <td>{{parseDateToString(item.rslFechaInicio)}}</td>
+                                    <td>{{parseDateToString(item.rslFechaEntrega)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="space-4" style="clear:both"></div>
+                </div>
+        
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+
+<div id="dialogEditar">
+    <div class="dialog-content" style="display: none;">
+        <form>
+            <div class="form-group row">
+                <label for="temIdTipo" class="col-sm-2 col-form-label">Tipo</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="miselect" [(ngModel)]="tema.temIdTipo">
+                        <option [value]="item.id" *ngFor="let item of listTipoTema">{{item.nombre}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="temNombre" class="col-sm-2 col-form-label">Título</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" name="temNombre" [(ngModel)]='tema.temNombre' rows="4"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="temDescripcion" class="col-sm-2 col-form-label">Descripción</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" name="temDescripcion" [(ngModel)]='tema.temDescripcion' rows="4"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="temAuspiciante" class="col-sm-2 col-form-label">Auspiciante</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="temAuspiciante" [(ngModel)]="tema.temAuspiciante">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="temObservacion" class="col-sm-2 col-form-label">Observación</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="temObservacion" [(ngModel)]="tema.temObservacion">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="temNumEst" class="col-sm-2 col-form-label">Número de estudiantes</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="miselect2" [(ngModel)]="tema.temNumEst">
+                        <option [value]="0">0</option>
+                        <option [value]="1">1</option>
+                        <option [value]="2">2</option>
+                    </select>
+                </div>
+            </div>
+            
+            <input type="hidden" value="" name="id" [(ngModel)]="tema.idTem">
+            <div class="form-group row">
+                <div class="col-sm-12 center">
+                    <button class="btn btn-primary" role="button" (click)='create()' *ngIf="!tema.idTem else elseBlock">
+                        <i class="fa fa-save"></i> CREAR
+                    </button>
+                    <ng-template #elseBlock>
+                        <button class="btn btn-primary" role="button" (click)='update()'>
+                            <i class="fa fa-save"></i> EDITAR
+                        </button>
+                    </ng-template>
+                </div>
+            </div>
+        </form>        
+    </div>
+</div>
+
+<!-- <div id="dialog">
     <div>
         <div class="ad-banner-example">
             <ng-template ad-host></ng-template>
         </div>
     </div>
-</div>
+</div> -->

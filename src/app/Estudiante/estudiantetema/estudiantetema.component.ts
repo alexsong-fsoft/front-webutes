@@ -15,6 +15,9 @@ import { AdDirectivePaginator } from './ad.directivepaginator';
 import { PageRender } from 'src/app/Page/pagerender';
 import { ActivatedRoute } from '@angular/router';
 import { PaginatorComponent } from 'src/app/paginator/paginator.component';
+import { Estado } from 'src/app/estado/Estado';
+import { Tipo } from 'src/app/tipo/Tipo';
+import { DatePipe } from '@angular/common';
 
 declare var JQuery: any;
 declare var $: any;
@@ -25,12 +28,13 @@ declare var Gestor: any;
   templateUrl: './estudiantetema.component.html'
 })
 export class EstudiantetemaComponent {
-  titulo: string = "Estudiante - Tema";
-  asig: Asignado = null;
-  listComisionPublicadoEstudiante: Tema[];
+  private asig: Asignado = null;
+  private listComisionPublicadoEstudiante: Tema[];
+  private listEstadoPreTema: Estado[] = [];
+  private listTipoDocumento: Tipo[];
+  public usserLogged: Sysusuario = null;
   pageRender: PageRender<Tema>;
   ads: AdItem[];
-  public usserLogged: Sysusuario = null;
 
   @ViewChild(AdDirective, {static: true}) adHost: AdDirective;
   @ViewChild(AdDirectivePaginator, {static: true}) adHostPag: AdDirectivePaginator;
@@ -40,13 +44,16 @@ export class EstudiantetemaComponent {
     private asignadoService: AsignadoService,
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
-    private componentFactoryResolver: ComponentFactoryResolver) {}
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private datepipe: DatePipe) {}
 
   ngOnInit() {
     //this.ads = this.adService.getAds();
     //this.loadComponent(161);
     this.usserLogged = this.userService.getUserLoggedIn();
     this.getListComisionPublicadoEstudiante();
+    this.listEstadoPreTema = Estado.loadPreTema();
+    this.listTipoDocumento = Tipo.loadDocumento();
   }
 
   getListComisionPublicadoEstudiante(): void {
@@ -104,5 +111,17 @@ export class EstudiantetemaComponent {
       resizable: false
     });
     Gestor.fn.positionDialog();
+  }
+
+  public getNombreEstadoPorLista(idEstado: number): String {
+    return Estado.getNombreEstadoPorLista(idEstado, this.listEstadoPreTema);
+  }
+
+  public getNombreTipoPorLista(idTipo: number): String {
+    return Tipo.getNombreTipoPorLista(idTipo, this.listTipoDocumento);
+  }
+
+  public parseDateToString(date: Date): String {
+    return this.datepipe.transform(date, Estaticos.FORMAT_DATE);
   }
 }

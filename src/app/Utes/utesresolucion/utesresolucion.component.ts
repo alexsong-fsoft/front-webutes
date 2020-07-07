@@ -9,6 +9,8 @@ import { UtesresoluciondetalleComponent } from './utesresoluciondetalle.componen
 import { AdItem } from 'src/app/Estudiante/estudiantetema/ad-item';
 import { AdComponent } from 'src/app/Estudiante/estudiantetema/ad.component';
 import { PageRender } from 'src/app/Page/pagerender';
+import { Estado } from 'src/app/estado/Estado';
+import { Tipo } from 'src/app/tipo/Tipo';
 
 declare var JQuery: any;
 declare var $: any;
@@ -20,8 +22,10 @@ declare var Gestor: any;
 })
 export class UtesresolucionComponent implements OnInit {
   public usserLogged: Sysusuario = null;
-  listAprobados: Tema[];
-  pageRender: PageRender<Tema>;
+  private listAprobados: Tema[];
+  private listEstadoPrePostTema: Estado[] = [];
+  private listTipoDocumento: Tipo[];
+  private pageRender: PageRender<Tema>;
   
   @ViewChild(AdDirective, {static: true}) adHost: AdDirective;
 
@@ -32,6 +36,8 @@ export class UtesresolucionComponent implements OnInit {
   ngOnInit() {
     this.usserLogged = this.userService.getUserLoggedIn();
     this.getListAprobados(0);
+    this.listEstadoPrePostTema = Estado.loadPrePostTema();
+    this.listTipoDocumento = Tipo.loadDocumento();
     $("#tabs_docentetema").tabs();
     this.showTab('tab-mistemas');
   }
@@ -71,5 +77,14 @@ export class UtesresolucionComponent implements OnInit {
     });
     Gestor.fn.positionDialog();
   }
+
+  public getNombreEstadoPorLista(idEstado: number): String {
+    return Estado.getNombreEstadoPorLista(idEstado, this.listEstadoPrePostTema);
+  }
+
+  public getNombreTipoPorLista(idTipo: number): String {
+    return Tipo.getNombreTipoPorLista(idTipo, this.listTipoDocumento);
+  }
+  
 
 }

@@ -6,6 +6,8 @@ import { UserService } from 'src/app/login/user.service';
 import { TemaService } from 'src/app/tema/tema.service';
 import { AsignadoService } from 'src/app/asignado/asignado.service';
 import { Estaticos } from 'src/app/app.constants';
+import { Estado } from 'src/app/estado/Estado';
+import { Tipo } from 'src/app/tipo/Tipo';
 
 declare var JQuery: any;
 declare var $: any;
@@ -16,9 +18,10 @@ declare var Gestor: any;
   templateUrl: './docenteevolucion.component.html'
 })
 export class DocenteevolucionComponent implements OnInit {
-  titulo: string = "Evolución de Trabajo";
-  asig: Asignado = null;
-  listDocenteEvolucion: Tema[];
+  private asig: Asignado = null;
+  private listDocenteEvolucion: Tema[];  
+  private listEstadoPostTema: Estado[];
+  private listTipoDocumento: Tipo[];
   public usserLogged: Sysusuario = null;
   
   constructor(private userService: UserService,
@@ -27,6 +30,8 @@ export class DocenteevolucionComponent implements OnInit {
 
   ngOnInit() {
     this.usserLogged = this.userService.getUserLoggedIn();
+    this.listEstadoPostTema = Estado.loadPostTema();
+    this.listTipoDocumento = Tipo.loadDocumento();
     this.getListEstudianteEvolucion();
   }
 
@@ -39,4 +44,13 @@ export class DocenteevolucionComponent implements OnInit {
     );
     return this.listDocenteEvolucion;
   }
+
+  public getNombreEstadoPorLista(idEstado: number): String {
+    return Estado.getNombreEstadoPorLista(idEstado, this.listEstadoPostTema);
+  }
+
+  public getNombreTipoPorLista(idTipo: number): String {
+    return Tipo.getNombreTipoPorLista(idTipo, this.listTipoDocumento);
+  }
+  
 }

@@ -18,7 +18,7 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="profile-info-name">Estado</div>
-                            <div class="profile-info-value" style="background-color: #b5d4fb;"><span><b>{{tema.nombreEstado}}</b></span></div>
+                            <div class="profile-info-value" style="background-color: #b5d4fb;"><span><b>{{getNombreEstadoPorLista(tema.temIdEstado)}}</b></span></div>
                         </div>				
                     </div>
                     <div class="row">
@@ -42,13 +42,13 @@
                     <div class="row">
                         <div class="col-sm-8">
                             <div class="profile-info-name">Fecha</div>
-                            <div class="profile-info-value"><span >{{tema.temFechaCreado}}</span></div>
+                            <div class="profile-info-value"><span >{{parseDateToString(tema.temFechaCreado)}}</span></div>
                         </div>				
                     </div>
                     <div class="row">
                         <div class="col-sm-8">
                             <div class="profile-info-name">Tipo Documento</div>
-                            <div class="profile-info-value"><span >{{tema.nombreTipo}}</span></div>
+                            <div class="profile-info-value"><span >{{getNombreTipoPorLista(tema.temIdTipo)}}</span></div>
                         </div>				
                     </div>
                     <div class="row">
@@ -79,7 +79,7 @@
                             <td class="center" style="width: 30px;">{{i + 1}}</td>
                             <td class="hide">{{item.idInf}}</td>
                             <td>{{item.infInforme}}</td>
-                            <td>{{item.infFecha}}</td>
+                            <td>{{parseDateToString(item.infFecha)}}</td>
                         </tr>
                     </tbody>
                 </table>                
@@ -107,7 +107,7 @@
                             <td class="hide">{{item.idAsg}}</td>
                             <td>{{item.persona.perCedula}}</td>
                             <td>{{item.persona.perApellido}} {{item.persona.perNombre}}</td>
-                            <td>{{item.asgFechaRegistro}}</td>
+                            <td>{{parseDateToString(item.asgFechaRegistro)}}</td>
                             <td>{{getNombreEstadoAsignado(item.asgIdEstadoTema)}}</td>
                             <td>{{getNombreTipoAsignado(item.asgIdTipo)}}</td>
                         </tr>
@@ -136,10 +136,10 @@
                             <td class="center" style="width: 30px;">{{i + 1}}</td>
                             <td class="hide">{{item.idRsl}}</td>
                             <td>{{item.rslNumero}}</td>
-                            <td>{{item.rslFechaResolucion}}</td>
+                            <td>{{parseDateToString(item.rslFechaResolucion)}}</td>
                             <td>{{item.tipoResolucion.idTrsl}}</td>
-                            <td>{{item.rslFechaInicio}}</td>
-                            <td>{{item.rslFechaEntrega}}</td>
+                            <td>{{parseDateToString(item.rslFechaInicio)}}</td>
+                            <td>{{parseDateToString(item.rslFechaEntrega)}}</td>
                         </tr>
                     </tbody>
                 </table>

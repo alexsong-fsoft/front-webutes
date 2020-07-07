@@ -1,4 +1,4 @@
-<h2 class="header header-efx">{{titulo}}</h2>
+<h2 class="header header-efx">Evolución de Trabajo</h2>
 <div class="widget-box widget-color-dark ui-sortable-handle hide" id="widget-box-11">
     <div class="widget-header">
         
@@ -25,7 +25,7 @@
         <tr>
             <th class="center" style="width: 30px;"></th>
             <th class="center" style="width: 100px;">Acciones</th>
-            <th class="center" style="width: 30px;">ID</th>
+            <th class="center hide" style="width: 30px;">ID</th>
             <th>Título</th>
             <th>N° Est</th>
             <th>Convocatoria</th>
@@ -44,12 +44,12 @@
                     <i class="fa fa-pencil-square-o"></i>
                 </button>
             </td>
-            <td>{{item.idTem}}</td>
+            <td class="hide">{{item.idTem}}</td>
             <td>{{item.temNombre}}</td>
             <td>{{item.temNumEst}}</td>
             <td>{{item.convocatoria.conNombre}}</td>
-            <td>{{item.nombreEstado}}</td>
-            <td>{{item.nombreTipo}}</td>
+            <td>{{getNombreEstadoPorLista(item.temIdEstado)}}</td>
+            <td>{{getNombreTipoPorLista(item.temIdTipo)}}</td>
         </tr>
     </tbody>
 </table>

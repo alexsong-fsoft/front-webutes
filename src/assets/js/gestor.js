@@ -271,8 +271,19 @@ var Gestor = {
 				});
 				$('div.ui-dialog-content.ui-widget-content').css('overflow-x', 'hidden');				
 			}, 300);
-		}
-		
+		},
+		destroyDialog: function (dialogid) {
+			try {
+				$('#' + dialogid).dialog('destroy');
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		showTab: function(tabid){
+			$('#' + tabid).parents('.tabbable').find('.tab-pane').hide();
+			$('#' + tabid).show();
+			$('#' + tabid).trigger('click');
+		}		
 	},
 	
 	SAlert: {

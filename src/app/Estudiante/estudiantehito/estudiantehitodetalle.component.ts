@@ -9,6 +9,9 @@ import { AdComponent } from '../estudiantetema/ad.component';
 import { Resolucion } from 'src/app/resolucion/resolucion';
 import { Estado } from 'src/app/estado/Estado';
 import { Tipo } from 'src/app/tipo/Tipo';
+import { reporteDownload, Estaticos } from 'src/app/app.constants';
+import { ReporteService } from 'src/app/reporte/reporte.service';
+import { DatePipe } from '@angular/common';
 
 declare var JQuery: any;
 declare var $: any;
@@ -20,9 +23,11 @@ declare var Gestor: any;
 })
 export class EstudiantehitoDetalleComponent implements OnInit {
   private tema: Tema = new Tema();
-  private titulo: string = "Detalle";
+  private listEstadoPrePostTema: Estado[];
   private listEstadoAsignadoLector: Estado[] = [];
+  private listTipoDocumento: Tipo[];
   private listTipoAsignacion: Tipo[] = [];
+  public reporteDownload = reporteDownload;
   ads: AdItem[];
 
   @ViewChild(AdDirective, {static: true}) adHost: AdDirective;
@@ -30,11 +35,15 @@ export class EstudiantehitoDetalleComponent implements OnInit {
   constructor(private temaService: TemaService, 
     private router: Router, 
     private activatedRoute: ActivatedRoute,
-    private componentFactoryResolver: ComponentFactoryResolver) { }
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private reporteService: ReporteService,
+    private datepipe: DatePipe) { }
 
   ngOnInit() {
     this.load();
     this.listEstadoAsignadoLector = Estado.loadAsignaLector();
+    this.listEstadoPrePostTema = Estado.loadPrePostTema();
+    this.listTipoDocumento = Tipo.loadDocumento();
     this.listTipoAsignacion = Tipo.loadAsignacion();
     $("#tabs_evolucion_detalle").tabs();
     this.showTab('tab-tema');    
@@ -48,6 +57,7 @@ export class EstudiantehitoDetalleComponent implements OnInit {
           (tema) => {
             if (tema != null) {
               this.tema = tema;
+              this.tema.asignados = this.tema.asignados.filter(s => (s.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_ESTUDIANTE || s.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_LECTORPLAN || s.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_LECTORPROYECTO));
               // this.cuestionarioService.getByIdsTipoIdInscripcion(Estaticos.TIPO_ID_CUESTIONARIO_INSCRIPCION.toString(), idinscripcion).subscribe(
               //   (cuestionarios: Cuestionario[]) => {
               //     this.listCuestionario = cuestionarios;
@@ -64,14 +74,6 @@ export class EstudiantehitoDetalleComponent implements OnInit {
     })
   }
   
-  public getNombreEstadoAsignadoLector(idEstado: number): String {
-    return Estado.getNombreEstadoPorLista(idEstado, this.listEstadoAsignadoLector);
-  }
-
-  public getNombreTipoAsignado(idTipo: number): String {
-    return Tipo.getNombreTipoPorLista(idTipo, this.listTipoAsignacion);
-  }
-
   loadComponent(idRsl: number) {
     const adItem = new AdItem(EstudiantehitodesarrolloDialogComponent, { idRsl: idRsl });
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
@@ -92,8 +94,35 @@ export class EstudiantehitoDetalleComponent implements OnInit {
     Gestor.fn.positionDialog();
   }
 
-  public showTab(tabid: String){
-    $('.tab-pane').hide();
-    $('#'+tabid).show();
+  public parseDateToString(date: Date): String{
+    return this.datepipe.transform(date, Estaticos.FORMAT_DATE);
   }
+
+  public showTab(tabid: String){
+    Gestor.fn.showTab(tabid);
+  }
+
+  public getNombreEstadoAsignadoLector(idEstado: number): String {
+    return Estado.getNombreEstadoPorLista(idEstado, this.listEstadoAsignadoLector);
+  }
+
+  public getNombreTipoAsignado(idTipo: number): String {
+    return Tipo.getNombreTipoPorLista(idTipo, this.listTipoAsignacion);
+  }
+
+  public getNombreEstadoPorLista(idEstado: number, tab: string): String {
+    return Estado.getNombreEstadoPorLista(idEstado, this.listEstadoPrePostTema);
+  }
+
+  public getNombreTipoPorLista(idTipo: number): String {
+    return Tipo.getNombreTipoPorLista(idTipo, this.listTipoDocumento);
+  }
+
+  public reporteTema(): void {
+    this.reporteService.getReporteTema(this.tema.idPersona, this.tema.idTem).subscribe(x => {
+      this.reporteDownload(x, "reporteTema.pdf");
+    });
+  }
+
+  
 }

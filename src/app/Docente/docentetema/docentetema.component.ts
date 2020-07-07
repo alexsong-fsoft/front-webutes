@@ -18,6 +18,9 @@ import { filter, pairwise, startWith, takeUntil } from 'rxjs/operators';
 import { ConvocatoriaService } from 'src/app/convocatoria/convocatoria.service';
 import swal from 'sweetalert2';
 import Lang from '../../../assets/app.lang.json';
+import { DatePipe } from '@angular/common';
+import { Tipo } from 'src/app/tipo/Tipo';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 declare var JQuery: any;
 declare var $: any;
@@ -28,12 +31,18 @@ declare var Gestor: any;
   templateUrl: './docentetema.component.html'
 })
 export class DocentetemaComponent implements OnInit, OnDestroy {
+  private tab: string;  
+  private temaDetalle: Tema = new Tema();
   private tema: Tema = new Tema();
-  private titulo: string = "Gestión de Temas";
-  listDocente: Tema[];
-  listTemaPost: Tema[];
-  listTemaAsignaRevisar: Tema[];
-  auxent: Asignado[];  
+  private listDocente: Tema[];
+  private listTemaPost: Tema[];
+  private listTemaAsignaRevisar: Tema[];
+  private listEstadoPrePostTema: Estado[];  
+  private listEstadoPostTema: Estado[];
+  private listDataEstadoLectorRevisor: Estado[];
+  private listTipoDocumento: Tipo[];
+  private listTipoTema: Tipo[];
+  private auxent: Asignado[];  
   private listTemaSeleccion: number[] = [];
   public usserLogged: Sysusuario = null;
   public destroyed = new Subject<any>();
@@ -46,7 +55,8 @@ export class DocentetemaComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private componentFactoryResolver: ComponentFactoryResolver,
     private asignadoService: AsignadoService,
-    private convocatoriaService: ConvocatoriaService) { }
+    private convocatoriaService: ConvocatoriaService,
+    private datepipe: DatePipe) { }
 
   ngOnInit() {
     this.router.events.pipe(
@@ -56,12 +66,10 @@ export class DocentetemaComponent implements OnInit, OnDestroy {
       startWith('initial call'),
       takeUntil(this.destroyed)
     ).subscribe(() => {
+      console.log('cargando....');
       this.usserLogged = this.userService.getUserLoggedIn();
-      this.getListDocente();
-      this.getListTemaPost();
-      this.getListTemaAsignaRevisar();
-      $("#tabs_docentetema").tabs();
-      this.showTab('tab-mistemas');
+      this.reset();
+      this.load();
       setTimeout(function () {
         Gestor.fn.initForms();
       }, 1000);
@@ -71,6 +79,34 @@ export class DocentetemaComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroyed.next();
     this.destroyed.complete();
+  }
+
+  reset(): void{
+    this.temaDetalle = new Tema();
+    this.tema = new Tema();
+    this.listDocente = [];
+    this.listTemaPost = [];
+    this.listTemaAsignaRevisar = [];
+    this.listEstadoPrePostTema = [];
+    this.listEstadoPostTema = [];
+    this.listDataEstadoLectorRevisor = [];
+    this.listTipoDocumento = [];
+    this.auxent = [];
+    this.listTemaSeleccion = [];
+    $("#tabs_docentetema").tabs();
+    $("#tabs_docentetema_detalle").tabs();
+    this.showTab('tab-mistemas');
+  }
+
+  load(): void {
+    this.getListDocente();
+    this.getListTemaPost();
+    this.getListTemaAsignaRevisar();
+    this.listEstadoPrePostTema = Estado.loadPrePostTema();
+    this.listEstadoPostTema = Estado.loadPostTema();
+    this.listDataEstadoLectorRevisor = Estado.loadAsignaLectorRevisor();
+    this.listTipoDocumento = Tipo.loadDocumento();
+    this.listTipoTema = Tipo.getListTipoTema();    
   }
 
   onChange(idTema: number, isChecked: boolean) {
@@ -134,30 +170,115 @@ export class DocentetemaComponent implements OnInit, OnDestroy {
     return this.listTemaAsignaRevisar;
   }
   
-  public showTab(tabid: String){
-    $('#tabs_docentetema .tab-pane').hide();
-    $('#tabs_docentetema #'+tabid).show();
-  }
-
-  loadComponent(idTema: number) {
-    const adItem = new AdItem(DocentetemadetalleComponent, { idTema: idTema });
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
-    const viewContainerRef = this.adHost.viewContainerRef;
-    viewContainerRef.clear();
-    const componentRef = viewContainerRef.createComponent(componentFactory);
-    (<AdComponent>componentRef.instance).data = adItem.data;
+  loadComponent(idTema: number, tab: string) {
+    // const adItem = new AdItem(DocentetemadetalleComponent, { idTema: idTema, tab: tab });
+    // const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
+    // const viewContainerRef = this.adHost.viewContainerRef;
+    // viewContainerRef.clear();
+    // const componentRef = viewContainerRef.createComponent(componentFactory);
+    // (<AdComponent>componentRef.instance).data = adItem.data;
+    this.tab = tab;
+    $("#tabs_docentetema_detalle").tabs();
+    this.showTab('tab-tema');
+    this.temaDetalle = new Tema();
+    if (idTema) {
+      this.temaService.getById(idTema).subscribe(
+        (tema) => {
+          if (tema != null) {
+            this.temaDetalle = tema; 
+          } 
+        }
+      )
+    }
   }
 
   loadComponent2(idTema: number) {
-    const adItem = new AdItem(DocentetemaeditarComponent, { idTema: idTema });
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
-    const viewContainerRef = this.adHost.viewContainerRef;
-    viewContainerRef.clear();
-    const componentRef = viewContainerRef.createComponent(componentFactory);
-    (<AdComponent>componentRef.instance).data = adItem.data;
+    // const adItem = new AdItem(DocentetemaeditarComponent, { idTema: idTema });
+    // const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
+    // const viewContainerRef = this.adHost.viewContainerRef;
+    // viewContainerRef.clear();
+    // const componentRef = viewContainerRef.createComponent(componentFactory);
+    // (<AdComponent>componentRef.instance).data = adItem.data;
+    this.tema = new Tema();
+    if (idTema) {
+      this.temaService.getById(idTema).subscribe(
+        (tema) => {
+          if (tema != null) {
+            this.tema = tema; 
+          } 
+        }
+      )
+    }
   }
 
-  updateTemaAddConvocatoria() {
+  openDialogDetalle(tema: Tema, tab: string): void {
+    Gestor.fn.destroyDialog('dialogDetalle');
+    $('#dialogDetalle').dialog({
+      title: 'Detalle',
+      modal: true,
+      minWidth: 1000,
+      resizable: false
+    });
+    this.loadComponent(tema.idTem, tab);
+    Gestor.fn.positionDialog();
+    $('#dialogDetalle div.dialog-content').show();
+  }
+
+  openDialogEditar(tema: Tema): void {
+    Gestor.fn.destroyDialog('dialogEditar');
+    $('#dialogEditar').dialog({
+      title: 'Datos Tema', 
+      modal: true,
+      minWidth: 800,
+      resizable: false
+    });
+    this.loadComponent2(tema.idTem);
+    Gestor.fn.positionDialog();
+    $('#dialogEditar div.dialog-content').show();
+  }
+
+  openDialogCrear(): void {
+    Gestor.fn.destroyDialog('dialogEditar');
+    $('#dialogEditar').dialog({
+      title: 'Registrar Tema', 
+      modal: true,
+      minWidth: 800,
+      resizable: false
+    });
+    this.loadComponent2(null);
+    Gestor.fn.positionDialog();
+    $('#dialogEditar div.dialog-content').show();
+  }
+
+  habilitaBotonActualiza (estado: number): boolean {
+    if (estado == Estaticos.ESTADO_TEMA_PRE_CREADO || estado == Estaticos.ESTADO_TEMA_PRE_REVISION) {
+      return false;
+    }
+    return true;
+  }
+
+  public getNombreEstadoPorLista(idEstado: number, tab: string): String {
+    if(tab == '1')
+      return Estado.getNombreEstadoPorLista(idEstado, this.listEstadoPrePostTema);
+    else if(tab == '2')
+      return Estado.getNombreEstadoPorLista(idEstado, this.listEstadoPostTema);
+    else if(tab == '3')
+      return Estado.getNombreEstadoPorLista(idEstado, this.listDataEstadoLectorRevisor);
+  }
+
+  public getNombreTipoPorLista(idTipo: number): String {
+    return Tipo.getNombreTipoPorLista(idTipo, this.listTipoDocumento);
+  }
+  
+  public parseDateToString(date: Date): String{
+    return this.datepipe.transform(date, Estaticos.FORMAT_DATE);
+  }
+
+  public showTab(tabid: String){
+    Gestor.fn.showTab(tabid);
+  }
+
+  public updateTemaAddConvocatoria() {
     let errores: String[] = [];
     let tematexto: String[] = [];     ;
     try {
@@ -198,7 +319,8 @@ export class DocentetemaComponent implements OnInit, OnDestroy {
                     
                     if (errores.length == 0) {
                       swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_ACTUALIZA, 'success');
-                      this.router.navigate(['/dashboard/docentetema'])
+                      //this.router.navigate(['/dashboard/docentetema'])
+                      this.ngOnInit();
                       // if (daoconfigura.activaProcesoByCampo(CONFIG_TEMA_ENVIADO)) {
                       //   utilcorreo.setDataUsuario(enusuariosesion, "Envio de temas", "Se ha enviado los siguiente(s) tema(s) para su revisión:", tematexto.toString().replace('[', ' ').replace(']', ' '));
                       //   utilcorreo.sendNotificaNuevo();
@@ -223,43 +345,88 @@ export class DocentetemaComponent implements OnInit, OnDestroy {
     }
   }
 
-  openDialog(tema: Tema): void {
-    this.loadComponent(tema.idTem);
-    $('#dialog').dialog({
-      modal: true,
-      minWidth: 1000,
-      resizable: false
-    });
-    Gestor.fn.positionDialog();
-  }
-
-  openDialog2(tema: Tema): void {
-    this.loadComponent2(tema.idTem);
-    $('#dialog').dialog({
-      title: 'Datos Tema', 
-      modal: true,
-      minWidth: 800,
-      resizable: false
-    });
-    Gestor.fn.positionDialog();
-  }
-
-  openDialog3(): void {
-    this.loadComponent2(null);
-    $('#dialog').dialog({
-      title: 'Registrar Tema', 
-      modal: true,
-      minWidth: 800,
-      resizable: false
-    });
-    Gestor.fn.positionDialog();
-  }
-
-  habilitaBotonActualiza (estado: number): boolean {
-    if (estado == Estaticos.ESTADO_TEMA_PRE_CREADO || estado == Estaticos.ESTADO_TEMA_PRE_REVISION) {
+  public create(): boolean {
+    let validacion:boolean = false;
+    try {
+      if (this.tema.temNumEst != null && this.tema.temNumEst != 0) {
+        this.temaService.getByNombreTema(this.tema.temNombre).subscribe(
+          (auxtema) => {
+            if (auxtema != null) {
+              swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_EXISTE, 'error');
+            }else{
+              let utilfecha = new Date();
+              let nuevotema = new Tema();
+              nuevotema.idPersona = this.usserLogged.persona.idPer; //(daopersona.obtenerPersonaPorCedula(enpersonasesion.getPerCedula()));
+              nuevotema.temNombre = this.tema.temNombre.toUpperCase().trim();
+              nuevotema.temDescripcion = this.tema.temDescripcion.toUpperCase().trim();
+              nuevotema.temNumEst = this.tema.temNumEst;
+              nuevotema.temFechaCreado = utilfecha;
+              nuevotema.temIdTipo = this.tema.temIdTipo;
+              nuevotema.temIdEstado = Estaticos.ESTADO_TEMA_PRE_CREADO;
+              nuevotema.temActivo = true;
+              nuevotema.temAuspiciante = this.tema.temAuspiciante.toUpperCase().trim();
+              nuevotema.temObservacion =this.tema.temObservacion.toUpperCase().trim();
+              nuevotema.temFechaEditado = utilfecha;
+              this.temaService.create(nuevotema).subscribe( 
+                response => {
+                  if(response){
+                    $('#dialogEditar').dialog('close');
+                    swal.fire(Lang.messages.register_new, Lang.messages.register_created, 'success');
+                    //this.router.navigate(['/dashboard/docentetema']);
+                    this.ngOnInit();
+                    validacion = true;
+                  }else{
+                    swal.fire(Lang.messages.register_new, Lang.messages.register_created, 'error');
+                  }
+                }
+              )
+            }
+          }
+        );       
+      } 
+    } catch (error) {
+      console.error('Here is the error message', error);
       return false;
     }
-    return true;
+    return validacion;
+  }
+
+
+  public update(): boolean {
+    let validacion:boolean = false;
+    try {
+      this.temaService.getById(this.tema.idTem).subscribe(
+        (auxtema) => {
+          if (auxtema != null) {
+            auxtema.temIdTipo = this.tema.temIdTipo;
+            auxtema.temNombre = this.tema.temNombre;
+            auxtema.temDescripcion = this.tema.temDescripcion;
+            auxtema.temAuspiciante = this.tema.temAuspiciante;
+            auxtema.temObservacion = this.tema.temObservacion;
+            auxtema.temNumEst = this.tema.temNumEst;
+            this.temaService.update(auxtema).subscribe( 
+              response => {
+                if(response){
+                  $('#dialogEditar').dialog('close');
+                  swal.fire(Lang.messages.register_update, Lang.messages.register_updated, 'success');
+                  //this.router.navigate(['/dashboard/docentetema'])
+                  this.ngOnInit();
+                  validacion = true;
+                }else{
+                  swal.fire(Lang.messages.register_update, Lang.messages.register_not_saved, 'error');
+                }
+              }
+            )
+          } else {
+            swal.fire(Lang.messages.register_update, Lang.messages.register_not_saved, 'error');
+          }
+        }
+      );      
+    } catch (error) {
+      console.error('Here is the error message', error);
+      return false;
+    }
+    return validacion;
   }
 
 }
