@@ -20,6 +20,13 @@ import { UtesconfiguracionnewrequisitoComponent } from './utesconfiguracionnewre
 import { Subject } from 'rxjs';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { filter, pairwise, startWith, takeUntil } from 'rxjs/operators';
+import { Estaticos, parseDate } from 'src/app/app.constants';
+import { DatePipe } from '@angular/common';
+import swal from 'sweetalert2';
+import Lang from '../../../assets/app.lang.json';
+import { SysusuarioService } from 'src/app/sysusuario/sysusuario.service';
+import { SeleccionService } from 'src/app/seleccion/seleccion.service';
+import { Seleccion } from 'src/app/seleccion/seleccion';
 
 declare var JQuery: any;
 declare var $: any;
@@ -32,11 +39,17 @@ declare var Gestor: any;
 export class UtesconfiguracionComponent implements OnInit, OnDestroy {
   private titulo: string = "Configuraciones";
   public usserLogged: Sysusuario = null;
-  listPeriodo: Periodo[];
-  listConvocatoria: Convocatoria[];
-  listInscripcion: Inscripcion[];
-  listCuestionario: Cuestionario[];
+  private listPeriodo: Periodo[];
+  private listConvocatoria: Convocatoria[];
+  private listInscripcion: Inscripcion[];
+  private listCuestionario: Cuestionario[];
+  //periodo
+  private periodo: Periodo = new Periodo();
+  private listUsuarioDocente: Sysusuario[];
+  private listSeleccion: Seleccion[];
+
   public destroyed = new Subject<any>();
+  public parseDate2 = parseDate;
 
   @ViewChild(AdDirective, {static: true}) adHost: AdDirective;
   
@@ -45,8 +58,11 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
     private periodoService: PeriodoService, 
     private inscripcionService: InscripcionService,
     private cuestionarioService: CuestionarioService,
+    private sysusuarioService: SysusuarioService,
+    private seleccionService: SeleccionService,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private router: Router
+    private router: Router,
+    private datepipe: DatePipe
     ) { }
 
   ngOnInit() {
@@ -121,50 +137,111 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
     return this.listCuestionario;
   }
 
-  public showTab(tabid: String){
-    $('#tabs_docentetema .tab-pane').hide();
-    $('#'+tabid).show();
-  }
-
   loadComponentPeriodo(idPrd: number) {
-    const adItem = new AdItem(UtesconfiguracionnewperiodoComponent, {idPrd: idPrd});
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
-    const viewContainerRef = this.adHost.viewContainerRef;
-    viewContainerRef.clear();
-    const componentRef = viewContainerRef.createComponent(componentFactory);
-    (<AdComponent>componentRef.instance).data = adItem.data;
+    // const adItem = new AdItem(UtesconfiguracionnewperiodoComponent, {idPrd: idPrd});
+    // const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
+    // const viewContainerRef = this.adHost.viewContainerRef;
+    // viewContainerRef.clear();
+    // const componentRef = viewContainerRef.createComponent(componentFactory);
+    // (<AdComponent>componentRef.instance).data = adItem.data;
+    this.periodo = new Periodo();
+    if (idPrd) {
+      this.periodoService.getById(idPrd).subscribe(
+        (periodo) => {
+          if (periodo != null) {
+            this.periodo = periodo; 
+          } 
+        }
+      )
+    }
   }
 
   dialogCreatePeriodo(): void {
-    this.loadComponentPeriodo(null);
-    try {
-      $('#dialogUtesConfiguracion').dialog('destroy');
-    } catch (error) {
-      console.log(error);
-    }
-    $('#dialogUtesConfiguracion').dialog({
+    Gestor.fn.destroyDialog('dialogPeriodo');
+    $('#dialogPeriodo').dialog({
       title: 'Registro de Periodo',
       modal: true,
       minWidth: 500,
       resizable: false
     });
+    this.loadComponentPeriodo(null);
     Gestor.fn.positionDialog();
+    $('#dialogPeriodo div.dialog-content').show();
   }
 
   dialogEditPeriodo(periodoSelected: Periodo): void {
-    this.loadComponentPeriodo(periodoSelected.idPrd);
-    try {
-      $('#dialogUtesConfiguracion').dialog('destroy');
-    } catch (error) {
-      console.log(error);
-    }
-    $('#dialogUtesConfiguracion').dialog({
+    Gestor.fn.destroyDialog('dialogPeriodo');
+    $('#dialogPeriodo').dialog({
       title: 'Editar Periodo',
       modal: true,
       minWidth: 500,
       resizable: false
     });
+    this.loadComponentPeriodo(periodoSelected.idPrd);
     Gestor.fn.positionDialog();
+    $('#dialogPeriodo div.dialog-content').show();
+  }
+
+  loadComponentPeriodoDocente(idPrd: number){
+    this.getListUsuarioDocente(idPrd);
+
+  }
+
+  public getListUsuarioDocente(idPrd: number): void {
+    this.sysusuarioService.getAllByNombrePerfil2(Estaticos.TIPO_LABEL_PERFIL_DOCENTE).subscribe(
+      (sysusuarios) => {
+        this.listUsuarioDocente = sysusuarios;
+        this.listUsuarioDocente.forEach(usr => {
+          this.seleccionService.getByPerioNumIdPersona(idPrd, usr.idUsr).subscribe(
+            (seleccion) => {
+              if(seleccion != null)
+                usr.usrClave = "ASIGNADO";
+              else
+                usr.usrClave = "NO ASIGNADO";
+            }
+          );
+        });
+      }
+    );
+  }
+
+  dialogPeriodoDocente(periodoSelected: Periodo): void {
+    Gestor.fn.destroyDialog('dialogPeriodoDocente');
+    $('#dialogPeriodoDocente').dialog({
+      title: 'Añadir docentes al periodo',
+      modal: true,
+      minWidth: 800,
+      resizable: false
+    });
+    this.loadComponentPeriodoDocente(periodoSelected.idPrd);
+    Gestor.fn.positionDialog();
+    $('#dialogPeriodoDocente div.dialog-content').show();
+  }
+
+  loadComponentPeriodoDocenteHora(idPrd: number){
+    this.getListSeleccion(idPrd);
+
+  }
+
+  public getListSeleccion(idPrd: number){
+    this.seleccionService.getAllByIdPeriodo(idPrd).subscribe(
+      (listSeleccion) => {
+        this.listSeleccion = listSeleccion;
+      }
+    );
+  }
+
+  dialogPeriodoDocenteHora(periodoSelected: Periodo): void {
+    Gestor.fn.destroyDialog('dialogPeriodoDocenteHora');
+    $('#dialogPeriodoDocenteHora').dialog({
+      title: 'Editar horas de docentes añadidos',
+      modal: true,
+      minWidth: 800,
+      resizable: false
+    });
+    this.loadComponentPeriodoDocenteHora(periodoSelected.idPrd);
+    Gestor.fn.positionDialog();
+    $('#dialogPeriodoDocenteHora div.dialog-content').show();
   }
 
   loadComponentConvocatoria(idCon: number) {
@@ -248,7 +325,6 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
     });
     Gestor.fn.positionDialog();
   }
-
   
   loadComponentCuestionario(idCue: number) {
     const adItem = new AdItem(UtesconfiguracionnewrequisitoComponent, {idCue: idCue});
@@ -289,5 +365,75 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
       resizable: false
     });
     Gestor.fn.positionDialog();
+  }
+
+  public showTab(tabid: String){
+    $('#tabs_docentetema .tab-pane').hide();
+    $('#'+tabid).show();
+  }
+
+  public parseDateToString(date: Date): String {
+    return this.datepipe.transform(date, Estaticos.FORMAT_DATE);
+  }
+
+  public createPeriodo(): boolean {
+    let validacion:boolean = false;
+    try {
+      console.log(this.periodo);
+      if (this.periodo.prdNumero != null && this.periodo.prdNumero != 0) {
+        this.periodoService.getAllByNumero(this.periodo.prdNumero).subscribe(
+          (periodos) => {
+            if (periodos == null || periodos.length == 0) {
+              this.periodoService.create(this.periodo).subscribe( 
+                response => {
+                  if(response){
+                    $('#dialogPeriodo').dialog('close');
+                    swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_REGISTRA, 'success');
+                    validacion = true;
+                    //this.router.navigate(['/dashboard/utesconfiguracion']);
+                    this.ngOnInit();
+                  } else {
+                    swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_REGISTRA, 'warning');
+                  }
+                }
+              );
+            }
+            else {
+              swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_EXISTE, 'warning');
+            }
+          }
+        );        
+      } else {
+        swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_REGISTRA_CERO, 'warning');
+      }
+    } catch (error) {
+      console.error('Here is the error message', error);
+      return false;
+    }
+    return validacion;
+  }
+
+  public updatePeriodo(): boolean {
+    let validacion:boolean = false;
+    try {
+      console.log(this.periodo);
+      this.periodoService.update(this.periodo).subscribe( 
+        response => {
+          if(response){
+            $('#dialogPeriodo').dialog('close');
+            swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_ACTUALIZA, 'success');
+            validacion = true;
+            //this.router.navigate(['/dashboard/utesconfiguracion']);
+            this.ngOnInit();
+          } else {
+            swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_ACTUALIZA, 'warning');
+          }
+        }
+      );
+    } catch (error) {
+      console.error('Here is the error message', error);
+      return false;
+    }
+    return validacion;
   }
 }

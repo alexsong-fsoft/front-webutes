@@ -2,10 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { AdComponent } from 'src/app/Estudiante/estudiantetema/ad.component';
 import { Periodo } from 'src/app/periodo/periodo';
 import { PeriodoService } from 'src/app/periodo/periodo.service';
-import swal from 'sweetalert2';
-import Lang from '../../../assets/app.lang.json';
 import { Estaticos } from 'src/app/app.constants';
 import { Router } from '@angular/router';
+import swal from 'sweetalert2';
+import Lang from '../../../assets/app.lang.json';
 
 declare var JQuery: any;
 declare var $: any;

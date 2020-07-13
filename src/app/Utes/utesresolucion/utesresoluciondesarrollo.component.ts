@@ -4,13 +4,19 @@ import { Estado } from 'src/app/estado/Estado';
 import { AdDirective } from 'src/app/Estudiante/estudiantetema/ad.directive';
 import { TemaService } from 'src/app/tema/tema.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Estaticos } from 'src/app/app.constants';
 import { Resolucion } from 'src/app/resolucion/resolucion';
 import { AdComponent } from 'src/app/Estudiante/estudiantetema/ad.component';
 import { UtesresoluciondialogComponentComponent } from './utesresoluciondialog-component.component';
 import { AdItem } from 'src/app/Estudiante/estudiantetema/ad-item';
 import { Tipo } from 'src/app/tipo/Tipo';
 import { UtesresolucionnuevodialogComponent } from './utesresolucionnuevodialog.component';
+import { parseDate, reporteDownload, Estaticos } from 'src/app/app.constants';
+import swal from 'sweetalert2';
+import Lang from '../../../assets/app.lang.json';
+import { DatePipe } from '@angular/common';
+import { Tiporesolucion } from 'src/app/tiporesolucion/tiporesolucion';
+import { TiporesolucionService } from 'src/app/tiporesolucion/tiporesolucion.service';
+import { ResolucionService } from 'src/app/resolucion/resolucion.service';
 
 declare var JQuery: any;
 declare var $: any;
@@ -22,22 +28,32 @@ declare var Gestor: any;
 })
 export class UtesresoluciondesarrolloComponent implements OnInit {
   private tema: Tema = new Tema();
-  private titulo: string = "Listado de Resoluciones";
   private listEstadoEvolucion: Estado[] = [];
   private listTipoAsignacion: Tipo[] = [];
+  private listTipoDocumento: Tipo[];
+
+  private resolucionnew: Resolucion = new Resolucion();
+  private listResolucionTipo: Tiporesolucion[] = [];
+
+  public parseDate2 = parseDate;
+  public reporteDownload = reporteDownload;
 
   @ViewChild(AdDirective, { static: true }) adHost: AdDirective;
-  
+
   constructor(private temaService: TemaService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private componentFactoryResolver: ComponentFactoryResolver) { }
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private tiporesolucionService: TiporesolucionService,
+    private resolucionService: ResolucionService,
+    private datepipe: DatePipe) { }
 
   ngOnInit() {
     this.tema = new Tema();
     this.load();
     this.listEstadoEvolucion = Estado.loadEvolucion();
     this.listTipoAsignacion = Tipo.loadAsignacion();
+    this.listTipoDocumento = Tipo.loadDocumento();
     $("#dialogAsignados").dialog({
       autoOpen: false
     });
@@ -52,11 +68,11 @@ export class UtesresoluciondesarrolloComponent implements OnInit {
             if (tema != null) {
               this.tema = tema;
               this.tema.asignados = this.tema.asignados.filter(
-                (x) => (x.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_ESTUDIANTE || 
+                (x) => (x.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_ESTUDIANTE ||
                   x.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_LECTORPLAN ||
-                  x.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_LECTORPROYECTO ) 
+                  x.asgIdTipo == Estaticos.TIPO_ID_ASIGNACION_LECTORPROYECTO)
               );
-            } 
+            }
           }
 
         )
@@ -80,53 +96,48 @@ export class UtesresoluciondesarrolloComponent implements OnInit {
     (<AdComponent>componentRef.instance).data = adItem.data;
   }
 
+  loadComponent2() {
+    // const adItem = new AdItem(UtesresolucionnuevodialogComponent, {});
+    // const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
+    // const viewContainerRef = this.adHost.viewContainerRef;
+    // viewContainerRef.clear();
+    // const componentRef = viewContainerRef.createComponent(componentFactory);
+    // (<AdComponent>componentRef.instance).data = adItem.data;
+    this.resolucionnew = new Resolucion();
+    this.tiporesolucionService.getAll().subscribe(
+      (tiporesoluciones) => {
+        this.listResolucionTipo = tiporesoluciones;
+      }
+    );
+  }
+
   openResolucionDetail(resolucion: Resolucion): void {
-    this.loadComponent(resolucion.idRsl);
-    try {
-      $('#dialogUtesResolucionNew').dialog('destroy');
-    } catch (error) {
-      console.log(error);
-    }
-    $('#dialogUtesResolucionNew').dialog({
+    Gestor.fn.destroyDialog('dialogUtesResolucion');
+    $('#dialogUtesResolucion').dialog({
       title: 'Detalle Resolución',
       modal: true,
       minWidth: 800,
       resizable: false
     });
+    this.loadComponent(resolucion.idRsl);
     Gestor.fn.positionDialog();
   }
 
-  loadComponent2() {
-    const adItem = new AdItem(UtesresolucionnuevodialogComponent, {});
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
-    const viewContainerRef = this.adHost.viewContainerRef;
-    viewContainerRef.clear();
-    const componentRef = viewContainerRef.createComponent(componentFactory);
-    (<AdComponent>componentRef.instance).data = adItem.data;
-  }
-
   openResolucionNew(): void {
-    this.loadComponent2();
-    try {
-      $('#dialogUtesResolucionNew').dialog('destroy');
-    } catch (error) {
-      console.log(error);
-    }
+    Gestor.fn.destroyDialog('dialogUtesResolucionNew');
     $('#dialogUtesResolucionNew').dialog({
       title: 'Nueva Resolución',
       modal: true,
       minWidth: 800,
       resizable: false
     });
+    this.loadComponent2();
     Gestor.fn.positionDialog();
+    $('#dialogUtesResolucionNew div.dialog-content').show();
   }
 
   openAsignados(): void {
-    try {
-      $('#dialogAsignados').dialog('destroy');
-    } catch (error) {
-      console.log(error);
-    }
+    Gestor.fn.destroyDialog('dialogAsignados');
     $('#dialogAsignados').dialog({
       title: 'Asignados',
       modal: true,
@@ -139,4 +150,67 @@ export class UtesresoluciondesarrolloComponent implements OnInit {
   public getNombreTipoAsignado(idTipo: number): String {
     return Tipo.getNombreTipoPorLista(idTipo, this.listTipoAsignacion);
   }
+
+  // public getNombreEstadoPorLista(idEstado: number): String {
+  //   return Estado.getNombreEstadoPorLista(idEstado, this.listEstadoHito);
+  // }
+
+  public getNombreTipoPorLista(idTipo: number): String {
+    return Tipo.getNombreTipoPorLista(idTipo, this.listTipoDocumento);
+  }
+
+  public parseDateToString(date: Date): String {
+    return this.datepipe.transform(date, Estaticos.FORMAT_DATE);
+  }
+
+  public UteResolucionCreate(): void {
+    let validacion: Boolean = false;
+    try {
+      this.tiporesolucionService.getById(this.resolucionnew.idTipoResolucion).subscribe(
+        (auxtipores) => {
+          if (auxtipores != null) {
+            this.resolucionnew.idTema = this.tema.idTem;
+            this.resolucionnew.idTipoResolucion = auxtipores.idTrsl;
+            this.resolucionnew.rslObservacion = this.resolucionnew.rslObservacion != null ? this.resolucionnew.rslObservacion.toUpperCase().trim() : this.resolucionnew.rslObservacion;
+            this.resolucionnew.rslActivo = true;
+            this.resolucionnew.rslIdEstado = Estaticos.ESTADO_RESOLUCION_CREADO;    
+            if (this.resolucionnew.idTipoResolucion == Estaticos.ESTADO_TEMA_POST_APROBADO) {
+              this.resolucionnew.rslIdEstado = Estaticos.ESTADO_RESOLUCION_PROCESADO;
+            }
+    
+            this.resolucionService.UteResolucionCreate(this.resolucionnew).subscribe( 
+              response => {
+                if(response){
+                  $('#dialogUtesResolucionNew').dialog('close');
+                  swal.fire(Lang.messages.register_new, Lang.messages.MENSAJE_OK_REGISTRA, 'success');
+                  this.ngOnInit();
+                  validacion = true;        
+                  if (this.resolucionnew.idTipoResolucion == Estaticos.ESTADO_TEMA_POST_CERRADO) {
+                    this.tema.temIdEstado = Estaticos.ESTADO_TEMA_POST_CERRADO;
+                  }
+                  if (this.resolucionnew.idTipoResolucion == Estaticos.ESTADO_TEMA_POST_ANULADO) {
+                    this.tema.temIdEstado = Estaticos.ESTADO_TEMA_POST_ANULADO;
+                  }
+                  if (this.resolucionnew.idTipoResolucion == Estaticos.ESTADO_TEMA_POST_PRORROGA) {
+                    this.tema.temIdEstado = Estaticos.ESTADO_TEMA_POST_PRORROGA;
+                  }
+                  //cleanResolucion();
+                  //reloadLists(4, "");                  
+                }else{
+                  swal.fire(Lang.messages.register_new, Lang.messages.MENSAJE_ERROR_REGISTRA, 'error');
+                }
+              }
+            )
+          }
+        }
+      )
+    } catch (error) {
+      console.error('Here is the error message', error);
+    }
+  }
+
+
+
+
+
 }

@@ -56,5 +56,9 @@ export class ResolucionService {
       map( response => response as Resolucion[] )
     );
   }
+
+  UteResolucionCreate(resolucion: Resolucion) : Observable<Boolean> {
+    return this.http.post<Boolean>(`${this.urlEndPoint}/ute/resolucion/create`, resolucion, {headers: this.httpHeaders})
+  }
   
 }

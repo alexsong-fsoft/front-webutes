@@ -9,6 +9,13 @@ import { PersonaService } from 'src/app/persona/persona.service';
 import { AdItem } from 'src/app/Estudiante/estudiantetema/ad-item';
 import { AdComponent } from 'src/app/Estudiante/estudiantetema/ad.component';
 import { PrerevisionexamendetalleComponent } from './prerevisionexamendetalle.component';
+import { Tipo } from 'src/app/tipo/Tipo';
+import { CuestionarioService } from 'src/app/cuestionario/cuestionario.service';
+import { RespuestaService } from 'src/app/respuesta/respuesta.service';
+import { InscripcionService } from 'src/app/inscripcion/inscripcion.service';
+import { Cuestionario } from 'src/app/cuestionario/cuestionario';
+import { Respuesta } from 'src/app/respuesta/respuesta';
+import { Estado } from 'src/app/estado/Estado';
 
 declare var JQuery: any;
 declare var $: any;
@@ -19,20 +26,29 @@ declare var Gestor: any;
   templateUrl: './prerevisionexamen.component.html'
 })
 export class PrerevisionexamenComponent implements OnInit {
-  titulo: string = "Revisión Previa";
-  listEstudiantesExamen: Presolicitud[];
+  private listEstudiantesExamen: Presolicitud[];
+  private listTipoDocumento: Tipo[];
+  private presolicitud: Presolicitud = new Presolicitud();
+  private listCuestionarioTodos: Cuestionario[];
+  private listCuestionarioSeleccion: number[] = [];
+  private presolicitudRespuestas: Respuesta[] = [];
+  private listEstadoInscripcion: Estado[] = [];
   public usserLogged: Sysusuario = null;
-  
-  @ViewChild(AdDirective, {static: true}) adHost: AdDirective;
 
-  constructor(private presolicitudService: PresolicitudService, 
-    private personaService: PersonaService,
+  @ViewChild(AdDirective, { static: true }) adHost: AdDirective;
+
+  constructor(private presolicitudService: PresolicitudService,
     private userService: UserService,
+    private inscripcionService: InscripcionService,
+    private cuestionarioService: CuestionarioService,
+    private respuestaService: RespuestaService,
     private componentFactoryResolver: ComponentFactoryResolver) { }
 
   ngOnInit() {
     this.usserLogged = this.userService.getUserLoggedIn();
     this.getListEstudiantesExamen();
+    this.listTipoDocumento = Tipo.loadDocumentoAll();
+    this.listEstadoInscripcion = Estado.loadInscripcion();
   }
 
   getListEstudiantesExamen(): Presolicitud[] {
@@ -52,11 +68,35 @@ export class PrerevisionexamenComponent implements OnInit {
     const componentRef = viewContainerRef.createComponent(componentFactory);
     (<AdComponent>componentRef.instance).data = adItem.data;
   }
-  
+
+
+  loadComponent2(idPsl: number) {
+    let id = idPsl;
+    if (id) {
+      this.presolicitudService.getById(id).subscribe((presolicitud) => this.presolicitud = presolicitud)
+      this.respuestaService.getAllByIdPresolicitud(id).subscribe((respuestas) => this.presolicitudRespuestas = respuestas)
+    }
+    this.inscripcionService.getUltimoRegistroInscripcion().subscribe(
+      (idinscripcion) => {
+        if (idinscripcion != null) {
+          let idstipo: string = Estaticos.TIPO_ID_CUESTIONARIO_INSCRIPCION + "," + Estaticos.TIPO_ID_CUESTIONARIO_PREREVISION;
+          this.cuestionarioService.getByIdsTipoIdInscripcion(idstipo, idinscripcion).subscribe(
+            (cuestionarios: Cuestionario[]) => {
+              this.listCuestionarioTodos = cuestionarios;
+              setTimeout(function () {
+                Gestor.fn.initForms();
+              }, 300);
+            }
+          );
+        }
+      }
+    );
+  }
+
   openDialog(idPsl: number): void {
     this.loadComponent(idPsl);
     $('#dialog').dialog({
-      title: 'Detalle', 
+      title: 'Detalle',
       modal: true,
       minWidth: 800,
       resizable: false
@@ -64,16 +104,63 @@ export class PrerevisionexamenComponent implements OnInit {
     Gestor.fn.positionDialog();
   }
 
-  habilitaBotonEditaPresolicitudExamen(idestado: number): boolean{
+  openDialogUtesPrerevision(idPsl: number): void {
+    Gestor.fn.destroyDialog('dialogUtesPrerevision');
+    $('#dialogUtesPrerevision').dialog({
+      title: 'Revision Previa',
+      modal: true,
+      minWidth: 800,
+      resizable: false
+    });
+    this.loadComponent2(idPsl);
+    Gestor.fn.positionDialog();
+    $('#dialogUtesPrerevision div.dialog-content').show();
+  }
+
+
+  habilitaBotonEditaPresolicitudExamen(idestado: number): boolean {
     try {
-     if (idestado == Estaticos.ESTADO_PRESOLICITUD_APROBADO || idestado == Estaticos.ESTADO_PRESOLICITUD_ENLISTAESPERA) {
-      return false;
-     } else {
-       return true;
-     }
+      if (idestado == Estaticos.ESTADO_PRESOLICITUD_APROBADO || idestado == Estaticos.ESTADO_PRESOLICITUD_ENLISTAESPERA) {
+        return false;
+      } else {
+        return true;
+      }
     } catch (error) {
       console.error('Here is the error message', error);
-    }  
+    }
     return false;
-   }
+  }
+
+  public getNombreTipoPorLista(idTipo: number): String {
+    return Tipo.getNombreTipoPorLista(idTipo, this.listTipoDocumento);
+  }
+
+  public getRespuestaValor(idcuestionario: number, idpresol: number): Boolean {
+    let valor: Boolean = false;
+    this.respuestaService.getByIdPresolicitudIdCuestionario(idcuestionario, idpresol).subscribe(
+      (auxresp) => {
+        if (auxresp != null) {
+          if (auxresp.resValor == null) {
+            valor = false;
+          } else {
+            valor = auxresp.resValor;
+            return valor;
+          }
+        }
+      }
+    );
+    return valor;
+  }
+
+  onChange(idcue: number, isChecked: boolean) {
+    let selectedCuestionario = this.listCuestionarioSeleccion;
+    if (isChecked) {
+      selectedCuestionario.push(idcue);
+    } else {
+      selectedCuestionario = this.listCuestionarioSeleccion.filter(item => item !== idcue);
+    }
+    this.listCuestionarioSeleccion = selectedCuestionario;
+    console.log(selectedCuestionario);
+  }
+
 }
