@@ -9,5 +9,5 @@ export class Seleccion{
     selHoraVigente: number;
     selHoraLectura: number;
     idPersona: number;
-    IdPeriodo: number;
+    idPeriodo: number;
 }

@@ -27,6 +27,9 @@ import Lang from '../../../assets/app.lang.json';
 import { SysusuarioService } from 'src/app/sysusuario/sysusuario.service';
 import { SeleccionService } from 'src/app/seleccion/seleccion.service';
 import { Seleccion } from 'src/app/seleccion/seleccion';
+import { Sysconfiguracion } from 'src/app/sysconfiguracion/sysconfiguracion';
+import { SysconfiguracionService } from 'src/app/sysconfiguracion/sysconfiguracion.service';
+import { Tipo } from 'src/app/tipo/Tipo';
 
 declare var JQuery: any;
 declare var $: any;
@@ -46,8 +49,24 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
   //periodo
   private periodo: Periodo = new Periodo();
   private listUsuarioDocente: Sysusuario[];
+  private listUsuarioDocenteSeleccion: Sysusuario[] = [];
   private listSeleccion: Seleccion[];
+  //convocatoria
+  private convocatoria: Convocatoria = new Convocatoria();
+  private enconfigura: Sysconfiguracion = new Sysconfiguracion();
+  private PARTE_CONFIG: String = "PKCONV";
+  private CONFIG_TIPO: String = "BOTON";
+  private PARTE_CONV: String = "CONV";
+  private listPeriodoActivo: Periodo[];
+  //inscripcion
+  private inscripcion: Inscripcion = new Inscripcion();
+  private PRE_SEC: String = "INSCRI";
+  //cuestionario
+  private cuestionario: Cuestionario = new Cuestionario();
+  private listTipoRequisito: Tipo[] = [];
+  //private listInscripcion: Inscripcion[] = [];
 
+  
   public destroyed = new Subject<any>();
   public parseDate2 = parseDate;
 
@@ -60,6 +79,7 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
     private cuestionarioService: CuestionarioService,
     private sysusuarioService: SysusuarioService,
     private seleccionService: SeleccionService,
+    private sysconfiguracionService: SysconfiguracionService,
     private componentFactoryResolver: ComponentFactoryResolver,
     private router: Router,
     private datepipe: DatePipe
@@ -99,6 +119,8 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
     this.getListConvocatoria();
     this.getListInscripcion();
     this.getListCuestionario();
+    this.loadPeriodoActivo();
+    this.listTipoRequisito = Tipo.loadCuestionario();
   }
 
   getListPeriodo(): Periodo[] {
@@ -182,9 +204,12 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
     $('#dialogPeriodo div.dialog-content').show();
   }
 
-  loadComponentPeriodoDocente(idPrd: number){
-    this.getListUsuarioDocente(idPrd);
-
+  loadComponentPeriodoDocente(periodoSelected: Periodo){
+    this.periodo = periodoSelected;
+    this.listUsuarioDocenteSeleccion = [];
+    this.listUsuarioDocente = [];
+    this.getListUsuarioDocente(this.periodo.idPrd);
+    Gestor.fn.initForms();
   }
 
   public getListUsuarioDocente(idPrd: number): void {
@@ -192,7 +217,7 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
       (sysusuarios) => {
         this.listUsuarioDocente = sysusuarios;
         this.listUsuarioDocente.forEach(usr => {
-          this.seleccionService.getByPerioNumIdPersona(idPrd, usr.idUsr).subscribe(
+          this.seleccionService.getByIdPeriodoIdPersona(idPrd, usr.idUsr).subscribe(
             (seleccion) => {
               if(seleccion != null)
                 usr.usrClave = "ASIGNADO";
@@ -205,15 +230,25 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
     );
   }
 
+  onChange(usr: Sysusuario, isChecked: boolean) {
+    let selectedTema = this.listUsuarioDocenteSeleccion;
+    if (isChecked) {
+      selectedTema.push(usr);
+    } else {
+      selectedTema = this.listUsuarioDocenteSeleccion.filter(item => item.idUsr !== usr.idUsr);
+    }
+    this.listUsuarioDocenteSeleccion = selectedTema;
+  }
+
   dialogPeriodoDocente(periodoSelected: Periodo): void {
     Gestor.fn.destroyDialog('dialogPeriodoDocente');
     $('#dialogPeriodoDocente').dialog({
       title: 'Añadir docentes al periodo',
       modal: true,
-      minWidth: 800,
+      minWidth: 1000,
       resizable: false
     });
-    this.loadComponentPeriodoDocente(periodoSelected.idPrd);
+    this.loadComponentPeriodoDocente(periodoSelected);
     Gestor.fn.positionDialog();
     $('#dialogPeriodoDocente div.dialog-content').show();
   }
@@ -236,7 +271,7 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
     $('#dialogPeriodoDocenteHora').dialog({
       title: 'Editar horas de docentes añadidos',
       modal: true,
-      minWidth: 800,
+      minWidth: 1000,
       resizable: false
     });
     this.loadComponentPeriodoDocenteHora(periodoSelected.idPrd);
@@ -245,126 +280,181 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
   }
 
   loadComponentConvocatoria(idCon: number) {
-    const adItem = new AdItem(UtesconfiguracionnewconvocatoriaComponent, {idCon: idCon});
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
-    const viewContainerRef = this.adHost.viewContainerRef;
-    viewContainerRef.clear();
-    const componentRef = viewContainerRef.createComponent(componentFactory);
-    (<AdComponent>componentRef.instance).data = adItem.data;
+    // const adItem = new AdItem(UtesconfiguracionnewconvocatoriaComponent, {idCon: idCon});
+    // const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
+    // const viewContainerRef = this.adHost.viewContainerRef;
+    // viewContainerRef.clear();
+    // const componentRef = viewContainerRef.createComponent(componentFactory);
+    // (<AdComponent>componentRef.instance).data = adItem.data;
+    this.convocatoria = new Convocatoria();
+    if (idCon) {
+      this.convocatoriaService.getById(idCon).subscribe(
+        (convocatoria) => {
+          if (convocatoria != null) {
+            this.convocatoria = convocatoria; 
+          } 
+        }
+      )
+    } else {
+      this.getCodeVal();
+    }
+    Gestor.fn.initForms();
+  }
+
+  public loadPeriodoActivo(): void {
+    this.listPeriodoActivo = [];
+    this.periodoService.getAll().subscribe(
+      (periodos) => {
+        if (periodos != null) {
+          this.listPeriodoActivo = periodos; 
+        } 
+      }
+    ) 
+  }
+
+  public getCodeVal(): void {
+    let valnom: String = "";
+    this.convocatoriaService.getSecuencialConvocatoria().subscribe(
+      (valorseq) => {
+        if (valorseq != null) {
+          valnom = this.PARTE_CONV + "" + valorseq;
+          this.convocatoria.conSecuencia = valorseq; 
+          this.convocatoria.conNombre = valnom;
+        } 
+      }
+    )
   }
 
   dialogCreateConvocatoria(): void {
-    this.loadComponentConvocatoria(null);
-    try {
-      $('#dialogUtesConfiguracion').dialog('destroy');
-    } catch (error) {
-      console.log(error);
-    }
-    $('#dialogUtesConfiguracion').dialog({
+    Gestor.fn.destroyDialog('dialogConvocatoria');
+    $('#dialogConvocatoria').dialog({
       title: 'Registro de Convocatoria',
       modal: true,
       minWidth: 500,
       resizable: false
     });
+    this.loadComponentConvocatoria(null);
     Gestor.fn.positionDialog();
+    $('#dialogConvocatoria div.dialog-content').show();
   }
 
   dialogEditConvocatoria(convocatoriaSelected: Convocatoria): void {
-    this.loadComponentConvocatoria(convocatoriaSelected.idCon);
-    try {
-      $('#dialogUtesConfiguracion').dialog('destroy');
-    } catch (error) {
-      console.log(error);
-    }
-    $('#dialogUtesConfiguracion').dialog({
+    Gestor.fn.destroyDialog('dialogConvocatoria');
+    $('#dialogConvocatoria').dialog({
       title: 'Editar Convocatoria',
       modal: true,
       minWidth: 500,
       resizable: false
     });
+    this.loadComponentConvocatoria(convocatoriaSelected.idCon);
     Gestor.fn.positionDialog();
+    $('#dialogConvocatoria div.dialog-content').show();
   }
 
   loadComponentInscripcion(idIns: number) {
-    const adItem = new AdItem(UtesconfiguracionnewinscripcionComponent, {idIns: idIns});
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
-    const viewContainerRef = this.adHost.viewContainerRef;
-    viewContainerRef.clear();
-    const componentRef = viewContainerRef.createComponent(componentFactory);
-    (<AdComponent>componentRef.instance).data = adItem.data;
+    // const adItem = new AdItem(UtesconfiguracionnewinscripcionComponent, {idIns: idIns});
+    // const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
+    // const viewContainerRef = this.adHost.viewContainerRef;
+    // viewContainerRef.clear();
+    // const componentRef = viewContainerRef.createComponent(componentFactory);
+    // (<AdComponent>componentRef.instance).data = adItem.data;
+    this.inscripcion = new Inscripcion();
+    if (idIns) {
+      this.inscripcionService.getById(idIns).subscribe(
+        (inscripcion) => {
+          if (inscripcion != null) {
+            this.inscripcion = inscripcion; 
+          } 
+        }
+      )
+    } else {
+      this.getCodeValInscripcion();
+    }
+    Gestor.fn.initForms();
+  }
+
+  public getCodeValInscripcion(): void {
+    let valnom: String = "";
+    this.inscripcionService.getSecuencialInscripcion().subscribe(
+      (valorseq) => {
+        if (valorseq != null) {
+          valnom = this.PRE_SEC + "" + valorseq;
+          this.inscripcion.insSecuencia = valorseq; 
+          this.inscripcion.insNombre = valnom;
+        } 
+      }
+    )
   }
 
   dialogCreateInscripcion(): void {
-    this.loadComponentInscripcion(null);
-    try {
-      $('#dialogUtesConfiguracion').dialog('destroy');
-    } catch (error) {
-      console.log(error);
-    }
-    $('#dialogUtesConfiguracion').dialog({
+    Gestor.fn.destroyDialog('dialogInscripcion');
+    $('#dialogInscripcion').dialog({
       title: 'Registro de Inscripcion',
       modal: true,
       minWidth: 500,
       resizable: false
     });
+    this.loadComponentInscripcion(null);
     Gestor.fn.positionDialog();
+    $('#dialogInscripcion div.dialog-content').show();
   }
 
   dialogEditInscripcion(inscripcionSelected: Inscripcion): void {
-    this.loadComponentInscripcion(inscripcionSelected.idIns);
-    try {
-      $('#dialogUtesConfiguracion').dialog('destroy');
-    } catch (error) {
-      console.log(error);
-    }
-    $('#dialogUtesConfiguracion').dialog({
+    Gestor.fn.destroyDialog('dialogInscripcion');
+    $('#dialogInscripcion').dialog({
       title: 'Editar Inscripcion',
       modal: true,
       minWidth: 500,
       resizable: false
     });
+    this.loadComponentInscripcion(inscripcionSelected.idIns);
     Gestor.fn.positionDialog();
+    $('#dialogInscripcion div.dialog-content').show();
   }
   
   loadComponentCuestionario(idCue: number) {
-    const adItem = new AdItem(UtesconfiguracionnewrequisitoComponent, {idCue: idCue});
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
-    const viewContainerRef = this.adHost.viewContainerRef;
-    viewContainerRef.clear();
-    const componentRef = viewContainerRef.createComponent(componentFactory);
-    (<AdComponent>componentRef.instance).data = adItem.data;
+    // const adItem = new AdItem(UtesconfiguracionnewrequisitoComponent, {idCue: idCue});
+    // const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
+    // const viewContainerRef = this.adHost.viewContainerRef;
+    // viewContainerRef.clear();
+    // const componentRef = viewContainerRef.createComponent(componentFactory);
+    // (<AdComponent>componentRef.instance).data = adItem.data;
+    this.cuestionario = new Cuestionario();
+    if (idCue) {
+      this.cuestionarioService.getById(idCue).subscribe(
+        (cuestionario) => {
+          if (cuestionario != null) {
+            this.cuestionario = cuestionario; 
+          } 
+        }
+      )
+    }
   }
 
   dialogCreateCuestionario(): void {
-    this.loadComponentCuestionario(null);
-    try {
-      $('#dialogUtesConfiguracion').dialog('destroy');
-    } catch (error) {
-      console.log(error);
-    }
-    $('#dialogUtesConfiguracion').dialog({
+    Gestor.fn.destroyDialog('dialogCuestionario');
+    $('#dialogCuestionario').dialog({
       title: 'Registro de Requisito',
       modal: true,
       minWidth: 700,
       resizable: false
     });
+    this.loadComponentCuestionario(null);
     Gestor.fn.positionDialog();
+    $('#dialogCuestionario div.dialog-content').show();
   }
 
   dialogEditCuestionario(cuestionarioSelected: Cuestionario): void {
-    this.loadComponentCuestionario(cuestionarioSelected.idCue);
-    try {
-      $('#dialogUtesConfiguracion').dialog('destroy');
-    } catch (error) {
-      console.log(error);
-    }
-    $('#dialogUtesConfiguracion').dialog({
+    Gestor.fn.destroyDialog('dialogCuestionario');
+    $('#dialogCuestionario').dialog({
       title: 'Editar Requisito',
       modal: true,
       minWidth: 700,
       resizable: false
     });
+    this.loadComponentCuestionario(cuestionarioSelected.idCue);
     Gestor.fn.positionDialog();
+    $('#dialogCuestionario div.dialog-content').show();
   }
 
   public showTab(tabid: String){
@@ -430,6 +520,155 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
           }
         }
       );
+    } catch (error) {
+      console.error('Here is the error message', error);
+      return false;
+    }
+    return validacion;
+  }
+
+  public saveSeleccion(): void{
+    try {
+      let error = [];
+      let utilfecha = new Date();
+      if (this.listUsuarioDocenteSeleccion.length > 0) {
+        this.listUsuarioDocenteSeleccion.forEach(object => {
+          this.seleccionService.getByPerioNumIdPersona(this.periodo.prdNumero, object.persona.idPer).subscribe(
+            (auxsel) => {
+              if(auxsel == null){
+                let enseleccion = new Seleccion();
+                enseleccion.idPeriodo = this.periodo.idPrd;
+                enseleccion.idPersona = object.persona.idPer;
+                enseleccion.selHoraAsignada = 0;
+                enseleccion.selHoraLectura = 0;
+                enseleccion.selHoraVigente = 0;
+                this.seleccionService.create(enseleccion).subscribe(
+                  response => {
+                    if(!response)
+                      error.push("Error en " + enseleccion);
+                  }
+                );
+              }
+            }
+          );
+        });
+      }
+      if (error.length == 0) {
+        this.listUsuarioDocenteSeleccion = [];
+        swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_REGISTRA, 'success');
+      } else {
+        swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_REGISTRA, 'warning');
+      }
+      setTimeout(() => {
+        this.loadComponentPeriodoDocente(this.periodo);
+      }, 1000);
+    } catch (error) {
+      console.error('Here is the error message', error);
+    }
+  }
+
+  public deleteSeleccion(): void{
+    try {
+      let error = [];
+      if (this.listUsuarioDocenteSeleccion.length > 0) {
+        this.listUsuarioDocenteSeleccion.forEach(object => {
+          this.seleccionService.getByPerioNumIdPersona(this.periodo.prdNumero, object.persona.idPer).subscribe(
+            (auxsel) => {
+              if(auxsel != null){
+                this.seleccionService.delete(auxsel.idSel).subscribe(
+                  response => {
+                    if(!response)
+                      error.push("No se elimino el registro " + auxsel);
+                  }
+                );
+              }
+            }
+          );
+        });
+      }
+      if (error.length == 0) {
+        this.listUsuarioDocenteSeleccion = [];
+        swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_ELIMINA, 'success');
+      } else {
+        swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_ELIMINA, 'warning');
+      }
+      setTimeout(() => {
+        this.loadComponentPeriodoDocente(this.periodo);
+      }, 1000);
+    } catch (error) {
+      console.error('Here is the error message', error);
+    }
+  }
+
+  public saveConvocatoria(): boolean {
+    let validacion:boolean = false;
+    try {
+      console.log(this.convocatoria);
+      if (this.convocatoria.conNombre != null && this.convocatoria.conNombre != "") {
+        if(this.convocatoria.conNumeroTema != null || this.convocatoria.conNumeroTema > 0){
+          this.convocatoriaService.create(this.convocatoria).subscribe( 
+            response => {
+              if(response){
+                if (this.convocatoria.conActivo == true) {
+                  //notificacionGlobal("Notificaciones", "Se habilito una convocatoria para registrar temas.", "/convocatoriatema");
+                }
+                // this.enconfigura = new Sysconfiguracion();
+                // this.enconfigura.confEstado = this.convocatoria.conActivo
+                // let pkconv:String = "" + this.convocatoria.idCon;
+                // this.enconfigura.confCampo = this.PARTE_CONV + "" + pkconv;
+                // this.enconfigura.confValor = pkconv;
+                // this.enconfigura.confTipo = this.CONFIG_TIPO;
+                // this.enconfigura.confActivo = true;
+                // this.sysconfiguracionService.create(this.enconfigura).subscribe( 
+                //   response2 => {
+                //     if(response2){
+                //     }
+                //   }
+                // );
+                $('#dialogConvocatoria').dialog('close');
+                swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_REGISTRA, 'success');
+                //this.router.navigate(['/dashboard/utesconfiguracion']);
+                this.ngOnInit();
+                this.showTab('tab-convocatoria');
+                validacion = true;
+              } else {
+                swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_REGISTRA, 'warning');
+              }
+            }
+          );
+        } else {
+          swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_REGISTRA_CERO, 'warning');
+        }        
+      } 
+    } catch (error) {
+      console.error('Here is the error message', error);
+      return false;
+    }
+    return validacion;
+  }
+
+
+  public createInscripcion(): boolean {
+    let validacion:boolean = false;
+    try {
+      if (this.inscripcion.insFechaFin != null && this.inscripcion.insFechaInicio != null) {
+          this.inscripcionService.create(this.inscripcion).subscribe( 
+            response => {
+              if(response){
+                $('#dialogInscripcion').dialog('close');
+                swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_REGISTRA, 'success');
+                //this.router.navigate(['/dashboard/utesconfiguracion']);
+                this.ngOnInit();
+                this.showTab('tab-inscripcion');
+                validacion = true;
+              } else {
+                swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_SELECCION, 'warning');
+              }
+            }
+          );
+      } else {
+        swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_REGISTRA_CERO, 'warning');
+      }        
     } catch (error) {
       console.error('Here is the error message', error);
       return false;
