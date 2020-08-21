@@ -647,7 +647,6 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
     return validacion;
   }
 
-
   public createInscripcion(): boolean {
     let validacion:boolean = false;
     try {
@@ -675,4 +674,29 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
     }
     return validacion;
   }
+
+  public savePregunta(): void{
+    let validacion: boolean = false;
+    try {
+      let utilfecha = new Date();
+      this.cuestionario.cuePregunta = ((this.cuestionario.cuePregunta != null) ? this.cuestionario.cuePregunta.toUpperCase().trim() : this.cuestionario.cuePregunta);
+      this.cuestionarioService.create(this.cuestionario).subscribe(
+        response => {
+          if(response){
+            $('#dialogCuestionario').dialog('close');
+            swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_REGISTRA, 'success');
+            validacion = true;
+            this.ngOnInit();
+            this.showTab('tab-requisitos');
+          }else{
+            swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_REGISTRA, 'warning');
+          }
+        }
+      ); 
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
 }

@@ -26,7 +26,6 @@ declare var Gestor: any;
   templateUrl: './utesconsulta.component.html'
 })
 export class UtesconsultaComponent implements OnInit {
-  private titulo: string = "Gestión de Temas";
   public usserLogged: Sysusuario = null;
   private presolicitudSearch: Presolicitud = new Presolicitud();  
   private consultaDoc: ConsultaDocente = new ConsultaDocente();

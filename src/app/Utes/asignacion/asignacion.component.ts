@@ -120,6 +120,21 @@ export class AsignacionComponent implements OnInit {
     this.temaService.getAllByEstadoPageable(estadoslst, page).subscribe(
       response => {
         this.listUtesAprobados = response.content;
+        this.listUtesAprobados.forEach(objTema => {
+          try {
+            this.asignadoService.getByIdTemaIdTipo(objTema.idTem, Estaticos.TIPO_ID_ASIGNACION_LECTORPLAN).subscribe(
+              response => {
+                if(response != null && response.length > 0){
+                  objTema.temActivo = true;
+                }else {
+                  objTema.temActivo = false;
+                }
+              }
+            );
+          } catch (error) {
+            console.error('Here is the error message', error);
+          }
+        });
         this.pageRender3 = new PageRender("/dashboard/utespresolicitud", response);
       }
     );
@@ -158,15 +173,15 @@ export class AsignacionComponent implements OnInit {
   habilitaBotonAddLectorPlan(idtema: number): Boolean {
     let val: Boolean = true;
     try {
-      // this.asignadoService.getByIdTemaIdTipo(idtema, Estaticos.TIPO_ID_ASIGNACION_LECTORPLAN).subscribe(
-      //   response => {
-      //     if(response != null && response.length > 0){
-      //       val = true;
-      //     }else {
-      //       val = false;
-      //     }
-      //   }
-      // );
+      this.asignadoService.getByIdTemaIdTipo(idtema, Estaticos.TIPO_ID_ASIGNACION_LECTORPLAN).subscribe(
+        response => {
+          if(response != null && response.length > 0){
+            val = true;
+          }else {
+            val = false;
+          }
+        }
+      );
     } catch (error) {
       console.error('Here is the error message', error);
     }
