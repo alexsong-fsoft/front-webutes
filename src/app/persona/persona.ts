@@ -15,7 +15,7 @@ export class Persona {
     perDireccion: String;
     perTelefono: String;
     perCelular: String;
-    perSexo: string;
+    perSexo: String;
     perFechaCreado: Date;
     perFechaEditado: Date;
 

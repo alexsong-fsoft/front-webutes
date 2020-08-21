@@ -162,11 +162,13 @@ import { UtesconfiguracionnewconvocatoriaComponent } from './Utes/utesconfigurac
 import { UtesconfiguracionnewinscripcionComponent } from './Utes/utesconfiguracion/utesconfiguracionnewinscripcion.component';
 import { UtesconfiguracionnewrequisitoComponent } from './Utes/utesconfiguracion/utesconfiguracionnewrequisito.component';
 import { ReporteService } from './reporte/reporte.service';
+import { LoginregisterComponent } from './login/loginregister.component';
 
 const routes: Routes = [
   //{path: '', redirectTo: '/login', pathMatch: 'full'},
   //{path: 'login', component: LoginComponent,  pathMatch: 'full'},
   { path: '', component: LoginComponent },
+  { path: 'loginregister', component: LoginregisterComponent, pathMatch: 'full' },
   {
     path: 'dashboard', component: DashboardComponent,
     children: [
@@ -364,7 +366,10 @@ const routes: Routes = [
     DocentehitodialogComponent, UtespresolicituddetalledialogComponent, 
     UtespresolicitudvalidarespuestadialogComponent, UtesasignacionrevisordialogComponent, 
     UtesresoluciondetalleComponent, PrerevisionexamendetalleComponent, 
-    UtesresoluciondesarrolloComponent, UtesresoluciondialogComponentComponent, UtesresolucionnuevodialogComponent, UtesconfiguracionnewperiodoComponent, UtesconfiguracionnewconvocatoriaComponent, UtesconfiguracionnewinscripcionComponent, UtesconfiguracionnewrequisitoComponent
+    UtesresoluciondesarrolloComponent, UtesresoluciondialogComponentComponent, 
+    UtesresolucionnuevodialogComponent, UtesconfiguracionnewperiodoComponent, 
+    UtesconfiguracionnewconvocatoriaComponent, UtesconfiguracionnewinscripcionComponent, UtesconfiguracionnewrequisitoComponent,
+    LoginregisterComponent
   ],
   imports: [
     BrowserModule,

@@ -39,25 +39,30 @@ export class PrerevisionComponent implements OnInit {
 
   getListLectorAsigna(): Tema[] {
     let stbids: string = "";
-    this.presolicituService.getAllByEstados(Estaticos.TIPO_ID_OPCIONTITULACION_PROYECTO + "," + Estaticos.TIPO_ID_OPCIONTITULACION_ARTICULO, Estaticos.ESTADO_PRESOLICITUD_APROBADO + "," + Estaticos.ESTADO_PRESOLICITUD_ENLISTAESPERA).subscribe(
-      (presolicitudes: Presolicitud[]) => {
-        if(presolicitudes != null && presolicitudes.length > 0){
-          presolicitudes.forEach(presol => {
-            this.asignadoService.getByIdPersona2(presol.persona.idPer).subscribe(
-              (asignado: Asignado) => {
-                if (asignado != null) {
-                  stbids = stbids + asignado.tema.idTem.toString() + ",";
-                }
-              }
-            );
-          });
-          let estados: string = Estaticos.ESTADO_TEMA_PRE_ASIGNALECTOR + "";
-          this.temaService.getByIdstemasEstados(stbids, estados).subscribe(
-            (temas: Tema[]) => {
-              this.listLectorAsigna = temas;
-            }
-          );
-        }
+    // this.presolicituService.getAllByEstados(Estaticos.TIPO_ID_OPCIONTITULACION_PROYECTO + "," + Estaticos.TIPO_ID_OPCIONTITULACION_ARTICULO, Estaticos.ESTADO_PRESOLICITUD_APROBADO + "," + Estaticos.ESTADO_PRESOLICITUD_ENLISTAESPERA).subscribe(
+    //   (presolicitudes: Presolicitud[]) => {
+    //     if(presolicitudes != null && presolicitudes.length > 0){
+    //       presolicitudes.forEach(presol => {
+    //         this.asignadoService.getByIdPersona2(presol.persona.idPer).subscribe(
+    //           (asignado: Asignado) => {
+    //             if (asignado != null) {
+    //               stbids = stbids + asignado.tema.idTem.toString() + ",";
+    //             }
+    //           }
+    //         );
+    //       });
+    //       let estados: string = Estaticos.ESTADO_TEMA_PRE_ASIGNALECTOR + "";
+    //       this.temaService.getByIdstemasEstados(stbids, estados).subscribe(
+    //         (temas: Tema[]) => {
+    //           this.listLectorAsigna = temas;
+    //         }
+    //       );
+    //     }
+    //   }
+    // );
+    this.temaService.getListLectorAsigna().subscribe(
+      (temas: Tema[]) => {
+        this.listLectorAsigna = temas;
       }
     );
     return this.listLectorAsigna;

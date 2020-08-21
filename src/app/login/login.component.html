@@ -34,6 +34,9 @@
                 <label for="password">Password</label>
                 <input type="password" #password id="password" placeholder="password">
                 <input type="submit" (click)="logIn(email.value, password.value, $event)" id="submit" value="Login">
+                <a routerLink="/loginregister" class="">
+                    <i class="fa fa-user"></i> Registrarse
+                </a>
             </div>
         </div>
     </div>

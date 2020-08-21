@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import Lang from '../../assets/app.lang.json';
 import { Persona } from '../persona/persona';
+import { LoginRegister } from './LoginRegister';
 
 @Injectable({
   providedIn: 'root'
@@ -128,6 +129,10 @@ export class SysusuarioService {
       return this.http.get(`${this.urlEndPoint}/obtenerListadoUsuarioPorTemaPorPerfil/${perfilnombre}/${idusuario}/${estados}/${idperiodo}`).pipe(
         map( response => response as Sysusuario[] )
       );
+    }
+
+    loginRegisterUsuario(LoginRegister: LoginRegister) : Observable<Boolean> {
+      return this.http.post<Boolean>(`${this.urlEndPoint}/loginRegisterUsuario`, LoginRegister, {headers: this.httpHeaders})
     }
 
   }

@@ -1,0 +1,100 @@
+<form>
+    <h2 class="header header-efx">Datos Personales</h2>
+    <div class="form-group row">
+        <label for="perCedula" class="col-sm-2 col-form-label">Cédula</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="perCedula" [(ngModel)]="persona.perCedula">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="perNombre" class="col-sm-2 col-form-label">Nombre</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="perNombre" [(ngModel)]="persona.perNombre">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="perApellido" class="col-sm-2 col-form-label">Apellido</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="perApellido" [(ngModel)]="persona.perApellido">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="perDireccion" class="col-sm-2 col-form-label">Direccion</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="perDireccion" [(ngModel)]="persona.perDireccion">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="perTelefono" class="col-sm-2 col-form-label">Telefono</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="perTelefono" [(ngModel)]="persona.perTelefono">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="perCelular" class="col-sm-2 col-form-label">Celular</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="perCelular" [(ngModel)]="persona.perCelular">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="perSexo" class="col-sm-2 col-form-label">perSexo</label>
+        <div class="col-sm-6">
+            <select class="form-control" name="perSexo" [(ngModel)]="persona.perSexo">
+                <option [value]="M">Masculino</option>
+                <option [value]="F">Femenino</option>
+            </select>
+        </div>
+    </div>
+    <input type="hidden" value="" name="id" [(ngModel)]="persona.idPer">
+
+    <br/>
+    <h2 class="header header-efx">Usuario</h2>
+    <div class="form-group row">
+        <label for="usrCorreo" class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-6">
+            <input type="email" class="form-control" name="usrCorreo" [(ngModel)]="sysusuario.usrCorreo">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="usrUsuario" class="col-sm-2 col-form-label">Usuario</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="usrUsuario" [(ngModel)]="sysusuario.usrUsuario">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="usrClave" class="col-sm-2 col-form-label">Clave</label>
+        <div class="col-sm-6">
+            <input type="password" class="form-control" name="usrClave" [(ngModel)]="sysusuario.usrClave">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="usrClave" class="col-sm-2 col-form-label">Repetir Clave</label>
+        <div class="col-sm-6">
+            <input type="password" class="form-control" name="confirmclave" [(ngModel)]="confirmclave">
+        </div>
+    </div>
+    <input type="hidden" value="" name="id" [(ngModel)]="sysusuario.idUsr">
+
+    <div class="form-group row">
+        <div class="col-sm-8 center">
+            <button class="btn btn-primary" role="button" (click)='saveAll()' *ngIf="!persona.idPer else elseBlock">
+                <i class="fa fa-save"></i> CREAR
+            </button>
+            <ng-template #elseBlock>
+                <button class="btn btn-primary" role="button" (click)='update()'>
+                    <i class="fa fa-save"></i> EDITAR
+                </button>
+            </ng-template>
+            <a routerLink="/" class="btn btn-danger">
+                <i class="fa fa-reply"></i> Cancelar
+            </a>
+        </div>
+    </div>
+</form>
+
+
+
+
+
+
+

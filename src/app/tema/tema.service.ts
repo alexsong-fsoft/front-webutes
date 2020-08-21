@@ -147,4 +147,11 @@ export class TemaService {
     );
   }
 
+  getListLectorAsigna(): Observable<Tema[]> {
+    return this.http.get(`${this.urlEndPoint}/utes/prerevision/getListLectorAsigna`).pipe(
+      map( response => response as Tema[] )
+    );
+  }
+
+  
 }
