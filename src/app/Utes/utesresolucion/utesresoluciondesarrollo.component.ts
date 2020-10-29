@@ -17,6 +17,10 @@ import { DatePipe } from '@angular/common';
 import { Tiporesolucion } from 'src/app/tiporesolucion/tiporesolucion';
 import { TiporesolucionService } from 'src/app/tiporesolucion/tiporesolucion.service';
 import { ResolucionService } from 'src/app/resolucion/resolucion.service';
+import { AsignadoService } from 'src/app/asignado/asignado.service';
+import { PeriodoService } from 'src/app/periodo/periodo.service';
+import { InscripcionService } from 'src/app/inscripcion/inscripcion.service';
+import { PresolicitudService } from 'src/app/presolicitud/presolicitud.service';
 
 declare var JQuery: any;
 declare var $: any;
@@ -33,6 +37,8 @@ export class UtesresoluciondesarrolloComponent implements OnInit {
   private listTipoDocumento: Tipo[];
 
   private resolucionnew: Resolucion = new Resolucion();
+  private enResolucionSeleccion: Resolucion = new Resolucion();
+  private enResolucionAlmacenado: Resolucion = new Resolucion();
   private listResolucionTipo: Tiporesolucion[] = [];
 
   public parseDate2 = parseDate;
@@ -46,6 +52,10 @@ export class UtesresoluciondesarrolloComponent implements OnInit {
     private componentFactoryResolver: ComponentFactoryResolver,
     private tiporesolucionService: TiporesolucionService,
     private resolucionService: ResolucionService,
+    private asignadoService: AsignadoService,
+    private periodoService: PeriodoService,
+    private inscripcionService: InscripcionService,
+    private presolicitudService: PresolicitudService,
     private datepipe: DatePipe) { }
 
   ngOnInit() {
@@ -209,6 +219,116 @@ export class UtesresoluciondesarrolloComponent implements OnInit {
     }
   }
 
+
+  public verDialogoExterno(idtipo: number, idres: number): void {
+    this.enResolucionSeleccion = new Resolucion();
+    if (idres != null) {
+      this.resolucionService.getById(idres).subscribe( 
+        response => {
+          if(response){
+            this.enResolucionSeleccion = response;
+            if (idtipo != null) {
+              if (idtipo == Estaticos.ESTADO_TEMA_POST_APROBADO) {
+                this.enResolucionAlmacenado = new Resolucion();
+                this.enResolucionAlmacenado = response;
+                //RequestContext.getCurrentInstance().openDialog("/paginas/privadas/utes/dialog/aprobartema", options, parametrosDialog);
+              } else if (idtipo == Estaticos.ESTADO_TEMA_POST_CAMBIOTUTOR) {
+                //RequestContext.getCurrentInstance().openDialog("/paginas/privadas/utes/dialog/cambiotutor", options, parametrosDialog);
+              } else if (idtipo == Estaticos.ESTADO_TEMA_POST_CAMBIOTEMA) {
+                //RequestContext.getCurrentInstance().openDialog("/paginas/privadas/utes/dialog/cambiotema", options, parametrosDialog);
+              } else if (idtipo == Estaticos.ESTADO_TEMA_POST_LECTORPROYECTO) {
+                //RequestContext.getCurrentInstance().openDialog("/paginas/privadas/utes/dialog/asignalectorproyecto", options, parametrosDialog);
+              } else if (idtipo == Estaticos.ESTADO_TEMA_POST_RENUNCIAESTUDIANTE) {
+                //RequestContext.getCurrentInstance().openDialog("/paginas/privadas/utes/dialog/renunciaestudiante", options, parametrosDialog);
+              } else if (idtipo == Estaticos.ESTADO_TEMA_POST_ANULADO) {
+                if (this.tema != null) {
+                  this.tema.temIdEstado = Estaticos.ESTADO_TEMA_POST_ANULADO;
+                  //accionGuardaEstadoTema(actionEvent);
+                  //Integer idresolucion = Integer.parseInt(parametrosDialog.get("idresolucion").get(0));
+                  let numeroresolucion: String = "";
+                  let enauxresol: Resolucion = response;
+                  enauxresol.rslIdEstado = Estaticos.ESTADO_RESOLUCION_PROCESADO;
+                  numeroresolucion = enauxresol.rslNumero;
+                  this.resolucionService.update(enauxresol).subscribe( 
+                    response => {
+                    }
+                  )
+                  //if (daoconfigura.activaProcesoByCampo(Estaticos.CONFIG_RESOLUCION_AUTOR)) {
+                    //SysUsuario auxdoc = daousuario.obtenerUsuarioPorPersonaId(enTemaDetalleSeleccion.getPersona().getIdPer());
+                    //utilcorreo.setDataUsuario(auxdoc, "Resolución - anulación tema", "Se ha realizado la anulación del tema:" + enTemaDetalleSeleccion.getTemNombre(), "No Resolución: " + numeroresolucion);
+                    //utilcorreo.sendNotificaNuevo();
+                  //}
+                  this.asignadoService.getByIdTemaIdTipo(this.tema.idTem, Estaticos.TIPO_ID_ASIGNACION_ESTUDIANTE).subscribe(
+                    (auxasig) => {
+                      if(auxasig){
+                        this.periodoService.getUltimoRegistroPeriodo().subscribe(
+                          (valorperiodo) => {
+                            if (valorperiodo != null) {
+                              this.inscripcionService.getByIdPeriodo(valorperiodo).subscribe(
+                                (objinscripcion) => {
+                                  auxasig.forEach(obj => {
+                                    this.presolicitudService.getByIdPeronaIdInscripcion(obj.persona.idPer, objinscripcion.idIns).subscribe( 
+                                      auxpresl => {
+                                        if(auxpresl){
+                                          auxpresl.pslIdEstado = Estaticos.ESTADO_PRESOLICITUD_ENLISTAESPERA;
+                                          this.presolicitudService.update(auxpresl).subscribe( 
+                                            response => {
+                                            }
+                                          )
+                                        }
+                                      }
+                                    )
+                                    //if (daoconfigura.activaProcesoByCampo(CONFIG_RESOLUCION_ESTUDIANTE)) {
+                                      //SysUsuario auxus = daousuario.obtenerUsuarioPorPersonaId(obj.getPersona().getIdPer());
+                                      //utilcorreo.setDataUsuario(auxus, "Resolución - anulación tema", "Se ha realizado la anulación del tema:" + enTemaDetalleSeleccion.getTemNombre(), "No Resolución: " + numeroresolucion);
+                                      //utilcorreo.sendNotificaNuevo();
+                                    //}
+
+                                    this.asignadoService.delete(obj.idAsg).subscribe();
+
+                                  });
+                                }
+                              );
+                            }
+                          }
+                        );
+                      }
+                    }
+                  );
+
+                  // Persona enperaux = daopersona.obtenerPersonaPorId(enTemaDetalleSeleccion.getPersona().getIdPer());
+                  // String dato = daoperiodo.obtenerUltimoRegistroPeriodo();
+                  // if (dato.isEmpty() != true && dato.equals("-1") != true) {
+                  //   Periodo enperiodoactual = daoperiodo.obtenerPeriodoPorId(Integer.parseInt(dato));
+                  //   Seleccion ensel = daoseleccion.obtenerSeleccionPorPeriodoPersona(enperiodoactual.getPrdNumero(), enperaux.getIdPer());
+                  //   if (ensel != null) {
+                  //     int horavig = 0;
+                  //     if (ensel.getSelHoravigente() != null) {
+                  //       horavig = ensel.getSelHoravigente();
+                  //     }
+                  //     ensel.setSelHoravigente(horavig - 1);
+                  //     daoseleccion.update(ensel);
+                  //   } else {
+                  //     Mensajes.mensajeError(null, "No se ha asignado el docente al periodo para actualizar proyectos vigentes.", null);
+                  //   }
+                  // }
+                  // Mensajes.mensajeInfo(null, MENSAJE_RESOLUCION_ANULA, null);
+                }
+              } else if (idtipo == Estaticos.ESTADO_TEMA_POST_CERRADO) {
+                this.tema.temIdEstado = Estaticos.ESTADO_TEMA_POST_CERRADO;
+                //RequestContext.getCurrentInstance().openDialog("/paginas/privadas/utes/dialog/terminacion", options, parametrosDialog);
+              } else if (idtipo == Estaticos.ESTADO_TEMA_POST_PRORROGA) {
+                this.tema.temIdEstado = Estaticos.ESTADO_TEMA_POST_PRORROGA;
+                //RequestContext.getCurrentInstance().openDialog("/paginas/privadas/utes/dialog/prorroga", options, parametrosDialog);
+              }
+
+            }
+          }
+        }
+      )
+
+    }
+  }
 
 
 

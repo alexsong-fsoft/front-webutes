@@ -16,6 +16,8 @@ import { InscripcionService } from 'src/app/inscripcion/inscripcion.service';
 import { Cuestionario } from 'src/app/cuestionario/cuestionario';
 import { Respuesta } from 'src/app/respuesta/respuesta';
 import { Estado } from 'src/app/estado/Estado';
+import swal from 'sweetalert2';
+import Lang from '../../../assets/app.lang.json';
 
 declare var JQuery: any;
 declare var $: any;
@@ -30,7 +32,7 @@ export class PrerevisionexamenComponent implements OnInit {
   private listTipoDocumento: Tipo[];
   private presolicitud: Presolicitud = new Presolicitud();
   private listCuestionarioTodos: Cuestionario[];
-  private listCuestionarioSeleccion: number[] = [];
+  private listCuestionarioTodosSeleccion: number[] = [];
   private presolicitudRespuestas: Respuesta[] = [];
   private listEstadoInscripcion: Estado[] = [];
   public usserLogged: Sysusuario = null;
@@ -153,14 +155,83 @@ export class PrerevisionexamenComponent implements OnInit {
   }
 
   onChange(idcue: number, isChecked: boolean) {
-    let selectedCuestionario = this.listCuestionarioSeleccion;
+    let selectedCuestionario = this.listCuestionarioTodosSeleccion;
     if (isChecked) {
       selectedCuestionario.push(idcue);
     } else {
-      selectedCuestionario = this.listCuestionarioSeleccion.filter(item => item !== idcue);
+      selectedCuestionario = this.listCuestionarioTodosSeleccion.filter(item => item !== idcue);
     }
-    this.listCuestionarioSeleccion = selectedCuestionario;
+    this.listCuestionarioTodosSeleccion = selectedCuestionario;
     console.log(selectedCuestionario);
   }
 
+  public updateRespuestaRevisionExamen(): void {
+    let estadoanterior: number;
+    try {
+      let error = [];
+      if (this.listCuestionarioTodosSeleccion.length != 0) {
+        if (this.presolicitud != null) {
+          estadoanterior = this.presolicitud.pslIdEstado;
+          this.presolicitud.pslIdEstadoAnterior = estadoanterior;
+          this.presolicitud.pslIdEstado = Estaticos.ESTADO_PRESOLICITUD_PREREVISADO;
+          this.presolicitudService.update(this.presolicitud).subscribe(
+            (response) => {
+              if(response){
+                this.listCuestionarioTodosSeleccion.forEach(idCue => {
+                  this.respuestaService.getByIdPresolicitudIdCuestionario(this.presolicitud.idPsl, idCue).subscribe(
+                    (auxrespuesta) => {
+                      if (auxrespuesta != null) {
+                        auxrespuesta.resPrerevision = true;
+                        this.respuestaService.update(auxrespuesta).subscribe(
+                          (response) => {
+                            if(response)  {
+
+                            } else {
+                              error.push("PROBLEMAS AL ACTUALIZAR  RESPUESTA");    
+                            }
+                          }
+                        )
+                      } else {
+                        let auxresp: Respuesta = new Respuesta();
+                        //auxresp.cuestionario = objcue;
+                        //auxresp.setPresolicitud(this.presolicitud);
+                        auxresp.idCuestionario = idCue;
+                        auxresp.idPresolicitud = this.presolicitud.idPsl;
+                        auxresp.resPrerevision = true;
+                        this.respuestaService.create(auxresp).subscribe(
+                          (response) => {
+                            if(response)  {
+
+                            } else {
+                              error.push("PROBLEMAS AL ALMACENAR NUEVA RESPUESTA");
+                            }
+                          }
+                        )
+                      }
+                    }
+                  );
+                });   
+                
+                if (error.length = 0) {
+                  this.listCuestionarioTodosSeleccion = [];
+                  swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_REGISTRA, 'warning');
+                  $('#dialogUtesPrerevision').dialog('close');
+                  this.ngOnInit();
+                } else {
+                  this.listCuestionarioTodosSeleccion = [];
+                  swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_REGISTRA, 'warning');
+                }
+              }
+            }
+          )
+         }
+         else {
+          error.push("Es necesario seleccinar un registro");
+         }
+
+      }
+    }catch (error) {
+      console.error('Here is the error message', error);
+    }
+  }
 }

@@ -3,9 +3,9 @@
 
 <div id="tabs_docentetema" class="tabbable">
     <ul class="nav nav-tabs">
-        <li><a href="javascript:void(0)" (click)="showTab('tab-mistemas')"><i class="fa fa-certificate"></i>&nbsp; Mis Temas</a></li>
-        <li><a href="javascript:void(0)" (click)="showTab('tab-desarrollo')"><i class="fa fa-certificate"></i>&nbsp; En Desarrollo</a></li>
-        <li><a href="javascript:void(0)" (click)="showTab('tab-revision')"><i class="fa fa-certificate"></i>&nbsp; Revisión de Temas</a></li>        
+        <li><a href="#" (click)="showTab('tab-mistemas')"><i class="fa fa-certificate"></i>&nbsp; Mis Temas</a></li>
+        <li><a href="#" (click)="showTab('tab-desarrollo')"><i class="fa fa-certificate"></i>&nbsp; En Desarrollo</a></li>
+        <li><a href="#" (click)="showTab('tab-revision')"><i class="fa fa-certificate"></i>&nbsp; Revisión de Temas</a></li>        
     </ul>
     
     <div class="tab-content">
@@ -115,7 +115,6 @@
                             <th class="center hide" style="width: 30px;">ID</th>
                             <th>Título</th>
                             <th>Fecha Enviado</th>
-                            <th>N° Est</th>
                             <th>Convocatoria</th>
                             <th>Estado</th>
                             <th>Tipo</th>
@@ -125,16 +124,15 @@
                         <tr *ngFor="let item of listTemaAsignaRevisar; index as i">
                             <td class="center" style="width: 30px;">{{i + 1}}</td>
                             <td class="actions center" style="width: 100px">
-                                <button type="button" name="detalle" (click)='openDialogDetalle(item, "3")' class="btn btn-primary btn-xs" title="Ver Detalle">
-                                    <i class="fa fa-search"></i>
+                                <button type="button" name="detalle" (click)='openDialogRevisionAccion(item, "3")' [className]="(item.temActivo) ? 'btn btn-primary btn-xs disabled' : 'btn btn-primary btn-xs'" title="Ver Detalle">
+                                    <i class="fa fa-pencil-square-o"></i>
                                 </button>
                             </td>
                             <td class="hide">{{item.idTem}}</td>
                             <td>{{item.temNombre}}</td>
                             <td>{{parseDateToString(item.temFechaEnviado)}}</td>
-                            <td>{{item.temNumEst}}</td>
                             <td>{{item.convocatoria.conNombre}}</td>
-                            <td>{{getNombreEstadoPorLista(item.temIdEstado, '3')}}</td>
+                            <td>{{item.nombreEstado}}</td>
                             <td>{{getNombreTipoPorLista(item.temIdTipo)}}</td>
                         </tr>
                     </tbody>
@@ -148,13 +146,13 @@
 </div>
 
 
-<div id="dialogDetalle">
+<div id="dialogDetalle" *ngIf="temaDetalle">
     <div class="dialog-content" style="display: none;">
         <div id="tabs_docentetema_detalle" class="tabbable">
             <ul class="nav nav-tabs">
-                <li><a href="javascript:void(0)" (click)="showTab('tab-tema')"><i class="fa fa-certificate"></i>&nbsp; Tema</a></li>
-                <li><a href="javascript:void(0)" (click)="showTab('tab-informe')"><i class="fa fa-certificate"></i>&nbsp; Informe</a></li>
-                <li><a href="javascript:void(0)" (click)="showTab('tab-resolucion')"><i class="fa fa-certificate"></i>&nbsp; Resolución</a></li>        
+                <li><a href="#" (click)="showTab('tab-tema')"><i class="fa fa-certificate"></i>&nbsp; Tema</a></li>
+                <li><a href="#" (click)="showTab('tab-informe')"><i class="fa fa-certificate"></i>&nbsp; Informe</a></li>
+                <li><a href="#" (click)="showTab('tab-resolucion')"><i class="fa fa-certificate"></i>&nbsp; Resolución</a></li>        
             </ul>
             
             <div class="tab-content">
@@ -165,7 +163,7 @@
                             <div class="row">
                                 <div class="col-sm-8">
                                     <div class="profile-info-name">Autor : </div>
-                                    <div class="profile-info-value"><span >{{temaDetalle.persona.perApellido + " " + temaDetalle.persona.perNombre}}</span></div>
+                                    <div class="profile-info-value" *ngIf="temaDetalle.persona"><span >{{temaDetalle.persona.perApellido + " " + temaDetalle.persona.perNombre}}</span></div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="profile-info-name">Estado</div>
@@ -274,7 +272,7 @@
     </div>
 </div>
 
-<div id="dialogEditar">
+<div id="dialogEditar" *ngIf="tema">
     <div class="dialog-content" style="display: none;">
         <form>
             <div class="form-group row">
@@ -334,6 +332,122 @@
                 </div>
             </div>
         </form>        
+    </div>
+</div>
+
+
+<div id="dialogRevisionAccion" *ngIf="temaRevisionAccion">
+    <div class="dialog-content" style="display: none;">
+        <div id="tabs_docentetema_revisionaccion" class="tabbable">
+            <ul class="nav nav-tabs">
+                <li><a href="#" (click)="showTab('tab-ra-tema')"><i class="fa fa-certificate"></i>&nbsp; Tema</a></li>
+                <li><a href="#" (click)="showTab('tab-ra-informe')"><i class="fa fa-certificate"></i>&nbsp; Informe</a></li>
+            </ul>
+            
+            <div class="tab-content">
+        
+                <div id="tab-ra-tema" class="tab-pane">
+                    <div id="cont-tab-ra-tema">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="profile-info-name">Autor : </div>
+                                    <div class="profile-info-value" *ngIf="temaRevisionAccion.persona"><span >{{temaRevisionAccion.persona.perApellido + " " + temaRevisionAccion.persona.perNombre}}</span></div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="profile-info-name">Estado</div>
+                                    <div class="profile-info-value" style="background-color: #b5d4fb;"><span><b>{{getNombreEstadoPorLista(temaRevisionAccion.temIdEstado, '1')}}</b></span></div>
+                                </div>				
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="profile-info-name">Título</div>
+                                    <div class="profile-info-value"><span >{{temaRevisionAccion.temNombre}}</span></div>
+                                </div>				
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="profile-info-name">Descripción</div>
+                                    <div class="profile-info-value"><span >{{temaRevisionAccion.temDescripcion}}</span></div>
+                                </div>				
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="profile-info-name">No Estudiantes</div>
+                                    <div class="profile-info-value"><span >{{temaRevisionAccion.temNumEst}}</span></div>
+                                </div>				
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="profile-info-name">Fecha</div>
+                                    <div class="profile-info-value"><span >{{parseDateToString(temaRevisionAccion.temFechaCreado)}}</span></div>
+                                </div>				
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="profile-info-name">Tipo Documento</div>
+                                    <div class="profile-info-value"><span >{{getNombreTipoPorLista(temaRevisionAccion.temIdTipo)}}</span></div>
+                                </div>				
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="profile-info-name">Estado: </div>
+                                    <div class="profile-info-value" style="width: 80%;"><span>
+                                        <select class="form-control" name="miselect" [(ngModel)]="temaRevisionAccion.temIdEstado">
+                                            <option [value]="item.id" *ngFor="let item of listEstadoRevisionInforme">{{item.titulo}}</option>
+                                        </select>
+                                    </span></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="profile-info-name">Informe: </div>
+                                    <div class="profile-info-value" style="width: 80%;"><span>
+                                        <textarea class="form-control" name="nombreTipo" [(ngModel)]='temaRevisionAccion.nombreTipo' rows="6"></textarea>
+                                    </span></div>
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-sm-12 center">
+                                <button class="btn btn-primary" role="button" (click)='saveRevisionAccion()'>
+                                    <i class="fa fa-save"></i> GUARDAR
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-4" style="clear:both"></div>
+                </div>
+        
+                <div id="tab-ra-informe" class="tab-pane">
+                    <div id="cont-tab-ra-informe">
+                        <table class="table table-striped table-bordered font-small" style="width:100%; margin-bottom:0px;">
+                            <thead class="thead-inverse">
+                                <tr>
+                                    <th class="center" style="width: 30px;"></th>
+                                    <th class="center hide" style="width: 30px;">ID</th>
+                                    <th>Informe</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of temaRevisionAccion.informes; index as i">
+                                    <td class="center" style="width: 30px;">{{i + 1}}</td>
+                                    <td class="hide">{{item.idInf}}</td>
+                                    <td>{{item.infInforme}}</td>
+                                    <td>{{parseDateToString(item.infFecha)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>                
+                    </div>
+                    <div class="space-4" style="clear:both"></div>
+                </div>
+        
+            </div>
+            <br>
+        </div>
     </div>
 </div>
 

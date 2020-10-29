@@ -51,6 +51,7 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
   private listUsuarioDocente: Sysusuario[];
   private listUsuarioDocenteSeleccion: Sysusuario[] = [];
   private listSeleccion: Seleccion[];
+  private enperiodoselect: Seleccion = new Seleccion();
   //convocatoria
   private convocatoria: Convocatoria = new Convocatoria();
   private enconfigura: Sysconfiguracion = new Sysconfiguracion();
@@ -160,12 +161,6 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
   }
 
   loadComponentPeriodo(idPrd: number) {
-    // const adItem = new AdItem(UtesconfiguracionnewperiodoComponent, {idPrd: idPrd});
-    // const componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
-    // const viewContainerRef = this.adHost.viewContainerRef;
-    // viewContainerRef.clear();
-    // const componentRef = viewContainerRef.createComponent(componentFactory);
-    // (<AdComponent>componentRef.instance).data = adItem.data;
     this.periodo = new Periodo();
     if (idPrd) {
       this.periodoService.getById(idPrd).subscribe(
@@ -179,6 +174,7 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
   }
 
   dialogCreatePeriodo(): void {
+    this.periodo = new Periodo();
     Gestor.fn.destroyDialog('dialogPeriodo');
     $('#dialogPeriodo').dialog({
       title: 'Registro de Periodo',
@@ -186,12 +182,13 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
       minWidth: 500,
       resizable: false
     });
-    this.loadComponentPeriodo(null);
     Gestor.fn.positionDialog();
     $('#dialogPeriodo div.dialog-content').show();
   }
 
   dialogEditPeriodo(periodoSelected: Periodo): void {
+    console.log(periodoSelected);
+    this.loadComponentPeriodo(periodoSelected.idPrd);
     Gestor.fn.destroyDialog('dialogPeriodo');
     $('#dialogPeriodo').dialog({
       title: 'Editar Periodo',
@@ -199,7 +196,6 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
       minWidth: 500,
       resizable: false
     });
-    this.loadComponentPeriodo(periodoSelected.idPrd);
     Gestor.fn.positionDialog();
     $('#dialogPeriodo div.dialog-content').show();
   }
@@ -277,6 +273,19 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
     this.loadComponentPeriodoDocenteHora(periodoSelected.idPrd);
     Gestor.fn.positionDialog();
     $('#dialogPeriodoDocenteHora div.dialog-content').show();
+  }
+
+  dialogEditPeriodoDocenteHora(seleccionSelected: Seleccion): void {
+    Gestor.fn.destroyDialog('dialogEditPeriodoDocenteHora');
+    this.enperiodoselect = seleccionSelected;
+    $('#dialogEditPeriodoDocenteHora').dialog({
+      title: 'Actualización de Requisito',
+      modal: true,
+      minWidth: 500,
+      resizable: false
+    });
+    Gestor.fn.positionDialog();
+    $('#dialogEditPeriodoDocenteHora div.dialog-content').show();
   }
 
   loadComponentConvocatoria(idCon: number) {

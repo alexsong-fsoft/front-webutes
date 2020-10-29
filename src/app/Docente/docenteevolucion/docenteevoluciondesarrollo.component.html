@@ -89,7 +89,7 @@
                 </div>	
                 <div class="col-sm-6">
                     <div class="profile-info-name">Fecha cita</div>
-                    <div class="profile-info-value"><span >{{evolucion.evlFechaCita}}</span></div>
+                    <div class="profile-info-value"><span >{{parseDateToString(evolucion.evlFechaCita)}}</span></div>
                 </div>			
             </div>
             <div class="row">
@@ -113,9 +113,14 @@
             <div class="row">
                 <div class="col-sm-10">
                     <div class="profile-info-name">% de Avnace: </div>
-                    <div class="profile-info-value" style="width: 80%;"><span>
-                        <input type="number" min="0" max="100" step="1" [(ngModel)]="evolucion.evlPorcentaje" [ngModelOptions]="{standalone: true}"/>
-                    </span></div>
+                    <div class="profile-info-value" style="width: 80%;">
+                        <span>
+                            <input type="number" min="0" max="100" step="1" [(ngModel)]="evolucion.evlPorcentaje" [ngModelOptions]="{standalone: true}"/>
+                        </span>
+                        <button type="button" name="ultimoAvance" (click)='openDialogUltimoAvance(evolucion.tema.idTem)' title="Datos última reunión" class="btn btn-xs btn-info">
+                            <i class="fa fa-pencil-square-o"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div style="clear: both;"></div>
@@ -188,6 +193,53 @@
                     </button>
                 </div>
             </div>
+        </form>
+        
+    </div>
+</div>
+
+
+<div id="dialogUltimoAvance">
+    <div class="dialog-content" style="display: none;">
+        <form>
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="profile-info-name">Código: </div>
+                    <div class="profile-info-value" style="background-color: #b5d4fb;"><span><b>{{enEvolucionPorcentajeActual.evlCodigo}}</b></span></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="profile-info-name">Fecha</div>
+                    <div class="profile-info-value"><span >{{parseDateToString(enEvolucionPorcentajeActual.evlFechaCita)}}</span></div>
+                </div>	
+            </div>
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="profile-info-name">Hora</div>
+                    <div class="profile-info-value"><span >{{enEvolucionPorcentajeActual.evlHoracita}}</span></div>
+                </div>	
+            </div>
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="profile-info-name">% Avance</div>
+                    <div class="profile-info-value"><span >{{enEvolucionPorcentajeActual.evlPorcentaje}}</span></div>
+                </div>	
+            </div>
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="profile-info-name">Tareas</div>
+                    <div class="profile-info-value"><span >{{enEvolucionPorcentajeActual.evlTareas}}</span></div>
+                </div>	
+            </div>
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="profile-info-name">Detalle reunión</div>
+                    <div class="profile-info-value"><span >{{enEvolucionPorcentajeActual.evlDescripcion}}</span></div>
+                </div>	
+            </div>
+            <input type="hidden" value="" name="id" [(ngModel)]="enEvolucionPorcentajeActual.idEvl">
+            <br/>
         </form>
         
     </div>

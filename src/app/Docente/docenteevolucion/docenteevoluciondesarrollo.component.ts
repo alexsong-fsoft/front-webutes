@@ -31,6 +31,7 @@ export class DocenteevoluciondesarrolloComponent implements OnInit {
   private tema: Tema = new Tema();
   private evolucion: Evolucion = new Evolucion();
   private evolucionNew: Evolucion = new Evolucion();
+  private enEvolucionPorcentajeActual: Evolucion = new Evolucion();
   private listEstadoEvolucion: Estado[] = [];
   private listEstadoEvolucionAccion: Estado[];
   private listTipoDocumento: Tipo[];
@@ -110,7 +111,7 @@ export class DocenteevoluciondesarrolloComponent implements OnInit {
       this.evolucionService.getById(idEvl).subscribe((evolucion) => this.evolucion = evolucion)
     }
   }
-  
+
   loadComponent3() {
     this.evolucionNew = new Evolucion();
     this.evolucionService.getSecuencialEvolucion(this.tema.idTem).subscribe(
@@ -120,6 +121,19 @@ export class DocenteevoluciondesarrolloComponent implements OnInit {
         } 
       }
     )
+  }
+  
+  loadComponent4(idTema: number) {
+    this.enEvolucionPorcentajeActual = new Evolucion();
+    if (idTema) {
+      this.evolucionService.getUltimoRegistroporTema(idTema, Estaticos.ESTADO_EVOLUCION_ASISTENCIA).subscribe(
+        (idevolucion) => {
+          if (idevolucion != null) {
+            this.evolucionService.getById(idevolucion).subscribe((evolucion) => this.enEvolucionPorcentajeActual = evolucion)
+          }
+        }
+      )
+    }
   }
   
   openDialogDetalle(evolucion: Evolucion): void {
@@ -158,6 +172,19 @@ export class DocenteevoluciondesarrolloComponent implements OnInit {
     this.loadComponent3();
     Gestor.fn.positionDialog();
     $('#dialogCrear div.dialog-content').show();
+  }
+
+  openDialogUltimoAvance(idTema: number): void {
+    //Gestor.fn.destroyDialog('dialogUltimoAvance');
+    $('#dialogUltimoAvance').dialog({
+      title: 'Datos última reunión',
+      modal: true,
+      minWidth: 600,
+      resizable: false
+    });
+    console.log(idTema);
+    this.loadComponent4(idTema);
+    $('#dialogUltimoAvance div.dialog-content').show();
   }
 
   public updateTemaEvolucionEstudiante(): void {

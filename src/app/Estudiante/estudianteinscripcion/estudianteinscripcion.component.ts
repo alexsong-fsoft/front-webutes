@@ -272,7 +272,9 @@ export class EstudianteinscripcionComponent implements OnInit, OnDestroy {
                                           $('#dialogCrear').dialog('close');
                                           swal.fire(Lang.messages.register_new, "Se registro un nueva inscripción", 'success');
                                           //this.router2.navigate(['/dashboard/estudianteinscripcion'])
-                                          this.ngOnInit();                                          
+                                          this.ngOnInit();  
+                                          this.habilitaBotonEvolucionEstado();
+                                          (document.getElementById('btnnuevo') as HTMLInputElement).disabled = false;                             
                                         } else {
                                           swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_REGISTRA, 'error');
                                           //Mensajes.mensajeError(null, MENSAJE_ERROR_REGISTRA, null);
