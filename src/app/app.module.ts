@@ -163,6 +163,7 @@ import { UtesconfiguracionnewinscripcionComponent } from './Utes/utesconfiguraci
 import { UtesconfiguracionnewrequisitoComponent } from './Utes/utesconfiguracion/utesconfiguracionnewrequisito.component';
 import { ReporteService } from './reporte/reporte.service';
 import { LoginregisterComponent } from './login/loginregister.component';
+import { TableModule } from 'primeng/table'
 
 const routes: Routes = [
   //{path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -376,6 +377,7 @@ const routes: Routes = [
     HttpClientModule,
     FormsModule,
     CommonModule,
+    TableModule,
     RouterModule.forRoot(routes, {
       onSameUrlNavigation: 'reload'
     })

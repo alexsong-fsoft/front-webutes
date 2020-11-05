@@ -63,6 +63,33 @@
                         </tr>
                     </tbody>
                 </table>
+
+
+                <p-table [value]="listPeriodo">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Periodo</th>
+                            <th>Fecha inicio</th>
+                            <th>Fecha fin</th>
+                            <th>Año inicio</th>
+                            <th>Año fin</th>
+                            <th>Activo</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-item>
+                        <tr>
+                            <td>{{item.prdNumero}}</td>
+                            <td>{{parseDateToString(item.prdFechaInicio)}}</td>
+                            <td>{{parseDateToString(item.prdFechaFin)}}</td>
+                            <td>{{item.prdAnioInicio}}</td>
+                            <td>{{item.prdAnioFin}}</td>
+                            <td class="actions fixed-side center">
+                                <input name="chk_prdActivo_{{i}}" type="checkbox" [checked]="item.prdActivo" disabled=true>                                                                   
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
             </div>
             <div class="space-4" style="clear:both"></div>
         </div>
@@ -403,7 +430,7 @@
             <br/>
             <div class="form-group row">
                 <div class="col-sm-12 center">
-                    <button class="btn btn-primary" role="button" (click)='update()'>
+                    <button class="btn btn-primary" role="button" (click)='updateSeleccion()'>
                         <i class="fa fa-save"></i> GUARDAR
                     </button>
                 </div>
@@ -459,9 +486,9 @@
             </div>
             <div class="row">
                 <div class="col-sm-10">
-                    <div class="profile-info-name">Actiado: </div>
+                    <div class="profile-info-name">Activado: </div>
                     <div class="profile-info-value" style="width: 80%;"><span>
-                        <input name="chk_prdActivo" type="checkbox" [checked]="convocatoria.conActivo" [(ngModel)]="convocatoria.prdActivo">                                                                   
+                        <input name="chk_conActivo" type="checkbox" [checked]="convocatoria.conActivo" [(ngModel)]="convocatoria.conActivo">                                                                   
                     </span></div>
                 </div>
             </div>
@@ -474,7 +501,7 @@
                         <i class="fa fa-save"></i> CREAR
                     </button>
                     <ng-template #elseBlock5>
-                        <button class="btn btn-primary" role="button" (click)='update()'>
+                        <button class="btn btn-primary" role="button" (click)='updateConvocatoria()'>
                             <i class="fa fa-save"></i> EDITAR
                         </button>
                     </ng-template>
@@ -543,7 +570,7 @@
                         <i class="fa fa-save"></i> CREAR
                     </button>
                     <ng-template #elseBlock3>
-                        <button class="btn btn-primary" role="button" (click)='update()'>
+                        <button class="btn btn-primary" role="button" (click)='updateInscripcion()'>
                             <i class="fa fa-save"></i> EDITAR
                         </button>
                     </ng-template>

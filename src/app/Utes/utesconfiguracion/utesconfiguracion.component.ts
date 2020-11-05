@@ -609,10 +609,30 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
     }
   }
 
+  public updateSeleccion(): void {
+    try {
+      this.seleccionService.update(this.enperiodoselect).subscribe( 
+        response => {
+          if(response){
+            $('#dialogEditPeriodoDocenteHora').dialog('close');
+            swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_ACTUALIZA, 'success');
+            //this.ngOnInit();
+            setTimeout(() => {
+              this.loadComponentPeriodoDocenteHora(this.enperiodoselect.idPeriodo);
+            }, 1000);
+          } else {
+            swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_ACTUALIZA, 'warning');
+          }
+        }
+      );
+    } catch (error) {
+      console.error('Here is the error message', error);
+    }
+  }
+
   public saveConvocatoria(): boolean {
     let validacion:boolean = false;
     try {
-      console.log(this.convocatoria);
       if (this.convocatoria.conNombre != null && this.convocatoria.conNombre != "") {
         if(this.convocatoria.conNumeroTema != null || this.convocatoria.conNumeroTema > 0){
           this.convocatoriaService.create(this.convocatoria).subscribe( 
@@ -656,6 +676,43 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
     return validacion;
   }
 
+  public updateConvocatoria(): boolean {
+    let validacion:boolean = false;
+    try {
+      if (this.convocatoria.conNombre != null && this.convocatoria.conNombre != "") {
+        if(this.convocatoria.conNumeroTema != null || this.convocatoria.conNumeroTema > 0){
+          this.convocatoriaService.update(this.convocatoria).subscribe( 
+            response => {
+              if(response){
+                // String pkconv = "" + enconvocatoriaseleccion.getIdCon();
+                // this.enconfigura = daoconfigura.obtenerConfiguracionbyCampo(getPARTE_CONFIG() + "" + pkconv);
+                // this.enconfigura.setConfEstado(this.enconvocatoriaseleccion.getConActivo());
+                if (this.convocatoria.conActivo == true) {
+                  //notificacionGlobal("Notificaciones", "Se habilito una convocatoria para registrar temas.", "/convocatoriatema");
+                }
+                // if (daoconfigura.update(this.enconfigura)) {
+                // }
+                $('#dialogConvocatoria').dialog('close');
+                swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_REGISTRA, 'success');
+                this.ngOnInit();
+                this.showTab('tab-convocatoria');
+                validacion = true;
+              } else {
+                swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_ACTUALIZA, 'warning');
+              }
+            }
+          );
+        } else {
+          swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_REGISTRA_CERO, 'warning');
+        }        
+      } 
+    } catch (error) {
+      console.error('Here is the error message', error);
+      return false;
+    }
+    return validacion;
+  }
+
   public createInscripcion(): boolean {
     let validacion:boolean = false;
     try {
@@ -671,6 +728,34 @@ export class UtesconfiguracionComponent implements OnInit, OnDestroy {
                 validacion = true;
               } else {
                 swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_SELECCION, 'warning');
+              }
+            }
+          );
+      } else {
+        swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_ERROR_REGISTRA_CERO, 'warning');
+      }        
+    } catch (error) {
+      console.error('Here is the error message', error);
+      return false;
+    }
+    return validacion;
+  }
+
+  public updateInscripcion(): boolean {
+    let validacion:boolean = false;
+    try {
+      if (this.inscripcion.insFechaFin != null && this.inscripcion.insFechaInicio != null) {
+          this.inscripcionService.update(this.inscripcion).subscribe( 
+            response => {
+              if(response){
+                $('#dialogInscripcion').dialog('close');
+                swal.fire(Lang.messages.register_update, Estaticos.MENSAJE_OK_ACTUALIZA, 'success');
+                //this.router.navigate(['/dashboard/utesconfiguracion']);
+                this.ngOnInit();
+                this.showTab('tab-inscripcion');
+                validacion = true;
+              } else {
+                swal.fire(Lang.messages.register_new, Estaticos.MENSAJE_OK_ACTUALIZA, 'warning');
               }
             }
           );
